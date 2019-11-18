@@ -1,0 +1,12 @@
+public/html
+public/mobile
+public/upload
+application/cache
+application/logs
+application/config/production
+application/config/development
+script
+.git
+.idea
+.gitignore
+install_locker

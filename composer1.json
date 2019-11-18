@@ -1,0 +1,31 @@
+{
+    "name": "vendor_name/package_name",
+    "description": "description_text",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "config": {
+        "secure-http": false
+    },
+    "authors": [
+        {
+            "name": "author's name",
+            "email": "email@example.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpexcel": "1.8.1",
+        "filp/whoops": "^2.1",
+        "overtrue/wechat": "^3.3"
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Application\\Component\\": "application/Component/"
+        }
+    }
+}
