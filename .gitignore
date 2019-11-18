@@ -1,0 +1,6 @@
+application/cache/
+application/logs/
+
+
+# Editor directories and files
+.idea
