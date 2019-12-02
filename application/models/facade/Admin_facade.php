@@ -14,6 +14,9 @@ class Admin_facade extends \Application\Component\Common\IFacade
 	{
 		parent::__construct ();
 		$this->load->model ( 'data/admin_data' );
+		$this->load->model ( 'data/admin_user_org_data' );
+		$this->load->model ( 'data/admin_organization_data' );
+		$this->load->model ( 'data/admin_org_temp_data' );
 
 	}
 
@@ -25,9 +28,8 @@ class Admin_facade extends \Application\Component\Common\IFacade
 	 */
 	public function login ( $user_name, $user_password )
 	{
-
 		$admin = $this->admin_data->get_info_by_user_name ( $user_name );
-		if ( !$admin ) {
+		/*if ( !$admin ) {
 			$this->set_error ( '不存在此用户！' );
 			return false;
 		}
@@ -49,22 +51,50 @@ class Admin_facade extends \Application\Component\Common\IFacade
 		) {
 			$this->set_error ( '记录登陆信息失败' );
 			return false;
+		}*/
+
+		//添加关联用户
+		//获取当前开启的岗位
+		$org_list = $this->admin_user_org_data->get_user_org($admin['id']);
+		$org_list = count($org_list)?array_column($org_list,'id'):[];
+		$ids = count($org_list)? implode('|',$org_list):'';
+		//array_unique //过滤所有重复数据
+
+		//获取所有权限组下的用户id
+		$user_list = $this->admin_data->get_ulist_in_oid($ids);
+		if($admin['org_id']){
+			$c = array_diff(explode(',',$admin['org_id']),$org_list);
+			foreach($c as $v){
+				$user_list[] = [ "u_id" =>$admin['id']
+								,"o_id" => $v
+								,"user_name" => $admin['user_name']
+								,"real_name" => $admin['real_name']];
+			}
 		}
-		$this->session->set_userdata ( self::SESSION_USER_FLAG, $admin['id'] );
+
+		//添加到临时表中
+		$re = $this->admin_org_temp_data->add_arr($admin['id'],$user_list);
+		if(!$re){
+			$this->set_error ( '用户权限读取失败' );return false;
+		}
+		//添加关联用户end
+
+		$this->session->set_userdata ( self::SESSION_USER_FLAG, $admin['id'] ); //保存登录缓存
 		set_cookie ( self::SESSION_USER_FLAG, auth_code ( $admin['id'], 'ENCODE' ), 43200 );
-		$this->admin_logs ( '登陆', $admin );
+		$this->admin_logs ( '登陆', $admin ); //添加日志
 		return true;
 	}
+
 
 	/**
 	 * 创建管理员
 	 * @param $user_name
 	 * @param $user_password
 	 * @param $real_name
-	 * @param int $role_id
+	 * @param string $role_id
 	 * @return bool
 	 */
-	public function create ( $user_name, $user_password, $real_name = '', $role_id = 0, $is_disable = 0 )
+	public function create ( $user_name, $user_password, $real_name = '', $role_id = '', $is_disable = 0 ,$org_id = '')
 	{
 
 		$admin = $this->admin_data->get_info_by_user_name ( $user_name );
@@ -78,6 +108,7 @@ class Admin_facade extends \Application\Component\Common\IFacade
 			'user_password' => $this->admin_data->encrypt_password ( $user_password ),
 			'real_name' => $real_name,
 			'role_id' => $role_id,
+			'org_id' => $org_id,
 			'is_disable' => $is_disable,
 			'dateline' => time ()
 		] )
@@ -95,13 +126,13 @@ class Admin_facade extends \Application\Component\Common\IFacade
 	 * @param $user_name
 	 * @param $user_password
 	 * @param string $real_name
-	 * @param int $role_id
+	 * @param string $role_id
 	 * @param int $is_disable
 	 * @return bool
 	 */
-	public function update ( $userid, $user_name, $user_password, $real_name = '', $role_id = 0, $is_disable = 0 )
+	public function update ( $userid, $user_name, $user_password, $real_name = '', $role_id = '', $is_disable = 0 ,$org_id = '')
 	{
-		if ( !is_numeric ( $role_id ) ) {
+		if ( empty($role_id) ) {
 			$this->set_error ( '权限组必须选择哦' );
 			return false;
 		}
@@ -115,6 +146,7 @@ class Admin_facade extends \Application\Component\Common\IFacade
 			'user_password' => $this->admin_data->encrypt_password ( $user_password ),
 			'real_name' => $real_name,
 			'role_id' => $role_id,
+			'org_id' => $org_id,
 			'is_disable' => $is_disable,
 		] )
 		) {

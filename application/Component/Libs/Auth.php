@@ -138,11 +138,21 @@ class Auth
 		// 转换表名
 		$auth_group = $this->config['auth_group'];
 		$admin = $this->config['auth_user'];
-		// 执行查询
-		$sql = "SELECT u.id uid,u.role_id group_id,g.title title ,g.rules rules FROM {$admin} u LEFT JOIN {$auth_group} g ON u.role_id=g.id WHERE u.id='{$uid}' AND g.status='1'";
-		$user_groups = $this->db->query ( $sql )->result_array ();
-		$groups[$uid] = $user_groups ?: [];
 
+		//查询
+		$user_role_ids = $this->db->query ( "select * from {$admin} where id ={$uid}" )->result_array ()[0];
+		$sql = "select * from {$auth_group} where `status`=1 and id in ({$user_role_ids['role_id']})";
+		$user_groups = $this->db->query ( $sql )->result_array ();
+		$arr = [];
+		if($user_groups){
+			foreach($user_groups as $k=>$v){
+				$arr[$k]['uid'] = $uid;
+				$arr[$k]['group_id'] = $v['id'];
+				$arr[$k]['title'] = $v['title'];
+				$arr[$k]['rules'] = $v['rules'];
+			}
+		}
+		$groups[$uid] = $arr ?: [];
 		return $groups[$uid];
 	}
 

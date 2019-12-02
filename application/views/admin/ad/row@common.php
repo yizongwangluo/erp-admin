@@ -18,13 +18,11 @@
         <div class="tool">
             <a href="<?php echo site_url('admin/ad/lists');?>" class="button">返回广告列表</a>
 
-
             <div style="margin-left: 30%;">
                 <input id="thumb_img" name="thumb_img" value="" type="text" class="txt txtB" />
                 <a id="thumb_img_btn" href="javascript:void(0)" class="button" >上传图片</a>
                 <script type="text/javascript">new custom_uploader('thumb_img_btn','thumb_img');</script>
             </div>
-
         </div>
 
         <form method="post" action="<?php echo site_url('admin/ad/save'); ?>">

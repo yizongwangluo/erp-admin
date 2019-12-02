@@ -20,13 +20,12 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">所属权限组</label>
-        <div class="layui-input-block">
-            <select name="role_id" lay-verify="required">
-                <option value="">请选择所属权限组</option>
-                <?php foreach ($auth_group_list as $item): ?>
-                <option value="<?=$item['id']?>" <?php if ($user_info['role_id'] == $item['id'] ): ?> selected="selected" <?php endif; ?> ><?=$item['title']?></option>
-                <?php endforeach;?>
-            </select>
+        <div class="layui-input-block" id="tag_ids2">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">职位</label>
+        <div class="layui-input-block" id="tag_ids1">
         </div>
     </div>
     <div class="layui-form-item">
@@ -43,3 +42,62 @@
         </div>
     </div>
 </form>
+
+
+<script>
+
+    layui.extend({
+        selectM: '/static/common/layui/layui_extends/selectM',
+    }).use(['layer','form','jquery','selectM'],function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,selectM = layui.selectM;
+
+        //多选标签-所有配置
+        var tagIns2 = selectM({
+            //元素容器【必填】
+            elem: '#tag_ids2'
+            //候选数据【必填】
+            ,data: <?=json_encode($auth_group_list);?>
+            //input的name 不设置与选择器相同(去#.)
+            ,name: 'role_id'
+            //值的分隔符
+            ,delimiter: ','
+            //默认选中
+            ,selected:[<?=$user_info['role_id']?>]
+            //候选项数据的键名
+            ,field: {idName:'id',titleName:'name'}
+        });
+
+
+        //多选标签-基本配置
+        var tagIns1 = selectM({
+            //元素容器【必填】
+            elem: '#tag_ids1'
+            //候选数据【必填】
+            ,data: <?=json_encode($org_list);?>
+            ,name: 'org_id'
+            //添加验证
+            ,verify:'required'
+            //默认选中
+            ,selected:[<?=$user_info['org_id']?>]
+        });
+
+        //多选标签-所有配置
+//        var tagIns1 = selectM({
+//            //元素容器【必填】
+//            elem: '#tag_ids1'
+//            //候选数据【必填】
+//            ,data: <?//=json_encode($org_list);?>
+//            //input的name 不设置与选择器相同(去#.)
+//            ,name: 'role_id'
+//            //值的分隔符
+//            ,delimiter: ','
+//            //默认选中
+//            ,selected:[<?//=$user_info['org_id']?>//]
+//            //候选项数据的键名
+//            ,field: {idName:'id',titleName:'name'}
+//        });
+    });
+
+</script>
