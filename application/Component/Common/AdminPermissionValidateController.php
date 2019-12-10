@@ -7,11 +7,14 @@
  */
 namespace Application\Component\Common;
 
+use  Application\Component\Concrete\TongTuApi\ErpApiFactory;
+
 class AdminPermissionValidateController extends AdminSessionValidateController
 {
-
+	protected $erpApi;
 	public function __construct ()
 	{
+		$this->erpApi = new ErpApiFactory();
 		parent::__construct ();
 	}
 
