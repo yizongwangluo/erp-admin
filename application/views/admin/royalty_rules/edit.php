@@ -253,20 +253,13 @@ table.on('tool(test2)', function(obj){
 function save_form() {
     var form = $('form'),data = form.serializeArray();
 
-    data.push({"name":"data_px","value":JSON.stringify(data_px)});
-    data.push({"name":"data_gmp","value":JSON.stringify(data_gmp)});
-
     $.post(form.attr('action'), data, function (response) {
         if (!response.status) {
             layer.msg(response.msg, {time: 2000, icon: 6});
             return false;
-        } else if(response.status==2){
-            layer.msg(response.msg, {time: 2000, icon: 6}, function () {
-                window.location.href = '<?php echo site_url ( 'admin/royalty_rules/edit/' ); ?>'+response.data.id;
-            })
-        } else {
+        }else {
             layer.msg('保存成功', {time: 2000, icon: 6}, function () {
-                window.location.href = '<?php echo site_url ( 'admin/royalty_rules/edit/' ); ?>'+response.data.id;
+                window.location.href = '<?php echo site_url ( 'admin/royalty_rules/index' ); ?>';
             })
         }
     },'json');

@@ -9,6 +9,46 @@
 class Royalty_rules_data extends \Application\Component\Common\IData{
 
     /**
+     * 查询
+     * @param int $uid
+     * @param array $where
+     * @param string $order
+     * @param int $page
+     * @param int $limit
+     * @return array
+     */
+    public function get_lists($uid = 0,$where=[],$order = '',$page = 1,$limit=10){
+
+        $sql = 'select {{}} from royalty_rules a ';
+        if($uid!=1){ //超级管理员
+            $sql .= ' INNER JOIN (select s_o_id from admin_org_temp where u_id=1 GROUP BY s_o_id) b on a.o_id=b.s_o_id';
+        }
+
+        $condition['total'] = 'COUNT(*) as total'; //统计
+        $condition['info'] = 'a.*'; //列表
+
+        $sql_total = str_replace('{{}}',$condition['total'],$sql);
+        $query = $this->db->query($sql_total);
+        $total = $query->result_array()[0]['total'];
+        $info = [];
+
+        if($total){ //有数据时，查询列表
+            $sql .=  ' limit '.($page-1)*$limit.','.$limit;
+            $sql_info = str_replace('{{}}',$condition['info'],$sql);
+            $query = $this->db->query($sql_info);
+            $info = $query->result_array();
+        }
+
+        return array(
+            'page_count' => $this->page->get_page_count(),
+            'page_num' => $page,
+            'page_size' => $limit,
+            'total' => $total,
+            'data' => $info
+        );
+    }
+
+    /**
      * 添加
      * @param array $input
      * @return bool
@@ -34,7 +74,9 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
 
         unset($input['data_px']);
         unset($input['data_gmp']);
-
+        $time = time();
+        $input['datetime'] = $time;
+        $input['edittime'] = $time;
         return $this->store($input);
     }
 
@@ -66,6 +108,8 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
 
         unset($input['data_px']);
         unset($input['data_gmp']);
+
+        $input['edittime'] = time();
 
         return $this->update($id,$input);
 

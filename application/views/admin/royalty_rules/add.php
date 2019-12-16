@@ -202,11 +202,11 @@ function save_form() {
             return false;
         } else if(response.status==2){
             layer.msg(response.msg, {time: 2000, icon: 6}, function () {
-                window.location.href = '<?php echo site_url ( 'admin/royalty_rules/edit/' ); ?>'+response.data.id;
+                window.location.href = '/admin/royalty_rules/edit/'+response.data.id;
             })
         } else {
             layer.msg('保存成功', {time: 2000, icon: 6}, function () {
-                window.location.href = '<?php echo site_url ( 'admin/royalty_rules/edit/' ); ?>'+response.data.id;
+                window.location.href = '/admin/royalty_rules/index';
             })
         }
     },'json');
