@@ -26,28 +26,34 @@
                             <input type="text" name="backstage" value="<?=$info['backstage']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">后台用户名</label>
                         <div class="layui-input-inline">
                             <input type="text" name="backstage_username" value="<?=$info['backstage_username']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
+                </div>
+                <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">后台密码</label>
                         <div class="layui-input-inline">
                             <input type="password" name="backstage_password" value="<?=$info['backstage_password']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">客服邮箱</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" placeholder="" name="customer_service_email" value="<?=$info['customer_service_email']?>">
+                        </div>
+                    </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">邮箱密码</label>
                         <div class="layui-input-inline">
                             <input type="password" name="email_password" value="<?=$info['email_password']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
+                </div>
+                <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">收款paypal</label>
                         <div class="layui-input-inline">
@@ -55,8 +61,6 @@
                             <em>多个以 , 隔开 最后一个为当前收款paypal</em>
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">收款信用卡通道</label>
                         <div class="layui-input-inline">
@@ -71,18 +75,17 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">客服邮箱</label>
-                        <div class="layui-input-inline">
-                            <input type="text" class="layui-input" placeholder="" name="customer_service_email" value="<?=$info['customer_service_email']?>">
-                        </div>
+                    <label class="layui-form-label">店铺API</label>
+                    <div class="layui-inline col-xs-3">
+                        <input type="text" name="shop_api" value="<?=$info['shop_api']?>" placeholder="" class="layui-input">
+                        <em>密钥与密码以 , 隔开</em>
                     </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">店铺API</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="shop_api" value="<?=$info['shop_api']?>" placeholder="" class="layui-input">
-                            <em>密钥与密码以 , 隔开</em>
-                        </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">店铺套餐</label>
+                    <div class="layui-inline col-xs-5">
+                        <textarea placeholder="请输入内容" class="layui-textarea" name="shop_package"><?=$info['shop_package']?></textarea>
+                        <em>多个套餐以 , 隔开</em>
                     </div>
                 </div>
                 <div class="layui-form-item">

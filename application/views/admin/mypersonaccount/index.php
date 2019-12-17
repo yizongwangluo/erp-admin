@@ -12,7 +12,7 @@
         <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索</button>
     </div>
                 <div style='overflow:auto'>
-                    <table class="layui-table" lay-size="sm" style='white-space: nowrap'>
+                    <table class="layui-table"  style='white-space: nowrap'>
         <thead>
         <tr>
             <td>ID</td>
@@ -39,7 +39,7 @@
                 </span>
             </td>
             <td>Cookies</td>
-            <td>备注</td>
+            <td>操作</td>
         </tr>
         </thead>
         <tbody>
@@ -59,7 +59,7 @@
                         <textarea id="test<?=$v['id']?>" type="longtext" style="display: none;"><?=$v['cookies']?></textarea>
                         <button onclick="textCopy(document.getElementById('test<?=$v['id']?>').value)" class="layui-btn layui-btn-xs layui-btn-danger">复制</button>
                     </td>
-                    <td><?=$v['person_remark']?></td>
+                    <td><button class="layui-btn-xs layui-btn layui-btn-normal" type="button"  data-modal="<?php echo base_url ( 'admin/mypersonaccount/detail/'.$v['id'] ) ?>"  data-title="个人账号详情" data-width="450px">详情</button></td>
                 </tr>
             <?php endforeach;?>
         <?php } ?>

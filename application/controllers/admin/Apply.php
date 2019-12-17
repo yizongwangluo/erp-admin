@@ -2,7 +2,7 @@
 /**
  * Created by PhpStorm.
  * User: zhoufang
- * Date: 2019/12/5
+ * Date: 2019/12/10
  * Time: 14:22
  */
 
@@ -29,8 +29,8 @@ class Apply  extends \Application\Component\Common\AdminPermissionValidateContro
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->apply_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->apply_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }

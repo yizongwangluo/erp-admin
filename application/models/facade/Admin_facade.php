@@ -94,7 +94,7 @@ class Admin_facade extends \Application\Component\Common\IFacade
 	 * @param string $role_id
 	 * @return bool
 	 */
-	public function create ( $user_name, $user_password, $real_name = '', $role_id = '', $is_disable = 0 ,$org_id = '')
+	public function create ( $user_name, $user_password, $real_name = '', $role_id = '', $is_disable = 0 ,$org_id = '', $job_number = '', $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period)
 	{
 
 		$admin = $this->admin_data->get_info_by_user_name ( $user_name );
@@ -110,7 +110,13 @@ class Admin_facade extends \Application\Component\Common\IFacade
 			'role_id' => $role_id,
 			'org_id' => $org_id,
 			'is_disable' => $is_disable,
-			'dateline' => time ()
+			'dateline' => time (),
+            'job_number' =>$job_number,
+            'probationary_salary' => $probationary_salary,
+            'positive_salary' => $positive_salary,
+            'entry_time' => strtotime($entry_time),
+            'turn_time' => strtotime($turn_time),
+            'trial_period' =>$trial_period
 		] )
 		) {
 			$this->set_error ( '建立账号失败' );
@@ -130,7 +136,7 @@ class Admin_facade extends \Application\Component\Common\IFacade
 	 * @param int $is_disable
 	 * @return bool
 	 */
-	public function update ( $userid, $user_name, $user_password, $real_name = '', $role_id = '', $is_disable = 0 ,$org_id = '')
+	public function update ( $userid, $user_name, $user_password, $real_name = '', $role_id = '', $is_disable = 0 ,$org_id = '', $job_number = '', $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period)
 	{
 		if ( empty($role_id) ) {
 			$this->set_error ( '权限组必须选择哦' );
@@ -148,6 +154,12 @@ class Admin_facade extends \Application\Component\Common\IFacade
 			'role_id' => $role_id,
 			'org_id' => $org_id,
 			'is_disable' => $is_disable,
+            'job_number' =>$job_number,
+            'probationary_salary' => $probationary_salary,
+            'positive_salary' => $positive_salary,
+            'entry_time' => strtotime($entry_time),
+            'turn_time' => strtotime($turn_time),
+            'trial_period' =>$trial_period
 		] )
 		) {
 			$this->set_error ( '后台管理员信息更新失败' );

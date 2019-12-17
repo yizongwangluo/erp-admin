@@ -67,8 +67,8 @@ LEFT JOIN admin d ON a.reviewer = d.id";
             return true;
         }
 
-        $data = array_filter($data,'filtrfunction');
         if (!$id) {
+            $data = array_filter($data,'filtrfunction');
             if (!$this->store($data)) {
                 $this->set_error('数据增加失败，请稍后再试~');
                 return false;

@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: zhoufang
  * Date: 2019/11/29
- * Time: 15:07
+ * Time: 14:07
  */
 
 class Shop extends \Application\Component\Common\AdminPermissionValidateController
@@ -30,8 +30,8 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->shop_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->shop_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }
@@ -42,7 +42,7 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where domain like '%{$search}%' or company_name like '%{$search}%' or shop_remark like '%{$search}%' or real_name like '%{$search}%' or code like '%{$search}%'";
+            $condition[] = " where domain like '%{$search}%' or company_name like '%{$search}%' or shop_remark like '%{$search}%' or real_name like '%{$search}%'";
         }
         if (empty($condition)){
             return array ();
@@ -105,8 +105,8 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->apply_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->apply_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }
@@ -126,8 +126,8 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->apply_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->apply_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }
@@ -147,8 +147,8 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->apply_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->apply_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }
@@ -168,8 +168,8 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->apply_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->apply_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }

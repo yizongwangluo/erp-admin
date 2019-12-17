@@ -12,12 +12,11 @@
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
                 <div style='overflow:auto'>
-                    <table class="layui-table" lay-size="sm" style='white-space: nowrap'>
+                    <table class="layui-table"  style='white-space: nowrap'>
                     <thead>
                     <tr>
                         <td>ID</td>
                         <td>域名</td>
-                        <td>代码</td>
                         <td>后台地址</td>
                         <td>客服邮箱</td>
                         <td>收款paypal
@@ -38,7 +37,7 @@
                     <a href='index?title=deduction&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
-                        <td>店铺API</td>
+                        <td>店铺套餐</td>
                         <td>授权ERP
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=authorization_erp&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
@@ -57,7 +56,7 @@
                     <a href='index?title=real_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
-                        <td>备注</td>
+                        <td>操作</td>
                     </tr>
                     </thead>
                     <tbody>
@@ -66,7 +65,6 @@
                             <tr>
                                 <td><?=$v['id']?></td>
                                 <td><?=$v['domain']?></td>
-                                <td><?=$v['code']?></td>
                                 <td><?=$v['backstage']?></td>
                                 <td><?=$v['customer_service_email']?></td>
                                 <td>
@@ -85,20 +83,20 @@
                                 <td><?=$v['deduction']?></td>
                                 <td>
                                     <?php
-                                    if(strpos($v['shop_api'],',') !== false) {
-                                        $shop_apis = explode(',',$v['shop_api']);
-                                        foreach ($shop_apis as $shop_api){
-                                            echo $shop_api."<br>";
+                                    if(strpos($v['shop_package'],',') !== false) {
+                                        $shop_packages = explode(',',$v['shop_package']);
+                                        foreach ($shop_packages as $shop_package){
+                                            echo $shop_package."<br>";
                                         }
                                     }else{
-                                        echo $v['shop_api'];
+                                        echo $v['shop_package'];
                                     }
                                     ?>
                                 </td>
                                 <td><?=$v['authorization_erp']?></td>
                                 <td><?=$v['company_name']?></td>
                                 <td><?=$v['real_name']?></td>
-                                <td><?=$v['shop_remark']?></td>
+                                <td><button class="layui-btn-xs layui-btn layui-btn-normal" type="button"  data-modal="<?php echo base_url ( 'admin/myshop/detail/'.$v['id'] ) ?>"  data-title="店铺详情" data-width="450px">详情</button></td>
                             </tr>
                         <?php endforeach;?>
                     <?php } ?>

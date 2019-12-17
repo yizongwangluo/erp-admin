@@ -12,7 +12,7 @@
         <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
     </div>
                 <div style='overflow:auto'>
-                    <table class="layui-table" lay-size="sm" style='white-space: nowrap'>
+                    <table class="layui-table"  style='white-space: nowrap'>
         <thead>
         <tr>
             <td>ID</td>
@@ -42,7 +42,7 @@
                     <a href='index?title=real_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
             </td>
-            <td>备注</td>
+            <td>操作</td>
         </tr>
         </thead>
         <tbody>
@@ -66,7 +66,7 @@
                         ?>
                     </td>
                     <td><?=$v['real_name']?></td>
-                    <td><?=$v['companyaccount_remark']?></td>
+                    <td><button class="layui-btn-xs layui-btn layui-btn-normal" type="button"  data-modal="<?php echo base_url ( 'admin/mycompanyaccount/detail/'.$v['id'] ) ?>"  data-title="企业账户详情" data-width="450px">详情</button></td>
                 </tr>
             <?php endforeach;?>
         <?php } ?>

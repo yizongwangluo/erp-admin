@@ -51,12 +51,18 @@ class Admin_user extends \Application\Component\Common\AdminPermissionValidateCo
 			$role_id = input ( 'role_id' );
 			$user_id = input ( 'user_id' );
 			$org_id = input ( 'org_id' );
+			$job_number = input ('job_number');
+			$probationary_salary = input ('probationary_salary');
+            $positive_salary = input ('positive_salary');
+            $entry_time = input ('entry_time');
+            $turn_time = input ('turn_time');
+            $trial_period = input ('trial_period');
 			if (!empty($user_id)){
-				if ( !$this->admin_facade->update ($user_id, $user_name, $user_password, $real_name, $role_id, $status,$org_id ) ) {
+				if ( !$this->admin_facade->update ($user_id, $user_name, $user_password, $real_name, $role_id, $status,$org_id, $job_number, $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period ) ) {
 					$this->output->ajax_return ( AJAX_RETURN_FAIL, $this->admin_facade->get_error () );
 				}
 			}else{
-				if ( !$this->admin_facade->create ( $user_name, $user_password, $real_name, $role_id, $status,$org_id ) ) {
+				if ( !$this->admin_facade->create ( $user_name, $user_password, $real_name, $role_id, $status,$org_id, $job_number, $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period ) ) {
 					$this->output->ajax_return ( AJAX_RETURN_FAIL, $this->admin_facade->get_error () );
 				}
 			}

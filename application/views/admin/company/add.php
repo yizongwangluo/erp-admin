@@ -25,13 +25,11 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">*营业执照</label>
-        <div class="layui-upload">
-            <input type="hidden" value="<?=$info['business_license_image']?>"  name="business_license_image" id="img">
-            <button type="button" class="layui-btn" id="test1">上传图片</button>
-            <div class="layui-upload-list" style="padding-left: 150px">
-                <img class="layui-upload-img" id="demo1" src="<?=$info['business_license_image']?>">
-                <p id="demoText"></p>
-            </div>
+        <div class="layui-inline">
+            <input id="thumb_img" name="business_license_image" value="<?=$info['business_license_image']?>" type="text" class="layui-input thumb_img" />
+        </div>
+        <div class="layui-inline">
+            <a id="thumb_img_btn"  href="javascript:void(0)" class="layui-btn upload-img-all" >上传图片</a>
         </div>
     </div>
     <div class="layui-form-item">
@@ -86,7 +84,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">下户时间</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="date" placeholder="请选择日期" name="logout_time" value="<?=$info['logout_time']?>">
+                <input type="text" class="layui-input" id="date" placeholder="请选择日期" name="logout_time" value="<?= $info['logout_time'] ? date('Y-m-d',$info['logout_time']) : '' ?>">
             </div>
         </div>
         <div class="layui-inline">
@@ -130,44 +128,8 @@
 <?php $this->load->view ( 'admin/common/footer' ) ?>
 
 <script>
-    layui.use('upload', function(){
-        var $ = layui.jquery
-            ,upload = layui.upload;
-        //普通图片上传
-        var uploadInst = upload.render({
-            elem: '#test1'
-            ,url: '/admin/company/upimage'
-            ,accept:'images'
-            ,before: function(obj){
-                //预读本地文件示例，不支持ie8
-                obj.preview(function(index, file, result){
-                    $('#demo1').attr('src', result); //图片链接（base64）
-                });
-            }
-            ,done: function(res){
-                //如果上传失败
-                if(res.code > 0){
-                    // return layer.msg('上传失败');
-                }
-                //上传成功
-                // return layer.msg('上传成功');
-                //将上传图片路径传给input框value
-                var img = $('#img');
-                img.val(res.data.src);
-            }
-            ,error: function(){
-                //演示失败状态，并实现重传
-                var demoText = $('#demoText');
-                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-                demoText.find('.demo-reload').on('click', function(){
-                    uploadInst.upload();
-                });
-            }
-        });
-    });
     layui.use('laydate', function(){
         var laydate = layui.laydate;
-
         //常规用法
         laydate.render({
             elem: '#date'

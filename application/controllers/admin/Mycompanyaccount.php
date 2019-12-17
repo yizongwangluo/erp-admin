@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: zhoufang
  * Date: 2019/12/3
- * Time: 17:51
+ * Time: 17:101
  */
 
 class mycompanyaccount extends \Application\Component\Common\AdminPermissionValidateController
@@ -12,6 +12,7 @@ class mycompanyaccount extends \Application\Component\Common\AdminPermissionVali
     {
         parent::__construct ();
         $this->load->model ( 'data/companyaccount_data' );
+        $this->load->model ( 'data/my_data' );
     }
 
     //我的企业账号
@@ -29,8 +30,8 @@ class mycompanyaccount extends \Application\Component\Common\AdminPermissionVali
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->companyaccount_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->companyaccount_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }
@@ -41,7 +42,7 @@ class mycompanyaccount extends \Application\Component\Common\AdminPermissionVali
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where company_account_id like '%{$search}%' or company_name like '%{$search}%' or companyaccount_remark like '%{$search}%' or domain like '%{$search}%' or real_name like '%{$search}%'";
+            $condition[] = " where company_account_id like '%{$search}%' or company_name like '%{$search}%' or domain like '%{$search}%' or real_name like '%{$search}%'";
         }
         if (empty($condition)){
             return array ();
@@ -49,5 +50,18 @@ class mycompanyaccount extends \Application\Component\Common\AdminPermissionVali
             return $condition;
         }
 
+    }
+
+    //企业账户详情
+    public function detail ( $id = null )
+    {
+        $data['info'] = $this->companyaccount_data->get_info ( $id );
+        $user_id = $data['info']['user_id'];
+        $company_id = $data['info']['company_id'];
+        $shop_id = $data['info']['shop_id'];
+        $data['user'] = $this->my_data->get_user ( $user_id );
+        $data['company'] = $this->my_data->get_company ( $company_id );
+        $data['domain'] = $this->my_data->get_domain ( $shop_id );
+        $this->load->view ( '', $data );
     }
 }

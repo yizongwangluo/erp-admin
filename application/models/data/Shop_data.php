@@ -29,7 +29,8 @@ class Shop_data extends \Application\Component\Common\IData
 	shop_remark,
 	company_name,
 	real_name,
-	code
+	code,
+	shop_package
 FROM
 	(
 		SELECT
@@ -45,6 +46,7 @@ FROM
 			c.shop_remark,
 			c.company_name,
 			c.code,
+			c.shop_package,
 			d.real_name 
 		FROM
 			(
@@ -61,6 +63,7 @@ FROM
 					a.shop_remark,
 					a.user_id,
 					a.code,
+					a.shop_package,
 					b.company_name
 				FROM
 					shop a
@@ -85,7 +88,8 @@ FROM
 	shop_remark,
 	company_name,
 	real_name,
-	code
+	code,
+	shop_package
 FROM
 	(
 		SELECT
@@ -101,6 +105,7 @@ FROM
 			c.shop_remark,
 			c.company_name,
 			c.code,
+			c.shop_package,
 			d.s_real_name AS real_name
 		FROM
 			(
@@ -117,6 +122,7 @@ FROM
 					a.shop_remark,
 					a.user_id,
 					a.code,
+					a.shop_package,
 					b.company_name
 				FROM
 					shop a
@@ -158,6 +164,10 @@ FROM
             $this->set_error(' 请输入后台密码！');
             return false;
         }
+        if (empty($in['customer_service_email'])) {
+            $this->set_error(' 请输入客服邮箱！');
+            return false;
+        }
         if (empty($in['email_password'])) {
             $this->set_error(' 请输入邮箱密码！');
             return false;
@@ -174,16 +184,13 @@ FROM
             $this->set_error(' 请输入扣款方式！');
             return false;
         }
-        if (empty($in['customer_service_email'])) {
-            $this->set_error(' 请输入客服邮箱！');
-            return false;
-        }
-        if (empty($in['shop_api'])) {
-            $this->set_error(' 请输入店铺API！');
-            return false;
-        }
+
+//        if (empty($in['shop_api'])) {
+//            $this->set_error(' 请输入店铺API！');
+//            return false;
+//        }
         if (empty($in['authorization_erp'])) {
-            $this->set_error(' 请选择授权ERP！');
+            $this->set_error(' 请选择是否授权ERP！');
             return false;
         }
         if (empty($in['company_id'])) {
@@ -215,7 +222,8 @@ FROM
             'company_id' => $in['company_id'],
             'user_id' => $in['user_id'],
             'shop_remark' => $in['shop_remark'],
-            'code' => $in['code']
+            'code' => $in['code'],
+            'shop_package' => $in['shop_package']
         );
 
         function  filtrfunction($arr){
@@ -225,9 +233,8 @@ FROM
             return true;
         }
 
-        $data = array_filter($data,'filtrfunction');
-
         if (!$id) {
+            $data = array_filter($data,'filtrfunction');
             if (!$this->store($data)) {
                 $this->set_error('数据增加失败，请稍后再试~');
                 return false;

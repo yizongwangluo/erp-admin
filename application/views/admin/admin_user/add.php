@@ -1,31 +1,76 @@
 <form class="layui-form layui-modal" action="<?php echo base_url ( 'admin/admin_user/add' ) ?>" method="post">
     <input type="hidden" value="<?=$user_info['id']?>" name="user_id">
     <div class="layui-form-item">
-        <label class="layui-form-label">用户名</label>
-        <div class="layui-input-block">
-            <input type="text" name="user_name" value="<?=$user_info['user_name']?>" required lay-verify="required" placeholder="请输入用户名"  class="layui-input">
+        <div class="layui-inline">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="user_name" value="<?=$user_info['user_name']?>" required lay-verify="required" placeholder="请输入用户名"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="password" value="" placeholder="请输入密码" class="layui-input">
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">密码</label>
-        <div class="layui-input-block">
-            <input type="password" name="password" value="" placeholder="请输入密码" class="layui-input">
+        <div class="layui-inline">
+            <label class="layui-form-label">真实姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="real_name" value="<?=$user_info['real_name']?>" required lay-verify="required" placeholder="请输入真实姓名" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">工号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="job_number" value="<?=$user_info['job_number']?>" required lay-verify="required" placeholder="请输入工号" class="layui-input">
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">真实姓名</label>
-        <div class="layui-input-block">
-            <input type="text" name="real_name" value="<?=$user_info['real_name']?>" required lay-verify="required" placeholder="请输入真实姓名" class="layui-input">
+        <div class="layui-inline">
+            <label class="layui-form-label">入职时间</label>
+            <div class="layui-input-inline">
+                <input name="entry_time" value="<?= $user_info['entry_time'] ? date('Y-m-d',$user_info['entry_time']) : '' ?>" required lay-verify="required" placeholder="入职时间" class="layui-input date-time">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">试用期限</label>
+            <div class="layui-input-inline">
+                <input type="text" name="trial_period" value="<?=$user_info['trial_period']?>" required lay-verify="required" placeholder="请输入试用期限" class="layui-input">
+                <em>(单位：月)</em>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">转正时间</label>
+        <div class="layui-input-inline">
+            <input name="turn_time" value="<?= $user_info['turn_time'] ? date('Y-m-d',$user_info['turn_time']) : '' ?>" required lay-verify="required" placeholder="转正时间" class="layui-input date-time">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">试用期薪资</label>
+            <div class="layui-input-inline">
+                <input type="text" name="probationary_salary" value="<?=$user_info['probationary_salary']?>" required lay-verify="required" placeholder="请输入试用期薪资" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">转正薪资</label>
+            <div class="layui-input-inline">
+                <input type="text" name="positive_salary" value="<?=$user_info['positive_salary']?>" required lay-verify="required" placeholder="请输入转正薪资" class="layui-input">
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">所属权限组</label>
-        <div class="layui-input-block" id="tag_ids2">
+        <div class="layui-input-block col-xs-8" id="tag_ids2">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">职位</label>
-        <div class="layui-input-block" id="tag_ids1">
+        <div class="layui-input-block col-xs-8" id="tag_ids1">
         </div>
     </div>
     <div class="layui-form-item">
@@ -45,7 +90,16 @@
 
 
 <script>
-
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        //同时绑定多个
+        lay('.date-time').each(function () {
+            laydate.render({
+                elem: this
+                , trigger: 'click'
+            });
+        });
+    });
     layui.extend({
         selectM: '/static/common/layui/layui_extends/selectM',
     }).use(['layer','form','jquery','selectM'],function(){
@@ -101,3 +155,9 @@
     });
 
 </script>
+<style>
+    em{
+        color: red;
+        padding-left: 5px;
+    }
+</style>

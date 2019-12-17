@@ -216,7 +216,7 @@ FROM
             'time_zone' => $in['time_zone'],
             'BM' => $in['BM'],
             'account_status' => $in['account_status'],
-            'logout_time' => $in['logout_time'],
+            'logout_time' => strtotime($in['logout_time']),
             'BMAPI' => $in['BMAPI'],
             'belong_to' => $in['belong_to'],
             'company_remark' => $in['company_remark']
@@ -229,9 +229,8 @@ FROM
             return true;
         }
 
-        $data = array_filter($data,'filtrfunction');
-
         if (!$id) {
+            $data = array_filter($data,'filtrfunction');
             if (!$this->store($data)) {
                 $this->set_error('数据增加失败，请稍后再试~');
                 return false;

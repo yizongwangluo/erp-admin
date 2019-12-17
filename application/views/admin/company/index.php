@@ -16,7 +16,7 @@
         <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
     </div>
                 <div style='overflow:auto'>
-                    <table class="layui-table" lay-size="sm" style='white-space: nowrap'>
+                    <table class="layui-table"  style='white-space: nowrap'>
         <thead>
         <tr>
             <td>ID</td>
@@ -98,7 +98,7 @@
                             }
                         ?>
                     </td>
-                    <td><?=$v['logout_time']?></td>
+                    <td><?=date('Y-m-d',$v['logout_time'])?></td>
                     <td><?=$v['account_num']?></td>
                     <td><?=$v['unlimit_num']?></td>
                     <td><?=$v['real_name']?></td>

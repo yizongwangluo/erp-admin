@@ -25,7 +25,7 @@
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
                 <div style='overflow:auto'>
-                    <table class="layui-table" lay-size="sm" style='white-space: nowrap'>
+                    <table class="layui-table"  style='white-space: nowrap'>
         <thead>
         <tr>
             <td>日期

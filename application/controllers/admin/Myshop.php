@@ -12,10 +12,11 @@ class Myshop extends \Application\Component\Common\AdminPermissionValidateContro
     {
         parent::__construct ();
         $this->load->model ( 'data/shop_data' );
+        $this->load->model ( 'data/my_data' );
     }
 
-    //店铺列表
-    public function index($title = 'id',$sort = 'desc')
+    //我的店铺
+    public function index ($title = 'id',$sort = 'desc')
     {
         $admin_id = $this->admin['id'];
         $sql = $this->shop_data->index ($admin_id);
@@ -29,8 +30,8 @@ class Myshop extends \Application\Component\Common\AdminPermissionValidateContro
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->shop_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->shop_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }
@@ -41,7 +42,7 @@ class Myshop extends \Application\Component\Common\AdminPermissionValidateContro
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where domain like '%{$search}%' or company_name like '%{$search}%' or shop_remark like '%{$search}%' or real_name like '%{$search}%' or code like '%{$search}%'";
+            $condition[] = " where domain like '%{$search}%' or company_name like '%{$search}%' or real_name like '%{$search}%'";
         }
         if (empty($condition)){
             return array ();
@@ -49,5 +50,16 @@ class Myshop extends \Application\Component\Common\AdminPermissionValidateContro
             return $condition;
         }
 
+    }
+
+    //店铺详情
+    public function detail ( $id = null )
+    {
+        $data['info'] = $this->shop_data->get_info ( $id );
+        $user_id = $data['info']['user_id'];
+        $company_id = $data['info']['company_id'];
+        $data['user'] = $this->my_data->get_user ( $user_id );
+        $data['company'] = $this->my_data->get_company ( $company_id );
+        $this->load->view ( '', $data );
     }
 }

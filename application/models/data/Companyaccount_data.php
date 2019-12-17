@@ -26,7 +26,7 @@ FROM
 			a.shop_id,
 			a.company_id,
 			a.isunlock,
-			a. STATUS,
+			a.status,
 			a.companyaccount_remark,
 			a.user_id,
 			b.real_name,
@@ -51,7 +51,7 @@ FROM
 			a.shop_id,
 			a.company_id,
 			a.isunlock,
-			a. status,
+			a.status,
 			a.companyaccount_remark,
 			a.user_id,
 			b.s_real_name AS real_name,
@@ -122,9 +122,8 @@ FROM
             return true;
         }
 
-        $data = array_filter($data,'filtrfunction');
-
         if (!$id) {
+            $data = array_filter($data,'filtrfunction');
             if (!$this->store($data)) {
                 $this->set_error('数据增加失败，请稍后再试~');
                 return false;
@@ -135,6 +134,7 @@ FROM
                 $this->set_error ('数据更新失败，请稍后再试！');
                 return false;
             }
+//            echo $this->db->last_query();exit;
         }
         return true;
     }

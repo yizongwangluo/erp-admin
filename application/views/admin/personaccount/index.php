@@ -20,7 +20,7 @@
         <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
     </div>
                 <div style='overflow:auto'>
-                    <table class="layui-table" lay-size="sm" style='white-space: nowrap'>
+                    <table class="layui-table"  style='white-space: nowrap'>
                         <thead>
                         <tr>
                             <td>ID</td>
@@ -86,7 +86,7 @@
                                     <td><?=$v['Rdo_username']?></td>
                                     <td><?=$v['Rdo_password']?></td>
                                     <td><?=$v['Rdo_port']?></td>
-                                    <td><?=$v['first_login_time']?></td>
+                                    <td><?=date('Y-m-d',$v['first_login_time'])?></td>
                                     <td>
                                         <?php
                                         if($v['type'] == 0){

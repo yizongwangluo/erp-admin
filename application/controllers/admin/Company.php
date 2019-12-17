@@ -29,8 +29,8 @@ class Company extends \Application\Component\Common\AdminPermissionValidateContr
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->company_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->company_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }
@@ -65,29 +65,6 @@ class Company extends \Application\Component\Common\AdminPermissionValidateContr
             $this->load->view ( '' ,$data);
         }
 
-    }
-
-    //上传营业执照图片
-    public function upimage(){
-        header("Content-Type:text/html;charset=utf-8");
-        $file_path = '/upload/images/';
-        $fileName = $_FILES["file"]["name"];
-        if ($_FILES["file"]["error"] > 0) {
-            echo "错误:" .$_FILES["file"]["error"];
-        } else {
-            if (file_exists($file_path.$fileName)) {
-                if(!unlink(($file_path.$fileName))) {
-                    echo "Error deleting $fileName";
-                }else{
-                    move_uploaded_file($_FILES["file"]["tmp_name"], $file_path.$_FILES["file"]["name"]);
-                }
-            } else {
-                move_uploaded_file($_FILES["file"]["tmp_name"], FCPATH.$file_path.$_FILES["file"]["name"]);
-            }
-            $url = $file_path.$fileName;
-            $result = ['code'=>0,'msg'=>'','data'=>['src'=>$url]];
-            echo json_encode($result);
-        }
     }
 
     //编辑企业主体

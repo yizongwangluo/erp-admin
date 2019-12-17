@@ -20,12 +20,11 @@
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
                 <div style='overflow:auto'>
-                    <table class="layui-table" lay-size="sm" style='white-space: nowrap'>
+                    <table class="layui-table"  style='white-space: nowrap'>
                     <thead>
                     <tr>
                         <td>ID</td>
                         <td>网站域名</td>
-                        <td>代码</td>
                         <td>收款paypal
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=receipt_paypal&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
@@ -44,7 +43,7 @@
                     <a href='index?title=deduction&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
-                        <td>店铺API</td>
+                        <td>店铺套餐</td>
                         <td>授权ERP
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=authorization_erp&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
@@ -73,7 +72,6 @@
                             <tr>
                                 <td><?=$v['id']?></td>
                                 <td><?=$v['domain']?></td>
-                                <td><?=$v['code']?></td>
                                 <td>
                                     <?php
                                     if(strpos($v['receipt_paypal'],',') !== false) {
@@ -90,13 +88,13 @@
                                 <td><?=$v['deduction']?></td>
                                 <td>
                                     <?php
-                                    if(strpos($v['shop_api'],',') !== false) {
-                                        $shop_apis = explode(',',$v['shop_api']);
-                                        foreach ($shop_apis as $shop_api){
-                                            echo $shop_api."<br>";
+                                    if(strpos($v['shop_package'],',') !== false) {
+                                        $shop_packages = explode(',',$v['shop_package']);
+                                        foreach ($shop_packages as $shop_package){
+                                            echo $shop_package."<br>";
                                         }
                                     }else{
-                                        echo $v['shop_api'];
+                                        echo $v['shop_package'];
                                     }
                                     ?>
                                 </td>

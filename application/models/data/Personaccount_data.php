@@ -145,7 +145,7 @@ FROM
             'Rdo_username' => $in['Rdo_username'],
             'Rdo_password' => $in['Rdo_password'],
             'Rdo_port' => $in['Rdo_port'],
-            'first_login_time' => $in['first_login_time'],
+            'first_login_time' => strtotime($in['first_login_time']),
             'type' => $in['type'],
             'company_id' => $in['company_id'],
             'belongto' => $in['belongto'],
@@ -161,9 +161,8 @@ FROM
             return true;
         }
 
-        $data = array_filter($data,'filtrfunction');
-
         if (!$id) {
+            $data = array_filter($data,'filtrfunction');
             if (!$this->store($data)) {
                 $this->set_error('数据增加失败，请稍后再试~');
                 return false;

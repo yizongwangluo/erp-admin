@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: zhoufang
  * Date: 2019/12/4
- * Time: 17:54
+ * Time: 17:104
  */
 
 class Mypersonaccount extends \Application\Component\Common\AdminPermissionValidateController
@@ -12,6 +12,7 @@ class Mypersonaccount extends \Application\Component\Common\AdminPermissionValid
     {
         parent::__construct ();
         $this->load->model ( 'data/personaccount_data' );
+        $this->load->model ( 'data/my_data' );
     }
 
     //我的个人账号
@@ -29,8 +30,8 @@ class Mypersonaccount extends \Application\Component\Common\AdminPermissionValid
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->personaccount_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->personaccount_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }
@@ -41,7 +42,7 @@ class Mypersonaccount extends \Application\Component\Common\AdminPermissionValid
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where person_username like '%{$search}%' or RdoIp like '%{$search}%' or Rdo_username like '%{$search}%' or real_name like '%{$search}%' or person_remark like '%{$search}%'";
+            $condition[] = " where person_username like '%{$search}%' or RdoIp like '%{$search}%' or Rdo_username like '%{$search}%' or real_name like '%{$search}%'";
         }
         if (empty($condition)){
             return array ();
@@ -56,5 +57,16 @@ class Mypersonaccount extends \Application\Component\Common\AdminPermissionValid
         $data['info'] = $this->personaccount_data->get_info ( $id );
         $data['info'] = $this->personaccount_data->get_info ( $id );
         $this->load->view ( '' ,$data);
+    }
+
+    //个人账号详情
+    public function detail ( $id = null )
+    {
+        $data['info'] = $this->personaccount_data->get_info ( $id );
+        $user_id = $data['info']['belongto'];
+        $company_id = $data['info']['company_id'];
+        $data['user'] = $this->my_data->get_user ( $user_id );
+        $data['company'] = $this->my_data->get_company ( $company_id );
+        $this->load->view ( '', $data );
     }
 }

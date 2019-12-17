@@ -59,7 +59,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">首次登陆时间</label>
                         <div class="layui-input-inline">
-                            <input type="text" class="layui-input" id="date" placeholder="请选择日期" name="first_login_time" value="<?=$info['first_login_time']?>">
+                            <input type="text" class="layui-input" id="date" placeholder="请选择日期" name="first_login_time" value="<?= $info['first_login_time'] ? date('Y-m-d',$info['first_login_time']) : '' ?>">
                         </div>
                     </div>
                     <div class="layui-inline">

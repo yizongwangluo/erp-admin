@@ -31,8 +31,8 @@ class Datareview extends \Application\Component\Common\AdminPermissionValidateCo
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->datareview_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->datareview_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }
@@ -100,8 +100,8 @@ class Datareview extends \Application\Component\Common\AdminPermissionValidateCo
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->datareview_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->datareview_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }
@@ -122,8 +122,8 @@ class Datareview extends \Application\Component\Common\AdminPermissionValidateCo
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $result = $this->datareview_data->list_page ( $sql, $condition, [$title, $sort], $page, 5 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],5 );
+        $result = $this->datareview_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
 
     }

@@ -67,9 +67,9 @@
                     <div class="layui-inline col-xs-3">
                         <select name="status" lay-filter="status">
                             <option value="">请选择</option>
-                            <option value="0" <?php if ( $info['status'] == "0" ){echo "selected=\"selected\"";}?>>正常</option>
-                            <option value="1" <?php if ( $info['status'] == "1" ){echo "selected=\"selected\"";}?>>封户</option>
-                            <option value="2" <?php if ( $info['status'] == "2" ){echo "selected=\"selected\"";}?>>申诉中</option>
+                            <option value= '0' <?php if ( $info['status'] == '0' ){echo "selected='selected'";}?>>正常</option>
+                            <option value= '1' <?php if ( $info['status'] == '1' ){echo "selected='selected'";}?>>封户</option>
+                            <option value= '2' <?php if ( $info['status'] == '2'){echo "selected='selected'";}?>>申诉中</option>
                         </select>
                     </div>
                 </div>
