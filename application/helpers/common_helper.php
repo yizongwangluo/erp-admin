@@ -1150,33 +1150,6 @@ function array2level ( $array, $pid = 0, $level = 1 )
 	return $list;
 }
 
-
-
-/**
- * 数组层级缩进转换
- * @param array $array 源数组
- * @param int $pid
- * @param int $level
- * @return array
- */
-function array3level_select ( $array, $pid = 0, $level = 1 )
-{
-	static $list = [];
-	foreach ( $array as $v ) {
-		$v['pid'] = empty($v['pid'])&&$v['children'] ? $v['children']:$v['pid'];
-		if ( $v['pid'] == $pid ) {
-			$v['level'] = $level;
-			$list[$v['id']] = $v;
-			if($v['pid']>0){
-				$list[$v['pid']]['id'] .= ','.$v['id'];
-			}
-			array3level_select ( $array, $v['id'], $level + 1 );
-		}
-	}
-
-	return $list;
-}
-
 /**
  * 采用一个方法，对数据进行过滤
  * @param $filter  方法

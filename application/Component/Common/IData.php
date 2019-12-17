@@ -77,6 +77,7 @@ abstract class IData extends ILayer implements DateInterface
      */
     final public function store($data = array(), $replace = false)
     {
+
         if(!$this->building_tables()){ return false; }
 
         if ($replace) {
@@ -87,6 +88,7 @@ abstract class IData extends ILayer implements DateInterface
         }
 
         if ($this->db->insert_id() > 0) {
+
             return $this->db->insert_id();
         }
 
@@ -235,6 +237,38 @@ abstract class IData extends ILayer implements DateInterface
     final public function get_info($pk_id = 0)
     {
         return $this->_get_info(array(static::_get_pk_field() => $pk_id));
+    }
+
+    /**
+     * 分页列表2
+     * @param array $condition
+     * @param int $page_num
+     * @param int $page_size
+     * @return array
+     */
+    final public function list_page($sql,$condition, $order_by = array(), $page_num = 1, $page_size = 17)
+    {
+        $this->load->library('page');
+        if (!$order_by) {
+            $order_by = array(static::_get_pk_field(), 'asc');
+        }
+        $sql_all = $sql.$condition[0].' order by '.$order_by[0].' '.$order_by[1];
+//        echo $sql_all;
+        $datas = $this->db->query ( $sql_all )->result_array ();
+        $total = count($datas);
+        $this->page->init($total, $page_num, $page_size);
+
+        $sql_page = $sql.$condition[0].' order by '.$order_by[0].' '.$order_by[1].' limit '.$this->page->get_page_start().' , '.$this->page->get_page_size();
+//        echo $sql;
+        $data = $this->db->query ( $sql_page )->result_array ();
+//        print_r($data);
+        return array(
+            'page_count' => $this->page->get_page_count(),
+            'page_num' => $page_num,
+            'page_size' => $page_size,
+            'total' => $total,
+            'data' => $data
+        );
     }
 
     /**

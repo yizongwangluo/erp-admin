@@ -172,4 +172,52 @@ class Admin_data extends \Application\Component\Common\IData
         $info = $query->result_array();
         return $info;
     }
+
+
+    /**
+     * 根据组织id 查询用户列表
+     * @param int $org_id
+     * @return mixed
+     */
+    public function lists_org_id($org_id = 0){
+        if($org_id){
+            $sql = 'select * from admin where FIND_IN_SET("'.$org_id.'",org_id) ';
+            $query = $this->db->query($sql);
+            $info = $query->result_array();
+            return $info;
+        }
+    }
+
+    /**
+     * 查询某组织列表中的所有用户
+     * @param string $oids
+     * @return mixed
+     */
+    public function get_ulist_in_oid($oids = ''){
+        if($oids){
+            $oids_arr = explode('|',$oids);
+
+            $sql = "select id,user_name,real_name,org_id from admin where is_disable=0 and org_id REGEXP '(^|,)({$oids})(,|$)'";
+            $query = $this->db->query($sql);
+            $info = $query->result_array();
+            $arr = [];
+            foreach($info as $v){
+                if($v['org_id']){
+                    $c = explode(',',$v['org_id']);
+                    foreach($c as $value){
+                        if(in_array($value,$oids_arr)){
+                            $arr[] = ['u_id'=>$v['id']
+                                ,'o_id'=>$value
+                                ,'user_name'=>$v['user_name']
+                                ,'real_name'=>$v['real_name']
+                            ];
+                        }
+                    }
+                }
+            }
+            return $arr;
+        }
+    }
+
+
 }

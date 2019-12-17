@@ -51,6 +51,7 @@
                 id: _id
             },
             success: function (data) {
+                console.log(data);
                 zTree = $.fn.zTree.init(tree, setting, data);
             }
         });
