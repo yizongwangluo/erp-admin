@@ -57,7 +57,11 @@
             <div class="layui-inline">
                 <input name="exchange_rate" lay-verify="required" value="<?=$info['exchange_rate']?>" type="number" class="layui-input">
             </div>
+            <em>例：1美元=7.0044人民币，此处应填 7.0044</em>
         </div>
+
+        </div>
+        <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">备注：</label>
             <div class="layui-inline">
