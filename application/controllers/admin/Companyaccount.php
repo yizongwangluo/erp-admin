@@ -62,8 +62,6 @@ class Companyaccount extends \Application\Component\Common\AdminPermissionValida
             $this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
         } else {
             $admin_id = $this->admin['id'];
-            $data['users'] = $this->companyaccount_data->get_users ($admin_id);
-            $data['company'] = $this->companyaccount_data->get_company ($admin_id);
             $data['domains'] = $this->companyaccount_data->get_domain ($admin_id);
             $this->load->view ( '' ,$data);
         }
@@ -75,8 +73,6 @@ class Companyaccount extends \Application\Component\Common\AdminPermissionValida
     {
         $admin_id = $this->admin['id'];
         $data['info'] = $this->companyaccount_data->get_info ( $id );
-        $data['users'] = $this->companyaccount_data->get_users ( $admin_id );
-        $data['company'] = $this->companyaccount_data->get_company ( $admin_id );
         $data['domains'] = $this->companyaccount_data->get_domain ( $admin_id );
         $this->load->view ( '@/add', $data );
     }

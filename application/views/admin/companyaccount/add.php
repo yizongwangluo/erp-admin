@@ -31,28 +31,6 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">所属企业主体</label>
-                    <div class="layui-inline col-xs-3">
-                        <select name="company_id" lay-search="">
-                            <option value="">直接选择或搜索选择</option>
-                            <?php foreach ($company as $v): ?>
-                                <option value="<?=$v['id']?>" <?php if ( $info['company_id'] == $v['id'] ){echo "selected=\"selected\"";}?>><?=$v['company_name']?></option>
-                            <?php endforeach;?>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">所属人</label>
-                    <div class="layui-inline col-xs-3">
-                        <select name="user_id" lay-search="">
-                            <option value="">直接选择或搜索选择</option>
-                            <?php foreach ($users as $v): ?>
-                                <option value="<?=$v['s_u_id']?>" <?php if ( $info['user_id'] == $v['s_u_id'] ){echo "selected=\"selected\"";}?>><?=$v['s_real_name']?></option>
-                            <?php endforeach;?>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
                     <label class="layui-form-label">是否解限</label>
                     <div class="layui-inline col-xs-3">
                         <select name="isunlock">
