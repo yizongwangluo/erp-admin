@@ -33,13 +33,16 @@
         <div class="layui-inline">
             <label class="layui-form-label">*手续费：</label>
             <div class="layui-inline">
-                <input name="service_charge" lay-verify="required" value="" type="text" class="layui-input">
+                <input name="service_charge" lay-verify="required" value="" type="number" class="layui-input">
             </div>
+            <em>
+                （百分比）
+            </em>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">	*运费(g)：</label>
             <div class="layui-inline">
-                <input name="freight" lay-verify="required" value="" type="text" class="layui-input">
+                <input name="freight" lay-verify="required" value="" type="number" class="layui-input">
             </div>
         </div>
         <div class="layui-inline">
@@ -49,9 +52,26 @@
             </div>
         </div>
         <div class="layui-inline">
+            <label class="layui-form-label">*汇率：</label>
+            <div class="layui-inline">
+                <input name="exchange_rate" lay-verify="required" value="" type="number" class="layui-input">
+            </div>
+            <em>例：1美元=7.0044人民币，此处应填 7.0044</em>
+        </div>
+    </div>
+        <div class="layui-form-item">
+        <div class="layui-inline">
             <label class="layui-form-label">备注：</label>
             <div class="layui-inline">
                 <input name="remarks" lay-verify="required" value="" type="text" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">类型：</label>
+            <div class="layui-inline">
+                <input type="radio" name="type" value="1" title="员工" checked>
+                <input type="radio" name="type" value="2" title="组长" >
+                <input type="radio" name="type" value="3" title="主管" >
             </div>
         </div>
     </div>

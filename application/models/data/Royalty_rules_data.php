@@ -64,6 +64,9 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
         if(!is_numeric($input['freight'])){
             $this->set_error('请填写SPU编码');return false;
         }
+        if(!is_numeric($input['exchange_rate'])){
+            $this->set_error('请填写汇率');return false;
+        }
         if(!is_numeric($input['register_fee'])){
             $this->set_error('请填写挂号费');return false;
         }
@@ -97,6 +100,9 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
         }
         if(!is_numeric($input['freight'])){
             $this->set_error('请填写SPU编码');return false;
+        }
+        if(!is_numeric($input['exchange_rate'])){
+            $this->set_error('请填写汇率');return false;
         }
         if(!is_numeric($input['register_fee'])){
             $this->set_error('请填写挂号费');return false;
