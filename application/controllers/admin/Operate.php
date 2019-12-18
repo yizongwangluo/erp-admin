@@ -63,7 +63,6 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
                 $condition[] = " where real_name like '%{$search}%' or domain like '%{$search}%'";
             }
 
-
         }else{
             if (!empty($start_time) && !empty($end_time)) {
                 $condition[] = " where date >= " . $start_time . " and date <= " . $end_time;
@@ -74,7 +73,6 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
             }
         }
 
-
         if (empty($condition)){
             return array ();
         }else{
@@ -83,6 +81,7 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
 
     }
 
+    //新增运营数据
     public function add()
     {
         if ( IS_POST ) {
@@ -92,13 +91,17 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
             }
             $this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
         } else {
-            $this->load->view ( '' );
+            $admin_id = $this->admin['id'];
+            $data['domains'] = $this->operate_data->get_domains ($admin_id);
+            $this->load->view ( '',$data );
         }
     }
 
     //上传广告费
     public function edit( $id = null )
     {
+        $admin_id = $this->admin['id'];
+        $data['domains'] = $this->operate_data->get_domains ($admin_id);
         $data['info'] = $this->operate_data->get_info ( $id );
         $this->load->view ( '@/add', $data );
     }

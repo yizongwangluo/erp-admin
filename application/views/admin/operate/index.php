@@ -1,6 +1,10 @@
 <?php $this->load->view ( 'admin/common/header' ) ?>
 <?php $this->load->view ( 'admin/common/menu' ) ?>
 <div class="layui-tab admin-layui-tab layui-tab-brief">
+    <ul class="layui-tab-title">
+        <li class="layui-this">运营数据列表</li>
+        <li data-modal="<?php echo base_url ( 'admin/operate/add' ) ?>"  data-title="新增运营数据" data-width="450px">新增运营数据</li>
+    </ul>
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
             <form action="?" method="get">
