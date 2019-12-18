@@ -36,6 +36,9 @@
             <div class="layui-inline">
                 <input name="service_charge" lay-verify="required" value="<?=$info['service_charge']?>" type="number" class="layui-input">
             </div>
+            <em>
+                （百分比）
+            </em>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">	*运费(g)：</label>
@@ -50,9 +53,23 @@
             </div>
         </div>
         <div class="layui-inline">
+            <label class="layui-form-label">*汇率：</label>
+            <div class="layui-inline">
+                <input name="exchange_rate" lay-verify="required" value="<?=$info['exchange_rate']?>" type="number" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
             <label class="layui-form-label">备注：</label>
             <div class="layui-inline">
                 <input name="remarks" lay-verify="required" value="<?=$info['remarks']?>" type="text" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">类型：</label>
+            <div class="layui-inline">
+                <input type="radio" name="type" value="1" title="员工" <?=$info['type']==1?'checked':'';?>>
+                <input type="radio" name="type" value="2" title="组长"  <?=$info['type']==2?'checked':'';?>>
+                <input type="radio" name="type" value="3" title="主管"  <?=$info['type']==3?'checked':'';?>>
             </div>
         </div>
     </div>
