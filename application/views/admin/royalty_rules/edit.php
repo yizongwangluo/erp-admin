@@ -84,7 +84,7 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">提成系数（GMP）：</label>
+        <label class="layui-form-label">提成系数（GPM）：</label>
         <div class="layui-inline">
             <table class="layui-hide" id="test2" lay-filter="test2"></table>
         </div>
@@ -107,7 +107,7 @@
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
     </div>
-    <div class="gmp">
+    <div class="GPM">
         <script type="text/html" id="toolbarDemo2">
             <div class="layui-btn-container">
                 <button type="button" class="layui-btn layui-btn-sm"  lay-event="add"><i class="layui-icon">&#xe654;</i></button>
@@ -147,11 +147,11 @@ layui.use('table', function(){
             ]]
         });
 
-        //提成系数gmp列表
+        //提成系数GPM列表
         table.render({
             elem: '#test2'
             ,id: 'idTest2'
-            ,url:'/admin/royalty_rules/get_list_gmp'
+            ,url:'/admin/royalty_rules/get_list_gpm'
             ,where:{r_id: <?=$info['id']?>}
             ,toolbar: '#toolbarDemo2' //开启头部工具栏，并为其绑定左侧模板
             ,defaultToolbar: []
@@ -191,11 +191,11 @@ table.on('toolbar(test2)', function(obj){
         case 'add':
             layer.open({
                 type: 2,
-                title: '添加 提成系数（GMP）',
+                title: '添加 提成系数（GPM）',
                 area: ['500px','350px'],
                 shadeClose: true, //点击遮罩关闭
                 maxmin: true,
-                content: '/admin/royalty_rules/edit_gmp',
+                content: '/admin/royalty_rules/edit_gpm',
                 success: function(layero, index){
                     layer.getChildFrame('body', index).find('input[name="r_id"]').val(<?=$info['id']?>);
                 }
@@ -241,7 +241,7 @@ table.on('tool(test2)', function(obj){
     var data = obj.data;
     if(obj.event === 'del'){
         layer.confirm('确定删除该数据？', function(index){
-            $.post('/admin/royalty_rules/del_gmp',{id:data.id},function(e){
+            $.post('/admin/royalty_rules/del_gpm',{id:data.id},function(e){
                 if(!e.status){
                     layer.msg(e.msg, {time: 2000, icon: 6});
                     return false;
@@ -253,11 +253,11 @@ table.on('tool(test2)', function(obj){
     } else if(obj.event === 'edit'){
         layer.open({
             type: 2,
-            title: '修改 提成系数（GMP）',
+            title: '修改 提成系数（GPM）',
             area: ['500px','350px'],
             shadeClose: true, //点击遮罩关闭
             maxmin: true,
-            content: '/admin/Royalty_rules/edit_gmp',
+            content: '/admin/Royalty_rules/edit_gpm',
             success: function(layero, index){
                 var body = layer.getChildFrame('body', index);
                 console.log(body);

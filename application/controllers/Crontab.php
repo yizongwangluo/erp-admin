@@ -11,10 +11,8 @@ class Crontab extends \MY_Controller
 	public function __construct ()
 	{
 		parent::__construct ();
-		set_time_limit ( 100 );
-		$this->load->model ( 'facade/order_facade' );
-        $this->load->model ( 'logic/order_to_financepanel_logic' );
-        $this->load->model ('data/finance_data');
+		set_time_limit ( 0 );
+		$this->load->model ( 'goods/shopify_goods' );
 	}
 
 	/**

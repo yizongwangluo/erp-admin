@@ -82,7 +82,7 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">提成系数（GMP）：</label>
+        <label class="layui-form-label">提成系数（GPM）：</label>
         <div class="layui-inline">
             <table class="layui-hide" id="test2" lay-filter="test2"></table>
         </div>
@@ -106,15 +106,15 @@
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
     </div>
-    <div class="gmp">
+    <div class="gpm">
         <script type="text/html" id="toolbarDemo2">
             <div class="layui-btn-container">
-                <button type="button" class="layui-btn layui-btn-sm" data-modal="<?php echo base_url ( 'admin/royalty_rules/add_gmp' ) ?>"  data-title="提成系数（gmp）" data-width="450px"><i class="layui-icon">&#xe654;</i></button>
+                <button type="button" class="layui-btn layui-btn-sm" data-modal="<?php echo base_url ( 'admin/royalty_rules/add_gpm' ) ?>"  data-title="提成系数（gpm）" data-width="450px"><i class="layui-icon">&#xe654;</i></button>
             </div>
         </script>
 
         <script type="text/html" id="barDemo2">
-            <a class="layui-btn layui-btn-xs"  lay-event="edit" data-modal="<?php echo base_url ( 'admin/royalty_rules/add_gmp?type=edit' ) ?>" data-title="提成系数（gmp）" data-width="450px">编辑</a>
+            <a class="layui-btn layui-btn-xs"  lay-event="edit" data-modal="<?php echo base_url ( 'admin/royalty_rules/add_gpm?type=edit' ) ?>" data-title="提成系数（gpm）" data-width="450px">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
     </div>
@@ -124,7 +124,7 @@
 <script type="text/javascript">
 
 var data_px = [],px_id = 0,px_edit_id = 0;
-var data_gmp = [],gmp_id = 0,gmp_edit_id = 0;
+var data_gpm = [],gpm_id = 0,gpm_edit_id = 0;
 var table;
 
 layui.use('table', function(){
@@ -151,11 +151,11 @@ layui.use('table', function(){
             ]]
         });
 
-        //提成系数gmp列表
+        //提成系数gpm列表
         table.render({
             elem: '#test2'
             ,id: 'idTest2'
-            ,data:data_gmp
+            ,data:data_gpm
             ,toolbar: '#toolbarDemo2' //开启头部工具栏，并为其绑定左侧模板
             ,defaultToolbar: []
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
@@ -195,17 +195,17 @@ table.on('tool(test2)', function(obj){
     if(obj.event === 'del'){
         layer.confirm('确定删除该数据？', function(index){
             var data_tmp = [];
-            $.each(data_gmp,function(i,item){
+            $.each(data_gpm,function(i,item){
                 if(data.id!=item.id){
                     data_tmp.push(item);
                 }
             });
-            data_gmp = data_tmp;
+            data_gpm = data_tmp;
             obj.del();
             layer.close(index);
         });
     } else if(obj.event === 'edit'){
-        gmp_edit_id = data.id;
+        gpm_edit_id = data.id;
     }
 });
 });
@@ -214,7 +214,7 @@ function save_form() {
     var form = $('form'),data = form.serializeArray();
 
     data.push({"name":"data_px","value":JSON.stringify(data_px)});
-    data.push({"name":"data_gmp","value":JSON.stringify(data_gmp)});
+    data.push({"name":"data_gpm","value":JSON.stringify(data_gpm)});
 
     $.post(form.attr('action'), data, function (response) {
         if (!response.status) {

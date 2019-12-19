@@ -14,7 +14,7 @@ class Royalty_rules extends \Application\Component\Common\AdminPermissionValidat
 	{
 		parent::__construct ();
 		$this->load->model ( 'data/royalty_rules_data' );
-		$this->load->model ( 'data/royalty_gmp_data' );
+		$this->load->model ( 'data/royalty_gpm_data' );
 		$this->load->model ( 'data/royalty_px_data' );
 		$this->load->model ( 'data/admin_organization_data' );
 	}
@@ -72,13 +72,13 @@ class Royalty_rules extends \Application\Component\Common\AdminPermissionValidat
 	}
 
 	/**
-	 * gmp列表
+	 * gpm列表
 	 */
-	public function get_list_gmp(){
+	public function get_list_gpm(){
 
 		$r_id = input('r_id');
 
-		$list = $this->royalty_gmp_data->lists(['r_id'=>$r_id]);
+		$list = $this->royalty_gpm_data->lists(['r_id'=>$r_id]);
 
 		echo json_encode(['code'=>0,'msg'=>'ok','data'=>$list]);
 
@@ -101,12 +101,12 @@ class Royalty_rules extends \Application\Component\Common\AdminPermissionValidat
 	/**
 	 * 删除px
 	 */
-	public function del_gmp(){
+	public function del_gpm(){
 		$id = input('id');
 		if($id){
-			$ret = $this->royalty_gmp_data->delete($id);
+			$ret = $this->royalty_gpm_data->delete($id);
 			if(!$ret){
-				$this->output->ajax_return(AJAX_RETURN_FAIL,$this->royalty_gmp_data->get_error());
+				$this->output->ajax_return(AJAX_RETURN_FAIL,$this->royalty_gpm_data->get_error());
 			}else{
 				$this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
 			}
@@ -146,9 +146,9 @@ class Royalty_rules extends \Application\Component\Common\AdminPermissionValidat
 				}
 			}
 
-			//添加 提成系数GMP
-			if($input['data_gmp']!='[]'){
-				if(!$this->royalty_gmp_data->add($id,$input['data_gmp'])){
+			//添加 提成系数gpm
+			if($input['data_gpm']!='[]'){
+				if(!$this->royalty_gpm_data->add($id,$input['data_gpm'])){
 					$b = ['error'=>'royalty_px_data'];
 				}
 			}
@@ -183,22 +183,22 @@ class Royalty_rules extends \Application\Component\Common\AdminPermissionValidat
 	}
 
 	/**
-	 * 保存gmp
+	 * 保存gpm
 	 */
-	public function save_gmp(){
+	public function save_gpm(){
 
 		$input = $this->input->post();
 
 		if($input['id']){ //修改
-			$ret = $this->royalty_gmp_data->edit($input);
+			$ret = $this->royalty_gpm_data->edit($input);
 		}else{ //添加
-			$ret = $this->royalty_gmp_data->add_one($input);
+			$ret = $this->royalty_gpm_data->add_one($input);
 		}
 
 		if($ret){
 			$this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
 		}else{
-			$this->output->ajax_return ( AJAX_RETURN_FAIL, $this->royalty_gmp_data->get_error() );
+			$this->output->ajax_return ( AJAX_RETURN_FAIL, $this->royalty_gpm_data->get_error() );
 		}
 	}
 

@@ -21,7 +21,7 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
 
         $sql = 'select {{}} from royalty_rules a ';
         if($uid!=1){ //超级管理员
-            $sql .= ' INNER JOIN (select s_o_id from admin_org_temp where u_id=1 GROUP BY s_o_id) b on a.o_id=b.s_o_id';
+            $sql .= ' INNER JOIN (select s_o_id from admin_org_temp where u_id='.$uid.' GROUP BY s_o_id) b on a.o_id=b.s_o_id';
         }
 
         $condition['total'] = 'COUNT(*) as total'; //统计
@@ -76,7 +76,7 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
         }
 
         unset($input['data_px']);
-        unset($input['data_gmp']);
+        unset($input['data_gpm']);
         $time = time();
         $input['datetime'] = $time;
         $input['edittime'] = $time;
@@ -113,7 +113,7 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
         }
 
         unset($input['data_px']);
-        unset($input['data_gmp']);
+        unset($input['data_gpm']);
 
         $input['edittime'] = time();
 
