@@ -62,11 +62,6 @@
         </div>
     </div>
 </div>
-<div class="layui-form-item">
-    <div class="layui-input-block">
-        <a href='<?php echo base_url ( 'admin/mycompanyaccount/index' ) ?>'><button type="button" class="layui-btn ">确定</button></a>
-    </div>
-</div>
 <style>
     .layui-form-item{
         margin-bottom: 5px;
