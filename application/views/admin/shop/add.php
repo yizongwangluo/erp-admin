@@ -75,10 +75,17 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">店铺API</label>
-                    <div class="layui-inline col-xs-3">
-                        <input type="text" name="shop_api" value="<?=$info['shop_api']?>" placeholder="" class="layui-input">
-                        <em>密钥与密码以 , 隔开</em>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">店铺API密钥</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="shop_api_key" value="<?=$info['shop_api_key']?>" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">店铺API密码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="shop_api_pwd" value="<?=$info['shop_api_pwd']?>" placeholder="" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
