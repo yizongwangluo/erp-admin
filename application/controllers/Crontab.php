@@ -12,7 +12,7 @@ class Crontab extends \MY_Controller
 	{
 		parent::__construct ();
 		set_time_limit ( 0 );
-		$this->load->model ( 'goods/shopify_goods' );
+		$this->load->model ( 'orders/shopify_orders' );
 	}
 
 	/**
@@ -35,6 +35,7 @@ class Crontab extends \MY_Controller
 	 */
 	public function run_every_hour ()
 	{
+		$list = $this->shopify_orders->index();
 	}
 
 	/**
