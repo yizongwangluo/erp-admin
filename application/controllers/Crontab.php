@@ -36,6 +36,8 @@ class Crontab extends \MY_Controller
 	public function run_every_hour ()
 	{
 		$list = $this->shopify_orders->index();
+
+		echo $list;exit;
 	}
 
 	/**
