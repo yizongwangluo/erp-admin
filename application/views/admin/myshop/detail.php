@@ -80,19 +80,18 @@
     </div>
 </div>
 <div class="layui-form-item">
-    <label class="layui-form-label">店铺API：</label>
+    <label class="layui-form-label">店铺API密钥：</label>
     <div class="layui-inline">
         <div class="detail">
-            <?php
-            if(strpos($info['shop_api'],',') !== false) {
-                $shop_apis = explode(',',$info['shop_api']);
-                foreach ($shop_apis as $shop_api){
-                    echo $shop_api."<br>";
-                }
-            }else{
-                echo $info['shop_api'];
-            }
-            ?>
+            <?= $info['shop_api_key'] ?>
+        </div>
+    </div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">店铺API密码：</label>
+    <div class="layui-inline">
+        <div class="detail">
+            <?= $info['shop_api_pwd'] ?>
         </div>
     </div>
 </div>
