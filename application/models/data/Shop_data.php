@@ -152,38 +152,38 @@ FROM
             $this->set_error(' 请输入网站域名！');
             return false;
         }
-        if (empty($in['backstage'])) {
-            $this->set_error(' 请输入网站后台！');
-            return false;
-        }
-        if (empty($in['backstage_username'])) {
-            $this->set_error(' 请输入后台用户名！');
-            return false;
-        }
-        if (empty($in['backstage_password'])) {
-            $this->set_error(' 请输入后台密码！');
-            return false;
-        }
-        if (empty($in['customer_service_email'])) {
-            $this->set_error(' 请输入客服邮箱！');
-            return false;
-        }
-        if (empty($in['email_password'])) {
-            $this->set_error(' 请输入邮箱密码！');
-            return false;
-        }
-        if (empty($in['receipt_paypal'])) {
-            $this->set_error(' 请输入收款paypal！');
-            return false;
-        }
-        if (empty($in['receipt_credit_card'])) {
-            $this->set_error(' 请输入收款信用卡通道！');
-            return false;
-        }
-        if (empty($in['deduction'])) {
-            $this->set_error(' 请输入扣款方式！');
-            return false;
-        }
+//        if (empty($in['backstage'])) {
+//            $this->set_error(' 请输入网站后台！');
+//            return false;
+//        }
+//        if (empty($in['backstage_username'])) {
+//            $this->set_error(' 请输入后台用户名！');
+//            return false;
+//        }
+//        if (empty($in['backstage_password'])) {
+//            $this->set_error(' 请输入后台密码！');
+//            return false;
+//        }
+//        if (empty($in['customer_service_email'])) {
+//            $this->set_error(' 请输入客服邮箱！');
+//            return false;
+//        }
+//        if (empty($in['email_password'])) {
+//            $this->set_error(' 请输入邮箱密码！');
+//            return false;
+//        }
+//        if (empty($in['receipt_paypal'])) {
+//            $this->set_error(' 请输入收款paypal！');
+//            return false;
+//        }
+//        if (empty($in['receipt_credit_card'])) {
+//            $this->set_error(' 请输入收款信用卡通道！');
+//            return false;
+//        }
+//        if (empty($in['deduction'])) {
+//            $this->set_error(' 请输入扣款方式！');
+//            return false;
+//        }
 
 //        if (empty($in['shop_api'])) {
 //            $this->set_error(' 请输入店铺API！');
@@ -245,6 +245,9 @@ FROM
                 $this->set_error ('数据更新失败，请稍后再试！');
                 return false;
             }
+            $company_id = $in['company_id'];
+            $user_id = $in['user_id'];
+            $this->db->query ( "update companyaccount set company_id = $company_id , user_id = $user_id where shop_id = $id " );
         }
         return true;
     }
@@ -262,7 +265,6 @@ FROM
 
     public function get_company($admin_id)
     {
-//        $sql = "select id,company_name from company a inner join (select s_u_id from admin_org_temp where u_id = $admin_id group by s_u_id) b on a.belong_to = b.s_u_id order by id desc";
         $sql = "select id,company_name from company order by id desc";
         $company = $this->db->query ( $sql )->result_array ();
         return $company;
