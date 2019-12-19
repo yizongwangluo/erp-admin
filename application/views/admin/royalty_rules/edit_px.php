@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label w">	系数(%)：</label>
+            <label class="layui-form-label w">	系数：</label>
             <div class="layui-inline">
                 <input name="ratio" lay-verify="required" value="0" type="number" class="layui-input">
             </div>
