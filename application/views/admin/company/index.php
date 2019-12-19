@@ -104,8 +104,9 @@
                     <td><?=$v['real_name']?></td>
                     <td><?=$v['company_remark']?></td>
                     <td>
-                        <a href='<?php echo base_url ( 'admin/company/edit/'.$v['id'] ) ?>'><button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button></a>
-                        <button data-url="<?php echo base_url ( 'admin/company/del' ) ?>" data-id="<?= $v['id'] ?>" type="button" class="layui-btn layui-btn-danger layui-btn-sm confirm_post"><i class="layui-icon"></i></button>
+                        <button class="layui-btn-xs layui-btn layui-btn-normal" type="button"  data-modal="<?php echo base_url ( 'admin/company/detail/'.$v['id'] ) ?>"  data-title="企业主体详情" data-width="650px">详情</button>
+                        <a href='<?php echo base_url ( 'admin/company/edit/'.$v['id'] ) ?>'><button type="button" class="layui-btn layui-btn-xs"><i class="layui-icon"></i></button></a>
+                        <button data-url="<?php echo base_url ( 'admin/company/del' ) ?>" data-id="<?= $v['id'] ?>" type="button" class="layui-btn layui-btn-danger layui-btn-xs confirm_post"><i class="layui-icon"></i></button>
                     </td>
                 </tr>
             <?php endforeach;?>

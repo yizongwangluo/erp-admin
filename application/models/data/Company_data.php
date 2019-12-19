@@ -184,14 +184,14 @@ FROM
             $this->set_error(' 请上传营业执照图片！');
             return false;
         }
-        if (empty($in['ad_connect_name'])) {
-            $this->set_error(' 请输入广告主联系人姓名！');
-            return false;
-        }
-        if (empty($in['ad_connect_email'])) {
-            $this->set_error(' 请输入广告主联系人邮箱！');
-            return false;
-        }
+//        if (empty($in['ad_connect_name'])) {
+//            $this->set_error(' 请输入广告主联系人姓名！');
+//            return false;
+//        }
+//        if (empty($in['ad_connect_email'])) {
+//            $this->set_error(' 请输入广告主联系人邮箱！');
+//            return false;
+//        }
         if (empty($in['logout_time'])) {
             $this->set_error(' 请选择下户时间！');
             return false;
@@ -253,6 +253,20 @@ FROM
         }
         $users = $this->db->query ( $sql )->result_array ();
         return $users;
+    }
+
+    public function get_lists($id)
+    {
+        $sql = "SELECT
+	a.*, b.domain,
+	c.real_name
+FROM
+	companyaccount a
+LEFT JOIN shop b ON a.shop_id = b.id
+LEFT JOIN admin c ON a.user_id = c.id
+WHERE
+	a.company_id = $id";
+        return $sql;
     }
 
 

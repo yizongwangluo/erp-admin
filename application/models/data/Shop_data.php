@@ -24,7 +24,8 @@ class Shop_data extends \Application\Component\Common\IData
 	receipt_credit_card,
 	deduction,
 	customer_service_email,
-	shop_api,
+	shop_api_key,
+	shop_api_pwd,
 	authorization_erp,
 	shop_remark,
 	company_name,
@@ -41,7 +42,8 @@ FROM
 			c.receipt_credit_card,
 			c.deduction,
 			c.customer_service_email,
-			c.shop_api,
+			c.shop_api_key,
+	        c.shop_api_pwd,
 			c.authorization_erp,
 			c.shop_remark,
 			c.company_name,
@@ -58,7 +60,8 @@ FROM
 					a.receipt_credit_card,
 					a.deduction,
 					a.customer_service_email,
-					a.shop_api,
+					a.shop_api_key,
+	                a.shop_api_pwd,
 					a.authorization_erp,
 					a.shop_remark,
 					a.user_id,
@@ -83,7 +86,8 @@ FROM
 	receipt_credit_card,
 	deduction,
 	customer_service_email,
-	shop_api,
+	shop_api_key,
+	shop_api_pwd,
 	authorization_erp,
 	shop_remark,
 	company_name,
@@ -100,7 +104,8 @@ FROM
 			c.receipt_credit_card,
 			c.deduction,
 			c.customer_service_email,
-			c.shop_api,
+			c.shop_api_key,
+	        c.shop_api_pwd,
 			c.authorization_erp,
 			c.shop_remark,
 			c.company_name,
@@ -117,7 +122,8 @@ FROM
 					a.receipt_credit_card,
 					a.deduction,
 					a.customer_service_email,
-					a.shop_api,
+					a.shop_api_key,
+	                a.shop_api_pwd,
 					a.authorization_erp,
 					a.shop_remark,
 					a.user_id,
@@ -185,10 +191,14 @@ FROM
 //            return false;
 //        }
 
-//        if (empty($in['shop_api'])) {
-//            $this->set_error(' 请输入店铺API！');
-//            return false;
-//        }
+        if (empty($in['shop_api_key'])) {
+            $this->set_error(' 请输入店铺API密钥！');
+            return false;
+        }
+        if (empty($in['shop_api_pwd'])) {
+            $this->set_error(' 请输入店铺API密码！');
+            return false;
+        }
         if (empty($in['authorization_erp'])) {
             $this->set_error(' 请选择是否授权ERP！');
             return false;
@@ -217,7 +227,8 @@ FROM
             'receipt_credit_card' => $in['receipt_credit_card'],
             'deduction' => $in['deduction'],
             'customer_service_email' => $in['customer_service_email'],
-            'shop_api' => $in['shop_api'],
+            'shop_api_key' => $in['shop_api_key'],
+            'shop_api_pwd' => $in['shop_api_pwd'],
             'authorization_erp' => $in['authorization_erp'],
             'company_id' => $in['company_id'],
             'user_id' => $in['user_id'],
