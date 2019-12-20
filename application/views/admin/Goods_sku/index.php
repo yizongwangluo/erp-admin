@@ -28,7 +28,7 @@
                     <td>SKU编码</td>
                     <td>规格/颜色</td>
                     <td class="img">产品图片</td>
-                    <td>价格</td>
+                    <td>采购价格</td>
                     <td>包装尺寸</td>
                     <td>重量（克）</td>
                     <td>采购周期</td>

@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">*价格：</label>
+            <label class="layui-form-label">*采购价格：</label>
             <div class="layui-inline">
                 <input name="price" lay-verify="required" value="<?= $info['price'] ?>" type="text" class="layui-input">
             </div>
