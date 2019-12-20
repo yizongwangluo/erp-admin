@@ -12,7 +12,6 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
     {
         parent::__construct ();
         $this->load->model ( 'data/operate_data' );
-        $this->load->model ( 'operate/getoperate_data' );
     }
 
     //运营数据列表
@@ -22,7 +21,6 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
         $sql = $this->operate_data->index($admin_id);
         $page = max ( 1, $this->input->get ( 'page' ) );
         $condition = $this->parse_query_lists ($this->input->get ());
-//        echo $condition[0]."<br>";
         $order_t = $this->input->get ( 'title' );
         $order_s = $this->input->get ( 'sort' );
         if(isset($order_t)){
@@ -31,11 +29,9 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
         if(isset($order_s)){
             $sort = $order_s;
         }
-        $this->getoperate_data->get_datas();
         $result = $this->operate_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
         $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
-
     }
 
     //查询条件
