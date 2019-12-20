@@ -39,7 +39,7 @@
 </style>
 <div>
 <div class="login">
-<div class="login-title">携上云管理后台</div>
+<div class="login-title">ERP管理后台</div>
 <form class="layui-form login-form" action="/admin/login/check" method="post">
     <div class="layui-form-item">
         <label class="layui-form-label">用户名</label>
