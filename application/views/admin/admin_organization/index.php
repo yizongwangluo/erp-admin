@@ -55,7 +55,8 @@
                     }
                 });
             }
-            ,edit: [ 'update', 'del']
+//                'update',
+            ,edit: [  'del']
             ,operate: function(obj){
                 var type = obj.type; //得到操作类型：add、edit、del
                 var data = obj.data; //得到当前节点的数据

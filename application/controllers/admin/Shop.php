@@ -13,6 +13,7 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         parent::__construct ();
         $this->load->model ( 'data/shop_data' );
         $this->load->model ( 'data/apply_data' );
+        $this->load->model ( 'data/order_synchro_data' );
     }
 
     //店铺列表
@@ -57,9 +58,15 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
     {
         if ( IS_POST ) {
             $input = input ( 'post.' );
-            if ( !$this->shop_data->add ( $input ) ) {
+            $id = $this->shop_data->add ( $input );
+
+            if ( !$id ) {
                 $this->output->ajax_return ( AJAX_RETURN_FAIL, $this->shop_data->get_error () );
             }
+
+            //添加shopify同步订单记录
+            $this->order_synchro_data->edit_order_synchro($id,$input);
+
             $this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
         } else {
             $admin_id = $this->admin['id'];

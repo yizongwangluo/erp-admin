@@ -246,10 +246,12 @@ FROM
 
         if (!$id) {
             $data = array_filter($data,'filtrfunction');
-            if (!$this->store($data)) {
+            $id = $this->store($data);
+            if (!$id) {
                 $this->set_error('数据增加失败，请稍后再试~');
                 return false;
             }
+            return $id;
         }else{
             unset($in['id']);
             if (!$this->shop_data->update($id,$data)){
@@ -259,8 +261,8 @@ FROM
             $company_id = $in['company_id'];
             $user_id = $in['user_id'];
             $this->db->query ( "update companyaccount set company_id = $company_id , user_id = $user_id where shop_id = $id " );
+            return $id;
         }
-        return true;
     }
 
     public function get_users($admin_id)
