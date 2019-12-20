@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /proxy_recharge/*
+Disallow: /proxy_recharge.htm
+Disallow: /*?*
+Disallow: /_t=t
