@@ -9,7 +9,7 @@
     <ul class="layui-tab-title">
         <li class="layui-this">规格列表</li>
         <li><a href="<?php echo base_url ( 'admin/goods_sku/add?spu_id='.input('spu_id') ) ?>">新增规格</a></li>
-        <li><a href="<?=base_url('admin/goods_sku/examine_list?spu_id='.input('spu_id'))?>">审核</a></li>
+<!--        <li><a href="--><?//=base_url('admin/goods_sku/examine_list?spu_id='.input('spu_id'))?><!--">审核</a></li>-->
     </ul>
     <div class="layui-tab-content">
             <!--<form action="?" method="get">
@@ -37,7 +37,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($data as $v): ?>
+                <?php if($data){ foreach ($data as $v): ?>
                   <tr>
                       <td><?=$v['id']?></td>
                       <td><?=$v['code']?></td>
@@ -49,12 +49,14 @@
                       <td><?=$v['cycle']?></td>
                       <td style="color: <?=$v['status']!=1?'red':'';?>"><?=$this->enum_field->get_values ( 'is_status' )[$v['status']]?></td>
                       <td>
-                          <button style="display: <?=$v['status']?'none':''?>"  data-url="<?=base_url("admin/goods_sku/to_examine/{$v['id']}"); ?>"  class="layui-btn layui-btn-xs confirm_get">提交审核</button>
+<!--                          <button style="display: --><?//=$v['status']?'none':''?><!--"  data-url="--><?//=base_url("admin/goods_sku/to_examine/{$v['id']}"); ?><!--"  class="layui-btn layui-btn-xs confirm_get">提交审核</button>-->
                           <a style="display: <?=$v['status']==1?'none':'';?>;" class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods_sku/edit/{$v['id']}"); ?>">编辑</a>
-                          <button data-url="<?php echo base_url ( 'admin/goods_sku/delete' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>
+                          <button style="display: <?=$v['status']==1?'none':'';?>;" data-url="<?php echo base_url ( 'admin/goods_sku/delete' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>
                       </td>
                   </tr>
-                <?php endforeach;?>
+                <?php endforeach;
+                }
+                ?>
                 </tbody>
             </table>
         <div class="admin-page">

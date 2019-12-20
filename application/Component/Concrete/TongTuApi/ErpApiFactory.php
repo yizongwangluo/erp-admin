@@ -77,15 +77,16 @@ class ErpApiFactory
     public function add_goods($data = []){
 
         $url = $this->get_link('/openapi/tongtool/createProduct');
-        //获取merchantId
-//        $merchantId_arr = $this->get_partnerOpenId($thi,$arr['timestamp']);
 
-        echo "<br/>";
-        print_r($this->merchantId) ;
-        exit;
-        $ret = $this->json_post($url,$data);
+        $data['merchantId'] = $this->merchantId[0]['partnerOpenId'];
 
-        echo $ret;exit;
+        $ret = $this->curl_post_https_json($url,$data);
+        $ret = json_decode($ret,true);
+
+        if($ret['code']!=200){
+            return false;
+        }
+        return true;
     }
 
     /**

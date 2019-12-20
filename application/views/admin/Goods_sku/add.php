@@ -9,7 +9,7 @@
     <ul class="layui-tab-title">
         <li><a href="<?=base_url('admin/goods_sku/index?spu_id='.input('spu_id'))?>">规格列表</a></li>
         <li  class="layui-this">新增规格</li>
-        <li><a href="<?=base_url('admin/goods_sku/examine_list?spu_id='.input('spu_id'))?>">审核</a></li>
+<!--        <li><a href="--><?//=base_url('admin/goods_sku/examine_list?spu_id='.input('spu_id'))?><!--">审核</a></li>-->
     </ul>
 <form action="<?php echo base_url ( 'admin/goods_sku/save' ) ?>" method="post" class="layui-form">
     <div class="layui-field-box">

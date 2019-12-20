@@ -186,10 +186,11 @@
 </div>
 <script type="text/javascript">
     function save_form() {
-        var form = $('form');
+        var form = $('form'),index = layer.load();
         $.post(form.attr('action'), form.serializeArray(), function (response) {
             if (!response.status) {
                 layer.msg(response.msg, {time: 2000, icon: 6});
+                layer.close(index);
                 return false;
             } else {
                 layer.msg('保存成功', {time: 2000, icon: 6}, function () {

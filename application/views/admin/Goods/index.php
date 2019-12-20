@@ -60,7 +60,7 @@
                           <a class="layui-btn layui-btn-xs layui-btn-normal" href="<?=base_url("admin/goods_sku/index?spu_id=".$v['id']); ?>">规格</a>
                           <button style="display: <?=$v['status']?'none':''?>"  data-url="<?=base_url("admin/goods/to_examine/{$v['id']}"); ?>"  class="layui-btn layui-btn-xs confirm_get">提交审核</button>
                           <a style="display: <?=$v['status']==1?'none':'';?>;" class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods/edit/{$v['id']}"); ?>">编辑</a>
-                          <button data-url="<?php echo base_url ( 'admin/goods/delete' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>
+                          <button style="display: <?=$v['status']==1?'none':'';?>;" data-url="<?php echo base_url ( 'admin/goods/delete' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>
                       </td>
                   </tr>
                 <?php endforeach;?>

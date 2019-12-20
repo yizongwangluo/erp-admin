@@ -115,9 +115,22 @@ class Goods_sku_data extends \Application\Component\Common\IData{
      * @param int $id
      * @return bool
      */
-    public function to_examine($id = 0){
+    public function to_examine_spuid($id = 0){
         if($id){
-            return $this->update($id,['status'=>2]);
+            return $this->update($id,['status'=>2],'spu_id');
         }
     }
+
+    /**
+     * 修改状态
+     * @param int $spu_id
+     * @param int $status
+     * @return bool
+     */
+    public function edit_spuid($spu_id = 0,$status = 0){
+        if($spu_id){
+            return $this->update($spu_id,['status'=>$status],'spu_id');
+        }
+    }
+
 }
