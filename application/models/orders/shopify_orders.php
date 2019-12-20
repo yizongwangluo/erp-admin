@@ -31,22 +31,24 @@ class shopify_orders extends \Application\Component\Common\IFacade
         //修改请求日志表请求时间
         $this->order_synchro_data->edit_shop_time($shop_info['id'],$time);
 
-        $this->get_order_page($shop_info['shop_url'],$url);
+        $this->get_order_page($shop_info['shop_id'],$shop_info['shop_url'],$url);
 
     }
 
 
-    public function get_order_page($shop_url = '',$url = '',$page = 1){
+    public function get_order_page($shop_id = 0,$shop_url = '',$url = '',$page = 1){
 
-        $order_list = curl_get_https($url.'&limit=250');
+        $url_new = $url.'&limit=250';
+
+        $order_list = curl_get_https($url_new);
         $order_list = json_decode($order_list,true);
 
         $order_cout = count($order_list['orders']);
         if($order_cout>0){ //有订单时
             //添加同步日志
-            $log_id = $this->order_synchro_log_data->add_log($shop_url,$url);
+            $log_id = $this->order_synchro_log_data->add_log($shop_url,$url_new);
             //同步订单到本地
-            $this->add_order($order_list['orders']);
+            $this->add_order($shop_id,$order_list['orders']);
             //修改订单同步状态
             $this->order_synchro_log_data->edit_log($log_id,1);
 
@@ -61,13 +63,15 @@ class shopify_orders extends \Application\Component\Common\IFacade
 
     /**
      * 保存订单
+     * @param int $shop_id
      * @param array $arr
      */
-    public function add_order($arr = []){
+    public function add_order($shop_id = 0,$arr = []){
 
         foreach($arr as $v){
             $order_info = [];
             $order_info['shopify_o_id'] = $v['id'];
+            $order_info['shop_id'] = $shop_id;
             $order_info['total_price_usd'] = $v['total_price_usd'];
             $order_info['created_at'] = $v['created_at'];
             $order_info['updated_at'] = $v['updated_at'];
@@ -85,6 +89,34 @@ class shopify_orders extends \Application\Component\Common\IFacade
                 }
             }
         }
+    }
+
+
+    /**
+     * get请求https链接公共方法
+     * @param $url
+     * @return mixed
+     */
+    function curl_get_shopify_https($url){
+        //	return $url;
+        $curl = curl_init(); // 启动一个CURL会话
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // 跳过证书检查
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, true);  // 从证书中检查SSL加密算法是否存在
+        // 返回 response_header, 该选项非常重要,如果不为 true, 只会获得响应的正文
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        $tmpInfo = curl_exec($curl);     //返回api的json对象
+
+        // 获得响应结果里的：头大小
+        $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        // 根据头大小去获取头信息内容
+        $header = substr($tmpInfo, 0, $headerSize);
+        //关闭URL请求
+        curl_close($curl);
+
+        return ['header'=>$header,'json'=>$tmpInfo];    //返回json对象
     }
 
 }

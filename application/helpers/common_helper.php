@@ -285,17 +285,9 @@ function curl_get_https($url){
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // 跳过证书检查
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, true);  // 从证书中检查SSL加密算法是否存在
-// 返回 response_header, 该选项非常重要,如果不为 true, 只会获得响应的正文
-//	curl_setopt($curl, CURLOPT_HEADER, true);
 	$tmpInfo = curl_exec($curl);     //返回api的json对象
-
-// 获得响应结果里的：头大小
-//	$headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-// 根据头大小去获取头信息内容
-//	$header = substr($tmpInfo, 0, $headerSize);
 	//关闭URL请求
 	curl_close($curl);
-//	return ['header'=>$header,'json'=>$tmpInfo];    //返回json对象
 	return $tmpInfo;
 }
 
