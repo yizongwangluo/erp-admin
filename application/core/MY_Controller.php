@@ -45,7 +45,7 @@ class MY_Controller extends CI_Controller
 	 */
 	protected function _init_env ()
 	{
-		$this->load->driver ( 'cache', array ('adapter' => 'file', 'backup' => 'file', 'key_prefix' => 'qianrenshu_') );
+		$this->load->driver ( 'cache', array ('adapter' => 'file', 'backup' => 'file', 'key_prefix' => 'erp_') );
 		$this->load->vars ( 'static_cdn', config_item ( 'static_cdn' ) );
 	}
 
@@ -77,18 +77,19 @@ class MY_Controller extends CI_Controller
 		if(!file_exists($filename)) { $this->output->ajax_return ( AJAX_RETURN_FAIL, '不存在该文件'); }//判断文件是否存在
 
 		$fileArr  = explode('.',$filename); //获取文件后缀
+		$file_len =  count($fileArr);
 
-		$this->load->library("phpexcel");//ci框架中引入excel类
+		$this->load->library("PHPExcel");//ci框架中引入excel类
 
 		$objPHPExcel = new PHPExcel();
 
-		if($fileArr[1]=='xls'){
+		if($fileArr[$file_len-1]=='xls'){
 			$objReader = \PHPExcel_IOFactory::createReader('Excel5');
 
-		}elseif($fileArr[1]=='xlsx'){
+		}elseif($fileArr[$file_len-1]=='xlsx'){
 			$objReader = \PHPExcel_IOFactory::createReader('Excel2007');
 
-		}elseif($fileArr[1]=='csv'){
+		}elseif($fileArr[$file_len-1]=='csv'){
 			return $this->read_csv_lines($filename);
 		}else{
 			$this->output->ajax_return ( AJAX_RETURN_FAIL, '无法读取该excel文件');
@@ -161,7 +162,7 @@ class MY_Controller extends CI_Controller
 		$date = date("YmdHis",time());
 		$fileName .= "_{$date}.xls";
 
-		$this->load->library("phpexcel");//ci框架中引入excel类
+		$this->load->library("PHPExcel");//ci框架中引入excel类
 		$objPHPExcel = new PHPExcel();
 
 		$objActSheet = $objPHPExcel->getActiveSheet();
@@ -206,5 +207,56 @@ class MY_Controller extends CI_Controller
 		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$objWriter->save('php://output'); //文件通过浏览器下载
 
+	}
+
+	//file_get_contents抓取https地址内容
+	function getCurl($url){
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		$result = curl_exec($ch);
+		curl_close ($ch);
+		return $result;
+	}
+
+	/**
+	 * 匹配字符串与数组是否存在相同数据
+	 * @param string $str
+	 * @param array $arr
+	 * @return bool
+	 */
+	function channel_strs($str = '',$arr = []){
+
+		$c = false;
+
+		if($str && $arr){
+			array_map(function($item) use (&$str,&$c){
+				if(strstr($str,$item)){
+					$c = true;
+					return ;
+				}
+			},$arr);
+		}
+		return $c;
+	}
+
+
+	/**
+	 * 正则匹配并删除字符串
+	 * @param string $str
+	 * @param array $arr
+	 * @param string $a
+	 * @return mixed
+	 */
+	function channel_replace_str ($str = '',$arr = [],$a = ''){
+
+		if($str && $arr){
+			$regex = '/('.implode('|',$arr).$a.')/';
+			$s = preg_replace($regex,"",$str);
+			return $s;
+		}
+		return false;
 	}
 }

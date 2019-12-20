@@ -176,13 +176,6 @@ if ( ! is_php('5.4'))
 		{
 			log_message('error', 'Could not find the specified $config[\'composer_autoload\'] path: '.$composer_autoload);
 		}
-		if (CI_DEBUG){
-			$whoops = new Whoops\Run();
-			$errorPage = new Whoops\Handler\PrettyPageHandler();
-			$errorPage->setPageTitle("Error_系统出错"); // Set the page's title
-			$whoops->pushHandler($errorPage);
-			$whoops->register();
-		}
 	}
 
 /*

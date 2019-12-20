@@ -134,7 +134,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = '../vendor/autoload.php';
+$config['composer_autoload'] = 'vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -526,4 +526,4 @@ $config['proxy_ips'] = '';
 //$config['img_url'] =  'http://cs.qianrenshu.com';
 $config['img_url'] =  '';
 $config['img_url_default'] =  '/logo.png';
-$config['static_cdn'] = (ENVIRONMENT == 'production') ? 'https://static.qianrenshu.com' : '';
+$config['static_cdn'] = (ENVIRONMENT == 'production') ? 'https://static.erp.com' : '';
