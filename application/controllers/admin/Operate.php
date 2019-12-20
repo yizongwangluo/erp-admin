@@ -12,10 +12,11 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
     {
         parent::__construct ();
         $this->load->model ( 'data/operate_data' );
+        $this->load->model ( 'operate/getoperate_data' );
     }
 
     //运营数据列表
-    public function index($title = 'date',$sort = 'desc')
+    public function index($title = 'datetime',$sort = 'desc')
     {
         $admin_id = $this->admin['id'];
         $sql = $this->operate_data->index($admin_id);
@@ -30,6 +31,7 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
         if(isset($order_s)){
             $sort = $order_s;
         }
+        $this->getoperate_data->get_datas();
         $result = $this->operate_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
         $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
@@ -41,11 +43,11 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
     {
         $start_time = $input['start_time'];
         $end_time = $input['end_time'];
-        $start_time = strtotime($start_time);
-        $end_time = strtotime($end_time);
+//        $start_time = strtotime($start_time);
+//        $end_time = strtotime($end_time);
         if($start_time != '' && $end_time != ''){
             //结束时间与开始时间的时间差
-            $time_stamp_diff = $end_time - $start_time;
+            $time_stamp_diff = strtotime($end_time) - strtotime($start_time);
             if($time_stamp_diff < 0)
                 $this->output->alert('对不起,查询开始时间必须小于结束时间!');
         }
@@ -54,22 +56,22 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
         if (!empty($search)){
 
             if (!empty($start_time) && !empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and date >= ".$start_time." and date <= ".$end_time;
+                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and datetime >= '{$start_time}' and datetime <= '{$end_time}'";
             }elseif (!empty($start_time) && empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and date >= ".$start_time;
+                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and datetime >= '{$start_time}'";
             }elseif (empty($start_time) && !empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and date <= ".$end_time;
+                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and datetime <= '{$end_time}'";
             }else{
                 $condition[] = " where real_name like '%{$search}%' or domain like '%{$search}%'";
             }
 
         }else{
             if (!empty($start_time) && !empty($end_time)) {
-                $condition[] = " where date >= " . $start_time . " and date <= " . $end_time;
+                $condition[] = " where datetime >= '{$start_time}' and datetime <= '{$end_time}'";
             }elseif (!empty($start_time) && empty($end_time)){
-                $condition[] = " where date >= ".$start_time;
+                $condition[] = " where datetime >= '{$start_time}'";
             }elseif (empty($start_time) && !empty($end_time)){
-                $condition[] = " where date <= ".$end_time;
+                $condition[] = " where datetime <= '{$end_time}'";
             }
         }
 
@@ -81,7 +83,6 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
 
     }
 
-    //新增运营数据
     public function add()
     {
         if ( IS_POST ) {
@@ -91,17 +92,13 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
             }
             $this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
         } else {
-            $admin_id = $this->admin['id'];
-            $data['domains'] = $this->operate_data->get_domains ($admin_id);
-            $this->load->view ( '',$data );
+            $this->load->view ( '' );
         }
     }
 
     //上传广告费
     public function edit( $id = null )
     {
-        $admin_id = $this->admin['id'];
-        $data['domains'] = $this->operate_data->get_domains ($admin_id);
         $data['info'] = $this->operate_data->get_info ( $id );
         $this->load->view ( '@/add', $data );
     }

@@ -31,8 +31,8 @@
                     <tr>
                         <td>日期
                             <span class="layui-table-sort layui-inline">
-                    <a href='index?title=date&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=date&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=datetime&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=datetime&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
                         <td>店铺域名</td>
@@ -93,7 +93,7 @@
                     <?php if(!empty($data)){ ?>
                         <?php foreach ($data as $v): ?>
                             <tr>
-                                <td><?=date('Y-m-d',$v['date'])?></td>
+                                <td><?=$v['datetime']?></td>
                                 <td><?=$v['domain']?></td>
                                 <td><?=$v['real_name']?></td>
                                 <td><?=$v['paid_orders']?></td>

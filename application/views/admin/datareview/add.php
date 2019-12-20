@@ -2,11 +2,6 @@
     <input type="hidden" value="<?=$info['id']?>"  name="id">
     <input type="hidden" value="<?=$admin['id']?>"  name="reviewer">
     <input type="hidden" value="<?=time()?>"  name="review_time">
-    <input type="hidden" value="<?=date('Y-m-d',$info['date'])?>"  name="date">
-    <input type="hidden" value="<?=$info['shop_id']?>"  name="shop_id">
-    <input type="hidden" value="<?=$info['paid_orders']?>"  name="paid_orders">
-    <input type="hidden" value="<?=$info['turnover']?>"  name="turnover">
-    <input type="hidden" value="<?=$info['sku_total_cost']?>"  name="sku_total_cost">
     <div class="layui-form-item">
         <label class="layui-form-label layui-form-label-auto">广告费用</label>
         <div class="layui-input-block">

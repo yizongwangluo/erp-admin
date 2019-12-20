@@ -17,7 +17,7 @@ class Datareview extends \Application\Component\Common\AdminPermissionValidateCo
     }
 
     //审核数据列表(全部)
-    public function index($title = 'date',$sort = 'desc')
+    public function index($title = 'datetime',$sort = 'desc')
     {
         $admin_id = $this->admin['id'];
         $sql = $this->datareview_data->index($admin_id);
@@ -42,11 +42,11 @@ class Datareview extends \Application\Component\Common\AdminPermissionValidateCo
     {
         $start_time = $input['start_time'];
         $end_time = $input['end_time'];
-        $start_time = strtotime($start_time);
-        $end_time = strtotime($end_time);
+//        $start_time = strtotime($start_time);
+//        $end_time = strtotime($end_time);
         if($start_time != '' && $end_time != ''){
             //结束时间与开始时间的时间差
-            $time_stamp_diff = $end_time - $start_time;
+            $time_stamp_diff = strtotime($end_time) - strtotime($start_time);
             if($time_stamp_diff < 0)
                 $this->output->alert('对不起,查询开始时间必须小于结束时间!');
         }
@@ -55,26 +55,24 @@ class Datareview extends \Application\Component\Common\AdminPermissionValidateCo
         if (!empty($search)){
 
             if (!empty($start_time) && !empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and date >= ".$start_time." and date <= ".$end_time;
+                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and datetime >= '{$start_time}' and datetime <= '{$end_time}'";
             }elseif (!empty($start_time) && empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and date >= ".$start_time;
+                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and datetime >= '{$start_time}'";
             }elseif (empty($start_time) && !empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and date <= ".$end_time;
+                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and datetime <= '{$end_time}'";
             }else{
                 $condition[] = " where real_name like '%{$search}%' or domain like '%{$search}%'";
             }
 
-
         }else{
             if (!empty($start_time) && !empty($end_time)) {
-                $condition[] = " where date >= " . $start_time . " and date <= " . $end_time;
+                $condition[] = " where datetime >= '{$start_time}' and datetime <= '{$end_time}'";
             }elseif (!empty($start_time) && empty($end_time)){
-                $condition[] = " where date >= ".$start_time;
+                $condition[] = " where datetime >= '{$start_time}'";
             }elseif (empty($start_time) && !empty($end_time)){
-                $condition[] = " where date <= ".$end_time;
+                $condition[] = " where datetime <= '{$end_time}'";
             }
         }
-
 
         if (empty($condition)){
             return array ();
@@ -85,7 +83,7 @@ class Datareview extends \Application\Component\Common\AdminPermissionValidateCo
     }
 
     //待审核数据列表
-    public function unreviewed($title = 'date',$sort = 'desc')
+    public function unreviewed($title = 'datetime',$sort = 'desc')
     {
         $admin_id = $this->admin['id'];
         $sql = $this->datareview_data->unreviewed($admin_id);
@@ -107,7 +105,7 @@ class Datareview extends \Application\Component\Common\AdminPermissionValidateCo
     }
 
     //已审核数据列表
-    public function reviewed($title = 'date',$sort = 'desc')
+    public function reviewed($title = 'datetime',$sort = 'desc')
     {
         $admin_id = $this->admin['id'];
         $sql = $this->datareview_data->reviewed($admin_id);
