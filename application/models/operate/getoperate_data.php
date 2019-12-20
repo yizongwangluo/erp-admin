@@ -14,7 +14,7 @@ class getoperate_data extends \Application\Component\Common\IData
         $this->load->model ( 'data/operate_data' );
     }
 
-    //根据店铺分组获取当天营业额,付款订单数,sku总成本
+    //根据店铺分组获取前一天的营业额,付款订单数,sku总成本
     public function get_datas()
     {
         //获取前一天的日期
