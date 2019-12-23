@@ -82,7 +82,7 @@
                             <?php foreach ($data as $v): ?>
                                 <tr>
                                     <td><input type="checkbox" name="ckbx" id="<?= $v['id'] ?>"/></td>
-                                    <td><?= date('Y-m',$v['date']) ?></td>
+                                    <td><?= $v['date'] ?></td>
                                     <td><?= $v['real_name']?></td>
                                     <td><?= $v['basic_salary']?></td>
                                     <td><?=$v['commission']?></td>

@@ -62,11 +62,9 @@ class Salary  extends \Application\Component\Common\AdminPermissionValidateContr
     {
         $start_time = $input['start_time'];
         $end_time = $input['end_time'];
-        $start_time = strtotime($start_time);
-        $end_time = strtotime($end_time);
         if($start_time != '' && $end_time != ''){
             //结束时间与开始时间的时间差
-            $time_stamp_diff = $end_time - $start_time;
+            $time_stamp_diff = strtotime($end_time) - strtotime($start_time);
             if($time_stamp_diff < 0)
                 $this->output->alert('对不起,查询开始时间必须小于结束时间!');
         }
@@ -79,10 +77,10 @@ class Salary  extends \Application\Component\Common\AdminPermissionValidateContr
                 $where[] = " real_name = '$search'";
             }
         if (!empty($start_time)){
-            $where[] = " date >= $start_time";
+            $where[] = " date >= '$start_time'";
         }
         if (!empty($end_time)){
-            $where[] = " date <= $end_time";
+            $where[] = " date <= '$end_time'";
         }
         if (is_numeric($status)){
             $where[] = " salary_status = $status";

@@ -63,23 +63,27 @@ FROM
     public function add( array $in )
     {
         $id = $in['id'];
+        //根据id查出已有的运营数据
         $operate = $this->db->query ( "SELECT * FROM operate where id = $id" )->row_array ();
+        //根据user_id获取org_id,获取对应的汇率
         $user_id = $operate['user_id'];
         $org_id = $this->db->query ( "select org_id from admin where id = $user_id" )->row_array ()['org_id'];
         $sql = "select exchange_rate from royalty_rules where o_id in ($org_id) and type = 1";
         $fees = $this->db->query ( $sql )->row_array ();
-        $exchange_rate = $fees['exchange_rate'];
-        if(empty($in['ad_cost'])){
+        $exchange_rate = $fees['exchange_rate'];//汇率
+        if(empty($in['ad_cost'])){//广告费未上传时,数据为空
             $ROI = '';
             $unit_ad_cost = '';
             $gross_profit = '';
             $gross_profit_rate = '';
             $in['review_status'] = 0;
-        }else{
-            $ROI = bcdiv($operate['turnover'],$in['ad_cost'],2);
-            $unit_ad_cost = bcdiv($in['ad_cost'],$operate['paid_orders'],2);
-            $gross_profit = $operate['turnover']-$in['ad_cost']-$operate['formalities_cost']-bcdiv($operate['product_total_cost'],$exchange_rate,2);
-            $gross_profit_rate = bcdiv($gross_profit,$operate['turnover'],9);
+        }else{//上传广告费后,计算相应数据
+            $ROI = bcdiv($operate['turnover'],$in['ad_cost'],2);//ROI=营业额/广告费
+            $unit_ad_cost = bcdiv($in['ad_cost'],$operate['paid_orders'],2);//每单广告成本=广告费/付款订单数
+            $unit_ad_cost = empty($unit_ad_cost) ? '0' : $unit_ad_cost;
+            $gross_profit = $operate['turnover']-$in['ad_cost']-$operate['formalities_cost']-bcdiv($operate['product_total_cost'],$exchange_rate,2);//毛利=营业额-广告费-手续费-产品总成本/汇率
+            $gross_profit_rate = bcdiv($gross_profit,$operate['turnover'],9);//毛利率=毛利/营业额
+            $gross_profit_rate = empty($gross_profit_rate) ? '0' : $gross_profit_rate;
             $in['review_status'] ? $in['review_status'] = $in['review_status'] : $in['review_status'] = 1;
         }
 

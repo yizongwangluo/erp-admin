@@ -37,7 +37,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">后台密码</label>
                         <div class="layui-input-inline">
-                            <input type="password" name="backstage_password" value="<?=$info['backstage_password']?>" placeholder="" class="layui-input">
+                            <input type="text" name="backstage_password" value="<?=$info['backstage_password']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -49,7 +49,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">邮箱密码</label>
                         <div class="layui-input-inline">
-                            <input type="password" name="email_password" value="<?=$info['email_password']?>" placeholder="" class="layui-input">
+                            <input type="text" name="email_password" value="<?=$info['email_password']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
                 </div>
