@@ -101,7 +101,7 @@
                     <td><?=date('Y-m-d',$v['logout_time'])?></td>
                     <td><?=$v['account_num']?></td>
                     <td><?=$v['unlimit_num']?></td>
-                    <td><?=$v['real_name']?></td>
+                    <td><?=$v['user_name']?></td>
                     <td><?=$v['company_remark']?></td>
                     <td>
                         <button class="layui-btn-xs layui-btn layui-btn-normal" type="button"  data-modal="<?php echo base_url ( 'admin/company/detail/'.$v['id'] ) ?>"  data-title="企业主体详情" data-width="650px">详情</button>

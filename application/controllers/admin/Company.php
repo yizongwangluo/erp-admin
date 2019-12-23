@@ -42,7 +42,7 @@ class Company extends \Application\Component\Common\AdminPermissionValidateContr
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where agent like '%{$search}%' or company_name like '%{$search}%' or company_remark like '%{$search}%' or domain like '%{$search}%' or real_name like '%{$search}%'";
+            $condition[] = " where agent like '%{$search}%' or company_name like '%{$search}%' or company_remark like '%{$search}%' or domain like '%{$search}%' or user_name like '%{$search}%'";
         }
         if (empty($condition)){
             return array ();

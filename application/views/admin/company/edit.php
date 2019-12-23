@@ -98,7 +98,7 @@
                             <select name="belong_to" lay-search="">
                                 <option value="">直接选择或搜索选择</option>
                                 <?php foreach ($users as $v): ?>
-                                    <option value="<?=$v['s_u_id']?>" <?php if ( $info['belong_to'] == $v['s_u_id'] ){echo "selected=\"selected\"";}?>><?=$v['s_real_name']?></option>
+                                    <option value="<?=$v['s_u_id']?>" <?php if ( $info['belong_to'] == $v['s_u_id'] ){echo "selected=\"selected\"";}?>><?=$v['s_user_name']?></option>
                                 <?php endforeach;?>
                             </select>
                         </div>
@@ -171,7 +171,7 @@
                                         }
                                         ?>
                                     </td>
-                                    <td><?=$v['real_name']?></td>
+                                    <td><?=$v['user_name']?></td>
                                     <td><?=$v['companyaccount_remark']?></td>
 <!--                                    <td>-->
 <!--                                        <a href='--><?php //echo base_url ( 'admin/companyaccount/edit/'.$v['id'] ) ?><!--'><button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button></a>-->

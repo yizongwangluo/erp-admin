@@ -16,7 +16,7 @@ class My_data extends \Application\Component\Common\IData
     public function get_user($user_id)
     {
         if(is_numeric($user_id)){
-            $sql = "select real_name from admin where id = $user_id";
+            $sql = "select user_name,real_name from admin where id = $user_id";
             $user = $this->db->query ( $sql )->row_array ();
         }else{
             $user = [];
