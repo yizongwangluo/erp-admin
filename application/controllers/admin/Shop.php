@@ -65,7 +65,7 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
             }
 
             //添加shopify同步订单记录
-            $this->order_synchro_data->edit_order_synchro($id,$input);
+//            $this->order_synchro_data->edit_order_synchro($id,$input);
 
             $this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
         } else {

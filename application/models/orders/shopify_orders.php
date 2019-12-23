@@ -3,7 +3,6 @@
 
 class shopify_orders extends \Application\Component\Common\IFacade
 {
-    protected $shop_info;
     public function __construct ()
     {
         parent::__construct ();
@@ -11,10 +10,29 @@ class shopify_orders extends \Application\Component\Common\IFacade
         $this->load->model ( 'data/order_synchro_log_data' );
         $this->load->model ( 'data/order_data' );
         $this->load->model ( 'data/order_goods_data' );
+        $this->load->model ( 'data/shop_data' );
     }
 
 
     public function index(){
+
+        $shop_list = $this->shop_data->lists();
+        //没有店铺时 跳出程序
+        if(empty($shop_list)){
+            return false;
+        }
+
+        $time = date('Y-m-d',strtotime("-1 day"));
+        $min_time = $time.'T00:00:00';
+        $mix_time = $time.'T23:59:59';
+
+        foreach($shop_list as $k=>$value){
+            $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['domain'].'/admin/api/2019-10/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_mix='.$mix_time.'&limit=10';
+            $this->get_order_page($value,$url,$time,$min_time,$mix_time,2);
+        }
+
+    }
+    public function index_bak(){
 
         $shop_info = $this->order_synchro_data->get_shop_one();
 
@@ -38,31 +56,41 @@ class shopify_orders extends \Application\Component\Common\IFacade
     }
 
     /**
-     *
+     * 请求地址，获取订单并保存
+     * @param array $arr
      * @param string $url
+     * @param string $time
+     * @param string $min_time
+     * @param string $mix_time
      * @param int $page
+     * @return bool
      */
-    public function get_order_page($url = '',$page = 1){
+    public function get_order_page($arr = [],$url = '',$time = '',$min_time = '',$mix_time = '',$page = 1){
 
         $order_json = curl_get_https($url);
         $order_list = json_decode($order_json,true);
 
         $order_cout = count($order_list['orders']);
+
         if($order_cout>0){ //有订单时
+
             //添加同步日志
-            $log_id = $this->order_synchro_log_data->add_log($this->shop_info['shop_id'],$this->shop_info['shop_url'],$url,$page);
+            $log_id = $this->order_synchro_log_data->add_log($arr['id'],$url,$min_time,$mix_time,$page);
+
             //同步订单到本地
-            $this->add_order($this->shop_info['shop_id'],$order_list['orders']);
+            $ret = $this->order_data->add_order($arr['id'],$time,$order_list['orders']);
+
+            if(!$ret){ return false; } //添加失败，跳出程序
+
             //修改订单同步状态
             $this->order_synchro_log_data->edit_log($log_id,1);
-
         }
 
-        $next_link = $this->get_header($url); //下页链接
+        $next_link = $this->get_header($url,$arr['shop_api_key'],$arr['shop_api_pwd']); //下页链接
 
         if($next_link){
             $page++;
-            $this->get_order_page($next_link,$page);
+            $this->get_order_page($arr,$next_link,$time,$min_time,$mix_time,$page);
         }
     }
 
@@ -128,9 +156,11 @@ class shopify_orders extends \Application\Component\Common\IFacade
     /**
      * 解析响应头
      * @param string $url
-     * @return bool|mixed
+     * @param string $key
+     * @param string $password
+     * @return bool|mixed|string
      */
-    public function get_header($url = ''){
+    public function get_header($url = '',$key = '',$password = ''){
 
         $headArr=get_headers($url);
 
@@ -142,7 +172,7 @@ class shopify_orders extends \Application\Component\Common\IFacade
                         $a = ['Link:','<https://','>',';',' ','rel="next"'];
                         $url = str_replace($a,'',$item);
                         if($url){
-                            $url = 'https://'.$this->shop_info['key'].':'.$this->shop_info['password'].'@'.$url;
+                            $url = 'https://'.$key.':'.$password.'@'.$url;
                             return $url;
                         }
                     }

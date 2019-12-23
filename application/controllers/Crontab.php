@@ -35,7 +35,6 @@ class Crontab extends \MY_Controller
 	 */
 	public function run_every_hour ()
 	{
-		$this->shopify_orders->index(); //定时获取shopify订单
 	}
 
 	/**
@@ -43,6 +42,7 @@ class Crontab extends \MY_Controller
 	 */
 	public function run_every_day ()
 	{
+		$this->shopify_orders->index(); //定时获取shopify订单
 	}
 
 	/**
