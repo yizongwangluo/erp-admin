@@ -2,3 +2,6 @@
 .layui-nav .layui-nav-more{
     border-top-color: rgb(167, 166, 166);
 }
+.layui-nav-tree .layui-nav-item{
+    background-color: #fff;
+}
