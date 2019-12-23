@@ -23,6 +23,7 @@ class Company_data extends \Application\Component\Common\IData
 	account_status,
 	logout_time,
 	company_remark,
+	user_name,
 	real_name,
 	account_num,
 	unlimit_num,
@@ -36,6 +37,7 @@ FROM
 			k.account_status,
 			k.logout_time,
 			k.company_remark,
+			k.user_name,
 			k.real_name,
 			k.account_num,
 			k.unlimit_num,
@@ -49,6 +51,7 @@ FROM
 					f.account_status,
 					f.logout_time,
 					f.company_remark,
+					f.user_name,
 					f.real_name,
 					f.account_num,
 					count(d.company_account_id) AS unlimit_num
@@ -61,6 +64,7 @@ FROM
 							a.account_status,
 							a.logout_time,
 							a.company_remark,
+							b.user_name,
 							b.real_name,
 							count(c.company_account_id) AS account_num
 						FROM
@@ -94,6 +98,7 @@ FROM
 	account_status,
 	logout_time,
 	company_remark,
+	user_name,
 	real_name,
 	account_num,
 	unlimit_num,
@@ -107,6 +112,7 @@ FROM
 			k.account_status,
 			k.logout_time,
 			k.company_remark,
+			k.user_name,
 			k.real_name,
 			k.account_num,
 			k.unlimit_num,
@@ -120,6 +126,7 @@ FROM
 					f.account_status,
 					f.logout_time,
 					f.company_remark,
+					f.user_name,
 					f.real_name,
 					f.account_num,
 					count(d.company_account_id) AS unlimit_num
@@ -132,6 +139,7 @@ FROM
 							a.account_status,
 							a.logout_time,
 							a.company_remark,
+							b.s_user_name AS user_name,
 							b.s_real_name AS real_name,
 							count(c.company_account_id) AS account_num
 						FROM
@@ -139,7 +147,8 @@ FROM
 						INNER JOIN (
 							SELECT
 								s_u_id,
-								s_real_name
+								s_real_name,
+								s_user_name
 							FROM
 								admin_org_temp
 							WHERE
@@ -247,9 +256,9 @@ FROM
 
     public function get_users($admin_id){
         if($admin_id == 1){
-            $sql = "select id as s_u_id,real_name as s_real_name from admin order by s_u_id desc";
+            $sql = "select id as s_u_id,real_name as s_real_name,user_name as s_user_name from admin order by s_u_id desc";
         }else{
-            $sql = 'select s_u_id,s_real_name from admin_org_temp where u_id = '.$admin_id.' group by s_u_id order by s_u_id desc';
+            $sql = 'select s_u_id,s_real_name,s_user_name from admin_org_temp where u_id = '.$admin_id.' group by s_u_id order by s_u_id desc';
         }
         $users = $this->db->query ( $sql )->result_array ();
         return $users;
@@ -259,6 +268,7 @@ FROM
     {
         $sql = "SELECT
 	a.*, b.domain,
+	c.user_name,
 	c.real_name
 FROM
 	companyaccount a

@@ -15,34 +15,10 @@
     </div>
 </div>
 <div class="layui-form-item">
-    <label class="layui-form-label">后台用户名：</label>
-    <div class="layui-inline">
-        <div class="detail">
-            <?= $info['backstage_username'] ?>
-        </div>
-    </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">后台密码：</label>
-    <div class="layui-inline">
-        <div class="detail">
-            <?= $info['backstage_password'] ?>
-        </div>
-    </div>
-</div>
-<div class="layui-form-item">
     <label class="layui-form-label">客服邮箱：</label>
     <div class="layui-inline">
         <div class="detail">
             <?= $info['customer_service_email'] ?>
-        </div>
-    </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">邮箱密码：</label>
-    <div class="layui-inline">
-        <div class="detail">
-            <?= $info['email_password'] ?>
         </div>
     </div>
 </div>
@@ -76,22 +52,6 @@
     <div class="layui-inline">
         <div class="detail">
             <?= $info['deduction'] ?>
-        </div>
-    </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">店铺API密钥：</label>
-    <div class="layui-inline">
-        <div class="detail">
-            <?= $info['shop_api_key'] ?>
-        </div>
-    </div>
-</div>
-<div class="layui-form-item">
-    <label class="layui-form-label">店铺API密码：</label>
-    <div class="layui-inline">
-        <div class="detail">
-            <?= $info['shop_api_pwd'] ?>
         </div>
     </div>
 </div>

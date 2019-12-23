@@ -101,7 +101,7 @@
                 <select name="belong_to" lay-search="">
                     <option value="">直接选择或搜索选择</option>
                     <?php foreach ($users as $v): ?>
-                        <option value="<?=$v['s_u_id']?>" <?php if ( $info['belong_to'] == $v['s_u_id'] ){echo "selected=\"selected\"";}?>><?=$v['s_real_name']?></option>
+                        <option value="<?=$v['s_u_id']?>" <?php if ( $info['belong_to'] == $v['s_u_id'] ){echo "selected=\"selected\"";}?>><?=$v['s_user_name']?></option>
                     <?php endforeach;?>
                 </select>
             </div>

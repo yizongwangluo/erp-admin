@@ -63,7 +63,7 @@
                         <?php if(!empty($data)){ ?>
                             <?php foreach ($data as $v): ?>
                                 <tr>
-                                    <td><?= date('Y-m',$v['date']) ?></td>
+                                    <td><?= $v['date'] ?></td>
                                     <td><?= $v['real_name']?></td>
                                     <td><?= $v['basic_salary']?></td>
                                     <td><?=$v['commission']?></td>
