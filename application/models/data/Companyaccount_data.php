@@ -13,6 +13,73 @@ class Companyaccount_data extends \Application\Component\Common\IData
         parent::__construct ();
     }
 
+    public function index ($admin_id)
+    {
+        if($admin_id == 1){
+            $sql = "SELECT
+	*
+FROM
+	(
+		SELECT
+			a.id,
+			a.company_account_id,
+			a.shop_id,
+			a.company_id,
+			a.isunlock,
+			a.status,
+			a.companyaccount_remark,
+			a.user_id,
+			b.real_name,
+			b.user_name,
+			c.domain,
+			d.company_name
+		FROM
+			companyaccount a
+		LEFT JOIN admin b ON b.id = a.user_id
+		LEFT JOIN shop c ON a.shop_id = c.id
+		LEFT JOIN company d ON a.company_id = d.id
+		GROUP BY
+			a.id
+	) s";
+        }else{
+            $sql = "SELECT
+	*
+FROM
+	(
+		SELECT
+			a.id,
+			a.company_account_id,
+			a.shop_id,
+			a.company_id,
+			a.isunlock,
+			a.status,
+			a.companyaccount_remark,
+			a.user_id,
+			b.s_real_name AS real_name,
+			b.s_user_name AS user_name,
+			c.domain,
+			d.company_name
+		FROM
+			companyaccount a
+		INNER JOIN (
+			SELECT
+				s_u_id,
+				s_real_name,
+				s_user_name
+			FROM
+				admin_org_temp
+			WHERE
+				u_id = $admin_id
+			GROUP BY
+				s_u_id
+		) b ON b.s_u_id = a.user_id
+		LEFT JOIN shop c ON a.shop_id = c.id
+		LEFT JOIN company d ON a.company_id = d.id
+	) s";
+        }
+        return $sql;
+    }
+
     public function  add ( array $in )
     {
         if (empty($in['company_account_id'])) {

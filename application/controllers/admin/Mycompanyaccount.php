@@ -42,7 +42,7 @@ class mycompanyaccount extends \Application\Component\Common\AdminPermissionVali
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where company_account_id like '%{$search}%' or company_name like '%{$search}%' or domain like '%{$search}%' or real_name like '%{$search}%'";
+            $condition[] = " where company_account_id like '%{$search}%' or company_name like '%{$search}%' or domain like '%{$search}%' or user_name like '%{$search}%'";
         }
         if (empty($condition)){
             return array ();
