@@ -4,6 +4,7 @@ class Shopify_orders extends \Application\Component\Common\IFacade
 {
     public function __construct ()
     {
+
         parent::__construct ();
         $this->load->model ( 'data/order_synchro_data' );
         $this->load->model ( 'data/order_synchro_log_data' );
@@ -46,7 +47,8 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $min_time = $shop_info['new_time']?str_replace(' ','T',date('Y-m-d H:i:s',$shop_info['new_time'])):'';
         $mix_time = str_replace(' ','T',date('Y-m-d H:i:s',$time));
 
-        $url = 'https://'.$shop_info['key'].':'.$shop_info['password'].'@'.$shop_info['shop_url'].'/admin/api/2019-10/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_mix='.$mix_time.'&limit=10';
+        //拼接url 获取shopify已支付订单列表
+        $url = 'https://'.$shop_info['key'].':'.$shop_info['password'].'@'.$shop_info['shop_url'].'/admin/api/2019-10/orders.json?order=updated_at&financial_status=paid&updated_at_min='.$min_time.'&updated_at_mix='.$mix_time.'&limit=10';
         //修改请求日志表请求时间
         $this->order_synchro_data->edit_shop_time($shop_info['id'],$time);
 

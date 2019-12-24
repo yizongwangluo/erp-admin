@@ -10,6 +10,7 @@ class Getoperate_data extends \Application\Component\Common\IData
 {
     public function __construct ()
     {
+
         parent::__construct ();
         $this->load->model ( 'data/operate_data' );
     }
