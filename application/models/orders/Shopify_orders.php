@@ -1,7 +1,6 @@
 <?php
 
-
-class shopify_orders extends \Application\Component\Common\IFacade
+class Shopify_orders extends \Application\Component\Common\IFacade
 {
     public function __construct ()
     {
@@ -66,6 +65,8 @@ class shopify_orders extends \Application\Component\Common\IFacade
      * @return bool
      */
     public function get_order_page($arr = [],$url = '',$time = '',$min_time = '',$mix_time = '',$page = 1){
+
+        log_message('get_order_page',json_encode($arr),true);
 
         $order_json = curl_get_https($url);
         $order_list = json_decode($order_json,true);
