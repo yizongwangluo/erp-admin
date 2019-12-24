@@ -48,7 +48,7 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $mix_time = str_replace(' ','T',date('Y-m-d H:i:s',$time));
 
         //拼接url 获取shopify已支付订单列表
-        $url = 'https://'.$shop_info['key'].':'.$shop_info['password'].'@'.$shop_info['shop_url'].'/admin/api/2019-10/orders.json?order=updated_at&financial_status=paid&updated_at_min='.$min_time.'&updated_at_mix='.$mix_time.'&limit=10';
+        $url = 'https://'.$shop_info['key'].':'.$shop_info['password'].'@'.$shop_info['shop_url'].'/admin/api/2019-10/orders.json?order=updated_at&financial_status=paid&updated_at_min='.$min_time.'&updated_at_mix='.$mix_time.'&limit=250';
         //修改请求日志表请求时间
         $this->order_synchro_data->edit_shop_time($shop_info['id'],$time);
 

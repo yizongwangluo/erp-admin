@@ -23,10 +23,10 @@
                     <td>广告费($)</td>
                     <td>产品总成本(¥)</td>
                     <td>订单数</td>
-                    <td>手续费(¥)</td>
-                    <td>挂号费(¥)</td>
-                    <td>汇率</td>
+                    <td>毛利(¥)</td>
+                    <td>毛利率</td>
                     <td>提成金额(¥)</td>
+                    <td>备注</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -38,10 +38,10 @@
                       <td><?=$v['ad_cost']?></td>
                       <td><?=$v['product_total_cost']?></td>
                       <td><?=$v['paid_orders']?></td>
-                      <td><?=$v['service_charge']?></td>
-                      <td><?=$v['register_fee']?></td>
-                      <td><?=$v['exchange_rate']?></td>
+                      <td><?=$v['gross_profit_rmb']?></td>
+                      <td><?=$v['gross_profit_rate']?></td>
                       <td><?=$v['money']?></td>
+                      <td><?=$v['remarks']?></td>
                   </tr>
                 <?php endforeach;
                 }

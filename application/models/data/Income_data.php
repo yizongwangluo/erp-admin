@@ -66,7 +66,7 @@ class Income_data extends \Application\Component\Common\IData
                 $sql = 'select * from royalty_rules where o_id in ('.$v['org_id'].')';
                 $royalty_rules = $this->db->query($sql)->result_array();
                 if(count($royalty_rules) !=2){
-                    $info[$k]['money'] = '未找到相应提成规则，请检查该员工信息';
+                    $info[$k]['remarks'] = '未找到相应提成规则，请检查该员工信息';
                 }else{
                     $data = [];
                     $royalty_rules = array_column($royalty_rules,null,'type');
@@ -78,10 +78,13 @@ class Income_data extends \Application\Component\Common\IData
                     $data[2] = $this->get_team_royalty($v['u_id'],$royalty_rules[2]['o_id'],$royalty_rules[1]['o_id'],$year,$month);
 
                     foreach($data[1] as $i=>$t){
-                        if($i=='exchange_rate'){
-                            $info[$k][$i] = $t;
+                        if($i=='remarks'){
+                            $info[$k][$i] = $data[1][$i].','.$data[2][$i];
                         }else{
                             $info[$k][$i] = $data[1][$i]+$data[2][$i];
+                            if($i=='gross_profit_rate'){
+                                $info[$k][$i] = $info[$k][$i]/2;
+                            }
                         }
                     }
                 }
@@ -98,6 +101,88 @@ class Income_data extends \Application\Component\Common\IData
     }
 
     /**
+     * 生成列表
+     * @param string $datetime
+     * @return bool
+     */
+    public function timing_lists($datetime = ''){
+
+        $user_list = [];
+
+        $datetime = $datetime?$datetime:time(); //时间戳
+        $datetime = date('Y-m',strtotime('-1 month',$datetime)); //上个月日期 格式2019-12
+        $date = explode('-',$datetime);
+        $year = $date[0];
+        $month = $date[1];
+
+        $query = $this->db->query('select id as u_id,user_name,org_id from admin');
+        $user_list = $query->result_array();
+
+        if(count($user_list)){
+            foreach($user_list as $k=>$v){ //循环计算个人业绩
+
+                //设置初始默认数据
+                $user_list[$k]['turnover'] = 0;
+                $user_list[$k]['paid_orders'] = 0;
+                $user_list[$k]['ad_cost'] = 0;
+                $user_list[$k]['product_total_cost'] = 0;
+                $user_list[$k]['gross_profit_rmb'] = 0;
+                $user_list[$k]['gross_profit_rate'] = 0;
+                $user_list[$k]['money'] = 0;
+                $user_list[$k]['remarks'] ='';
+                //设置初始默认数据end
+
+                if(strpos($v['org_id'],',')===false){ //单个职位（组员）
+
+                    $user_list[$k] = array_merge($user_list[$k],$this->get_personal_royalty($v['u_id'],$v['org_id'],$year,$month)); //计算个人提成
+
+                }else{ //多个职位（组长）
+
+                    //查看提成规则
+                    $sql = 'select * from royalty_rules where o_id in ('.$v['org_id'].')';
+                    $royalty_rules = $this->db->query($sql)->result_array();
+                    if(count($royalty_rules) !=2){
+                        $user_list[$k]['remarks'] = '未找到相应提成规则，请检查该员工信息';
+                    }else{
+                        $data = [];
+                        $royalty_rules = array_column($royalty_rules,null,'type');
+
+                        //个人业绩
+                        $data[1] = $this->get_personal_royalty($v['u_id'],$royalty_rules[1]['o_id'],$year,$month);
+
+                        //管理提成
+                        $data[2] = $this->get_team_royalty($v['u_id'],$royalty_rules[2]['o_id'],$royalty_rules[1]['o_id'],$year,$month);
+
+                        foreach($data[1] as $i=>$t){
+                            if($i=='remarks'){
+                                $user_list[$k][$i] = $data[1][$i].','.$data[2][$i];
+                            }else{
+                                $user_list[$k][$i] = $data[1][$i]+$data[2][$i];
+                                if($i=='gross_profit_rate'){
+                                    $user_list[$k][$i] = $user_list[$k][$i]/2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $sql = 'INSERT into income(u_id,turnover,ad_cost,product_total_cost,paid_orders,gross_profit_rate,gross_profit_rmb,datetime,money,remarks)  VALUES ';
+            $sql_val = [];
+            foreach($user_list as $value){
+                $sql_val[] = '('.$value['u_id'].','.$value['turnover'].','.$value['ad_cost'].','.$value['product_total_cost'].','.$value['paid_orders'].','.$value['gross_profit_rate'].','.$value['gross_profit_rmb'].',"'.$datetime.'",'.$value['money'].',"'.$value['remarks'].'")';
+            }
+            $sql .= implode(',',$sql_val);
+            $query = $this->db->query($sql);
+            if($this->db->affected_rows()<=0){
+                log_message('timing_lists','sql = '.$sql,true);
+                $this->set_error('添加失败');return false;
+            }
+            return true;
+        }
+    }
+
+    /**
      * 个人提成计算
      * @param int $u_id
      * @param int $org_id
@@ -109,36 +194,30 @@ class Income_data extends \Application\Component\Common\IData
 
         $data = [];
 
-        if(!$u_id || !$org_id || !$year || !$month){  return $data;    }
+        if(!$u_id || !$org_id || !$year || !$month){  return $data;  }
 
-        //获取本月的营业额$、订单数、广告费$、产品总成本￥、产品总重量
-        $sql = 'select SUM(turnover) as turnover,sum(paid_orders) as paid_orders,SUM(ad_cost) as ad_cost,SUM(product_total_cost) as product_total_cost,SUM(total_weight) as total_weight from operate where user_id='.$u_id.' and year(datetime)="'.$year.'" and month(datetime)="'.$month.'"';
-        $sum_money = $this->db->query($sql)->result_array()[0];
+        //获取本月的营业额$、订单数、广告费$、产品总成本￥、毛利（rmb）、毛利率
+        $sql = 'select SUM(turnover) as turnover,sum(paid_orders) as paid_orders,SUM(ad_cost) as ad_cost,SUM(product_total_cost) as product_total_cost,sum(gross_profit_rmb) as gross_profit_rmb,(sum(gross_profit_rate)/count(*)) as  gross_profit_rate from operate where user_id='.$u_id.' and year(datetime)="'.$year.'" and month(datetime)="'.$month.'"';
+        $sum_money = $this->db->query($sql)->row_array();
         if($sum_money){
+            foreach($sum_money as $k=>$value){
+                $sum_money[$k] = $value?$value:0;
+            }
             $data = array_merge($data,$sum_money);
         }
 
         //查看提成规则
-        $sql = 'select id,service_charge,freight,register_fee,exchange_rate from royalty_rules where o_id='.$org_id;
-        $royalty_rules = $this->db->query($sql)->result_array()[0];
+        $sql = 'select id from royalty_rules where o_id='.$org_id;
+        $royalty_rules = $this->db->query($sql)->row_array();
         if($royalty_rules){ //有提成规则时
 
-            $data = array_merge($data,$royalty_rules);
+            $px = $sum_money['gross_profit_rmb']; //毛利 人民币
+            $gpm = $sum_money['gross_profit_rate']; //毛利率
 
-            //毛利（px）：营业额-营业额 * 0.07 - 广告费 - sku成本 - （产品总重量 * 每克价格） - （订单数量 * 挂号费）
-            $turnover =  $sum_money['turnover']*$royalty_rules['exchange_rate'];//营业额 美元转换成人民币
-            $ad_cost =  $sum_money['ad_cost']*$royalty_rules['exchange_rate'];//广告费 美元转换成人民币
+            $get_royalty = $this->get_royalty($royalty_rules['id'],$px,$gpm); //计算提成
+            $data['money'] = $get_royalty['money'];
+            $data['remarks'] = $get_royalty['remarks'];
 
-            $data['service_charge'] = $turnover * $royalty_rules['service_charge']/100; //手续费 （订单数*手续费百分比）
-            $data['register_fee'] = $sum_money['paid_orders']*$royalty_rules['register_fee'];//挂号费 （付款订单数*挂号费）
-
-            $px = $turnover - $data['service_charge'] - $ad_cost - $sum_money['product_total_cost']- $sum_money['total_weight']*$royalty_rules['freight']-$data['register_fee'];
-
-            //gpm（毛利/营业额）
-            if($px){
-                $gpm = bcdiv($px,$turnover,2)*100;
-                $data['money'] = $this->get_royalty($royalty_rules['id'],$px,$gpm);
-            }
         }
         return $data;
     }
@@ -166,35 +245,23 @@ class Income_data extends \Application\Component\Common\IData
             unset($team_ids[$u_id]); //过滤自己的id
             $team_ids = implode(',',$team_ids);
 
-            //获取本月部门的营业额$、订单数、广告费$、产品总成本￥、产品总重量
-            $sql = 'select SUM(turnover) as turnover,sum(paid_orders) as paid_orders,SUM(ad_cost) as ad_cost,SUM(product_total_cost) as product_total_cost,SUM(total_weight) as total_weight from operate where user_id in ('.$team_ids.') and year(datetime)="'.$year.'" and month(datetime)="'.$month.'"';
-            $sum_money = $this->db->query($sql)->result_array()[0];
+            //获取本月部门的营业额$、订单数、广告费$、产品总成本￥、毛利（rmb）、毛利率
+            $sql = 'select SUM(turnover) as turnover,sum(paid_orders) as paid_orders,SUM(ad_cost) as ad_cost,SUM(product_total_cost) as product_total_cost,sum(gross_profit_rmb) as gross_profit_rmb,(sum(gross_profit_rate)/count(*)) as  gross_profit_rate from operate where user_id in ('.$team_ids.') and year(datetime)="'.$year.'" and month(datetime)="'.$month.'"';
+            $sum_money = $this->db->query($sql)->row_array();
             if($sum_money){
                 $data = array_merge($data,$sum_money);
             }
 
+            $px = $sum_money['gross_profit_rmb']; //毛利 人民币
+            $gpm = $sum_money['gross_profit_rate']; //毛利率
+
             //查看提成规则
-            $sql = 'select id,service_charge,freight,register_fee,exchange_rate from royalty_rules where o_id='.$o_id;
-            $royalty_rules = $this->db->query($sql)->result_array()[0];
+            $sql = 'select id from royalty_rules where o_id='.$o_id;
+            $royalty_rules = $this->db->query($sql)->row_array();
             if($royalty_rules){ //有提成规则时
-
-                $data = array_merge($data,$royalty_rules);
-
-                //毛利（px）：营业额-营业额 * 0.07 - 广告费 - sku成本 - （产品总重量 * 每克价格） - （订单数量 * 挂号费）
-                $turnover =  $sum_money['turnover']*$royalty_rules['exchange_rate'];//营业额 美元转换成人民币
-                $ad_cost =  $sum_money['ad_cost']*$royalty_rules['exchange_rate'];//广告费 美元转换成人民币
-
-                $data['service_charge'] = $turnover * $royalty_rules['service_charge']/100; //手续费 （订单数*手续费百分比）
-                $data['register_fee'] = $sum_money['paid_orders']*$royalty_rules['register_fee'];//挂号费 （付款订单数*挂号费）
-
-                $px = $turnover - $data['service_charge'] - $ad_cost - $sum_money['product_total_cost']- $sum_money['total_weight']*$royalty_rules['freight']-$data['register_fee'];
-
-                //gpm（毛利/营业额）
-                if($px){
-                    $gpm = bcdiv($px,$turnover,2)*100;
-
-                    $data['money'] = $this->get_royalty($royalty_rules['id'],$px,$gpm);
-                }
+                $get_royalty = $this->get_royalty($royalty_rules['id'],$px,$gpm);
+                $data['money'] = $get_royalty['money'];
+                $data['remarks'] = $get_royalty['remarks'];
             }
         }
 
@@ -222,12 +289,12 @@ class Income_data extends \Application\Component\Common\IData
 
                 $money = bcmul($px*$px_c/100,$gpm_c,'2');
 
-                return $money;
+                return ['money'=>$money,'remarks'=>''];
 
             }
-            return '该部门提成规则未设置';
+            return ['money'=>0,'remarks'=>'该部门提成规则未设置'];
         }
-        return 0;
+        return ['money'=>0,'remarks'=>''];
     }
 
     /**

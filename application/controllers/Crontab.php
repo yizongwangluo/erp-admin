@@ -13,6 +13,7 @@ class Crontab extends \MY_Controller
 		parent::__construct ();
 		set_time_limit ( 0 );
 		$this->load->model ( 'orders/shopify_orders' );
+		$this->load->model ( 'data/income_data' );
 	}
 
 	/**
@@ -28,6 +29,7 @@ class Crontab extends \MY_Controller
 	 */
 	public function run_every_minute ()
 	{
+		log_message('run_every_minute',date('Y-m-d H:i:s'),true);
 	}
 
 	/**
@@ -43,6 +45,7 @@ class Crontab extends \MY_Controller
 	public function run_every_day ()
 	{
 		$this->shopify_orders->index(); //定时获取shopify订单
+
 	}
 
 	/**
@@ -57,6 +60,8 @@ class Crontab extends \MY_Controller
 	 */
 	public function run_every_month ()
 	{
+		$this->income_data->timing_lists();
 	}
+
 
 }
