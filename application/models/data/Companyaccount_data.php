@@ -13,70 +13,6 @@ class Companyaccount_data extends \Application\Component\Common\IData
         parent::__construct ();
     }
 
-    public function index ($admin_id)
-    {
-        if($admin_id == 1){
-            $sql = "SELECT
-	*
-FROM
-	(
-		SELECT
-			a.id,
-			a.company_account_id,
-			a.shop_id,
-			a.company_id,
-			a.isunlock,
-			a.status,
-			a.companyaccount_remark,
-			a.user_id,
-			b.real_name,
-			c.domain,
-			d.company_name
-		FROM
-			companyaccount a
-		LEFT JOIN admin b ON b.id = a.user_id
-		LEFT JOIN shop c ON a.shop_id = c.id
-		LEFT JOIN company d ON a.company_id = d.id
-		GROUP BY
-			a.id
-	) s";
-        }else{
-            $sql = "SELECT
-	*
-FROM
-	(
-		SELECT
-			a.id,
-			a.company_account_id,
-			a.shop_id,
-			a.company_id,
-			a.isunlock,
-			a.status,
-			a.companyaccount_remark,
-			a.user_id,
-			b.s_real_name AS real_name,
-			c.domain,
-			d.company_name
-		FROM
-			companyaccount a
-		INNER JOIN (
-			SELECT
-				s_u_id,
-				s_real_name
-			FROM
-				admin_org_temp
-			WHERE
-				u_id = $admin_id
-			GROUP BY
-				s_u_id
-		) b ON b.s_u_id = a.user_id
-		LEFT JOIN shop c ON a.shop_id = c.id
-		LEFT JOIN company d ON a.company_id = d.id
-	) s";
-        }
-        return $sql;
-    }
-
     public function  add ( array $in )
     {
         if (empty($in['company_account_id'])) {
@@ -135,13 +71,9 @@ FROM
         return true;
     }
 
-    public function get_domain($admin_id)
+    public function get_domain($company_id)
     {
-        if($admin_id == 1){
-            $sql = "select id,domain from shop order by id desc";
-        }else{
-            $sql = "select id,domain from shop a inner join (select s_u_id from admin_org_temp where u_id = $admin_id group by s_u_id) b on a.user_id = b.s_u_id order by id desc";
-        }
+        $sql = "select id,domain from shop where company_id = $company_id order by id desc";
         $domains = $this->db->query ( $sql )->result_array ();
         return $domains;
     }

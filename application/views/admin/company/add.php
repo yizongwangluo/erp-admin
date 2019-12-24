@@ -140,15 +140,13 @@
     .layui-form-label{
         width: 120px;
     }
-    #demo1{
-        width: 150px;
-        height: 150px;
-    }
+
     input{
         overflow: hidden;
         text-overflow:ellipsis;
         white-space: nowrap;
     }
+
     em{
         color: red;
         padding-left: 5px;

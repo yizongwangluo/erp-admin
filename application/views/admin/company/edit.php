@@ -121,13 +121,15 @@
                     </div>
                 </div>
             </form>
-            <div style="color: #009688;font-size: 14px;margin-top: 10px">企业账号列表</div>
+            <div style="color: #009688;font-size: 14px;margin: 10px 10px 0 0;display: inline-block">企业账号列表</div>
+            <div style="display: inline-block">
+                <button type="button" class="layui-btn layui-btn-xs layui-btn-normal" data-modal="<?php echo base_url ( 'admin/companyaccount/add?'.$info['id'] ) ?>"  data-title="新增企业账号" data-width="550px"><i class="layui-icon"></i></button>
+            </div>
             <form action="?" method="get">
                 <div style='overflow:auto'>
                     <table class="layui-table"  style='white-space: nowrap'>
                         <thead>
                         <tr>
-<!--                            <td>ID</td>-->
                             <td>企业账户ID</td>
                             <td>网站域名</td>
                             <td>是否解限
@@ -149,14 +151,13 @@
                 </span>
                             </td>
                             <td>备注</td>
-<!--                            <td>操作</td>-->
+                            <td>操作</td>
                         </tr>
                         </thead>
                         <tbody>
                         <?php if(!empty($data)){ ?>
                             <?php foreach ($data as $v): ?>
                                 <tr>
-<!--                                    <td>--><?//=$v['id']?><!--</td>-->
                                     <td><?=$v['company_account_id']?></td>
                                     <td><?=$v['domain']?></td>
                                     <td><?=$v['isunlock']?></td>
@@ -173,10 +174,10 @@
                                     </td>
                                     <td><?=$v['user_name']?></td>
                                     <td><?=$v['companyaccount_remark']?></td>
-<!--                                    <td>-->
-<!--                                        <a href='--><?php //echo base_url ( 'admin/companyaccount/edit/'.$v['id'] ) ?><!--'><button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button></a>-->
-<!--                                        <button data-url="--><?php //echo base_url ( 'admin/companyaccount/del' ) ?><!--" data-id="--><?//= $v['id'] ?><!--" type="button" class="layui-btn layui-btn-danger layui-btn-sm confirm_post"><i class="layui-icon"></i></button>-->
-<!--                                    </td>-->
+                                    <td>
+                                        <button type="button" class="layui-btn layui-btn-xs" data-modal="<?php echo base_url ( 'admin/companyaccount/edit/'.$v['id'].'?'.$info['id'] ) ?>" data-title="编辑企业账号" data-width="550px"><i class="layui-icon"></i></button>
+                                        <button data-url="<?php echo base_url ( 'admin/companyaccount/del' ) ?>" data-id="<?= $v['id'] ?>" type="button" class="layui-btn layui-btn-danger layui-btn-xs confirm_post"><i class="layui-icon"></i></button>
+                                    </td>
                                 </tr>
                             <?php endforeach;?>
                         <?php } ?>
@@ -202,13 +203,6 @@
     });
 </script>
 <style>
-    .layui-form-label{
-        width: 120px;
-    }
-    #demo1{
-        width: 150px;
-        height: 150px;
-    }
     input{
         overflow: hidden;
         text-overflow:ellipsis;
