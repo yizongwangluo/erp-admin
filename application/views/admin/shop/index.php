@@ -4,10 +4,6 @@
     <ul class="layui-tab-title">
         <li class="layui-this">店铺列表</li>
         <li class=""><a href='<?php echo base_url ( 'admin/shop/add' ) ?>'>新增店铺</a></li>
-        <li><a href='<?php echo base_url ( 'admin/shop/lists' ) ?>'>申请列表</a></li>
-        <li><a href='<?php echo base_url ( 'admin/shop/unreviewed' ) ?>'>待审批</a></li>
-        <li><a href='<?php echo base_url ( 'admin/shop/rejected' ) ?>'>已驳回</a></li>
-        <li><a href='<?php echo base_url ( 'admin/shop/reviewed' ) ?>'>已完成</a></li>
     </ul>
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
@@ -103,8 +99,8 @@
                                 <td><?=$v['user_name']?></td>
                                 <td><?=$v['shop_remark']?></td>
                                 <td>
-                                    <a href='<?php echo base_url ( 'admin/shop/edit/'.$v['id'] ) ?>'><button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button></a>
-                                    <button data-url="<?php echo base_url ( 'admin/shop/del' ) ?>" data-id="<?= $v['id'] ?>" type="button" class="layui-btn layui-btn-danger layui-btn-sm confirm_post"><i class="layui-icon"></i></button>
+                                    <a href='<?php echo base_url ( 'admin/shop/edit/'.$v['id'] ) ?>'><button type="button" class="layui-btn layui-btn-xs"><i class="layui-icon"></i></button></a>
+                                    <button data-url="<?php echo base_url ( 'admin/shop/del' ) ?>" data-id="<?= $v['id'] ?>" type="button" class="layui-btn layui-btn-danger layui-btn-xs confirm_post"><i class="layui-icon"></i></button>
                                 </td>
                             </tr>
                         <?php endforeach;?>

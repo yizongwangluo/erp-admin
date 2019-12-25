@@ -4,10 +4,6 @@
     <ul class="layui-tab-title">
         <li class="layui-this">个人账号列表</li>
         <li><a href='<?php echo base_url ( 'admin/personaccount/add' ) ?>'>新增个人账号</a></li>
-        <li><a href='<?php echo base_url ( 'admin/personaccount/lists' ) ?>'>申请列表</a></li>
-        <li><a href='<?php echo base_url ( 'admin/personaccount/unreviewed' ) ?>'>待审批</a></li>
-        <li><a href='<?php echo base_url ( 'admin/personaccount/rejected' ) ?>'>已驳回</a></li>
-        <li><a href='<?php echo base_url ( 'admin/personaccount/reviewed' ) ?>'>已完成</a></li>
     </ul>
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
@@ -110,8 +106,8 @@
                                     </td>
                                     <td><?=$v['person_remark']?></td>
                                     <td>
-                                        <a href='<?php echo base_url ( 'admin/personaccount/edit/'.$v['id'] ) ?>'><button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button></a>
-                                        <button data-url="<?php echo base_url ( 'admin/personaccount/del' ) ?>" data-id="<?= $v['id'] ?>" type="button" class="layui-btn layui-btn-danger layui-btn-sm confirm_post"><i class="layui-icon"></i></button>
+                                        <a href='<?php echo base_url ( 'admin/personaccount/edit/'.$v['id'] ) ?>'><button type="button" class="layui-btn layui-btn-xs"><i class="layui-icon"></i></button></a>
+                                        <button data-url="<?php echo base_url ( 'admin/personaccount/del' ) ?>" data-id="<?= $v['id'] ?>" type="button" class="layui-btn layui-btn-danger layui-btn-xs confirm_post"><i class="layui-icon"></i></button>
                                     </td>
                                 </tr>
                             <?php endforeach;?>

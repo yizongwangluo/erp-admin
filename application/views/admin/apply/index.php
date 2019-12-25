@@ -49,8 +49,8 @@
             <td>申请概要</td>
             <td>申请人
                 <span class="layui-table-sort layui-inline">
-                    <a href='index?title=real_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=real_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=user_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=user_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
             </td>
             <td>备注</td>
@@ -80,7 +80,7 @@
                     }
                     ?>
                     <td><?=$v['apply_summary']?></td>
-                    <td><?=$v['real_name']?></td>
+                    <td><?=$v['user_name']?></td>
                     <td><?=$v['apply_remark']?></td>
                     <?php
                     if($v['apply_status'] == 0){

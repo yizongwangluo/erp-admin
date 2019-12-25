@@ -22,8 +22,8 @@ class Apply_data extends \Application\Component\Common\IData
 FROM
 	(
 		SELECT
-			a.*, b.real_name,
-			c.real_name AS reviewer_name
+			a.*, b.user_name,
+			c.user_name AS reviewer_name
 		FROM
 			apply a
 		LEFT JOIN admin b ON a.user_id = b.id
@@ -35,8 +35,8 @@ FROM
 FROM
 	(
 		SELECT
-			a.*, b.real_name,
-			c.real_name AS reviewer_name
+			a.*, b.user_name,
+			c.user_name AS reviewer_name
 		FROM
 			apply a
 		LEFT JOIN admin b ON a.user_id = b.id
@@ -53,14 +53,14 @@ FROM
 FROM
 	(
 		SELECT
-			a.*, b.s_real_name AS real_name,
-			c.real_name AS reviewer_name
+			a.*, b.s_user_name AS user_name,
+			c.user_name AS reviewer_name
 		FROM
 			apply a
 		INNER JOIN (
 			SELECT
 				s_u_id,
-				s_real_name
+				s_user_name
 			FROM
 				admin_org_temp
 			WHERE
@@ -76,14 +76,14 @@ FROM
 FROM
 	(
 		SELECT
-			a.*, b.s_real_name AS real_name,
-			c.real_name AS reviewer_name
+			a.*, b.s_user_name AS user_name,
+			c.user_name AS reviewer_name
 		FROM
 			apply a
 		INNER JOIN (
 			SELECT
 				s_u_id,
-				s_real_name
+				s_user_name
 			FROM
 				admin_org_temp
 			WHERE

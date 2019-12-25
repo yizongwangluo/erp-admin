@@ -14,7 +14,7 @@ class Apply  extends \Application\Component\Common\AdminPermissionValidateContro
         $this->load->model ( 'data/apply_data' );
     }
 
-    //申请列表
+    //我的申请
     public function index($title = 'date',$sort = 'desc')
     {
         $admin_id = $this->admin['id'];
@@ -73,6 +73,48 @@ class Apply  extends \Application\Component\Common\AdminPermissionValidateContro
             }
         }
 
+
+        if (empty($condition)){
+            return array ();
+        }else{
+            return $condition;
+        }
+
+    }
+
+    //查询条件
+    private function l_query_lists ($input)
+    {
+        $start_time = $input['start_time'];
+        $end_time = $input['end_time'];
+        if($start_time != '' && $end_time != ''){
+            //结束时间与开始时间的时间差
+            $time_stamp_diff = strtotime($end_time) - strtotime($start_time);
+            if($time_stamp_diff < 0)
+                $this->output->alert('对不起,查询开始时间必须小于结束时间!');
+        }
+        $condition = array ();
+        $search = trim($input['search']);
+        $status = $input['status'];
+        $where_sql = "";
+        $where = [];
+        if (!empty($search)){
+            $where[] = " user_name = '$search'";
+        }
+        if (!empty($start_time)){
+            $where[] = " date >= '$start_time'";
+        }
+        if (!empty($end_time)){
+            $where[] = " date <= '$end_time'";
+        }
+        if (is_numeric($status)){
+            $where[] = " salary_status = $status";
+        }
+        if($where){
+            $where_sql .= ' where '.implode(' and ',$where);
+        }
+
+        $condition[] = $where_sql;
 
         if (empty($condition)){
             return array ();

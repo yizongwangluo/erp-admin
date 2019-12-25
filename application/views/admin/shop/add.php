@@ -4,10 +4,6 @@
     <ul class="layui-tab-title">
         <li class=""><a href='<?php echo base_url ( 'admin/shop/index' ) ?>'>店铺列表</a></li>
         <li class="layui-this">新增店铺</li>
-        <li><a href='<?php echo base_url ( 'admin/shop/lists' ) ?>'>申请列表</a></li>
-        <li><a href='<?php echo base_url ( 'admin/shop/unreviewed' ) ?>'>待审批</a></li>
-        <li><a href='<?php echo base_url ( 'admin/shop/rejected' ) ?>'>已驳回</a></li>
-        <li><a href='<?php echo base_url ( 'admin/shop/reviewed' ) ?>'>已完成</a></li>
     </ul>
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show"  >

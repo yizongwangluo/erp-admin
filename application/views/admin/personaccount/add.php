@@ -4,10 +4,6 @@
     <ul class="layui-tab-title">
         <li><a href='<?php echo base_url ( 'admin/personaccount/index' ) ?>'>个人账号列表</a></li>
         <li class="layui-this">新增个人账号</li>
-        <li><a href='<?php echo base_url ( 'admin/personaccount/lists' ) ?>'>申请列表</a></li>
-        <li><a href='<?php echo base_url ( 'admin/personaccount/unreviewed' ) ?>'>待审批</a></li>
-        <li><a href='<?php echo base_url ( 'admin/personaccount/rejected' ) ?>'>已驳回</a></li>
-        <li><a href='<?php echo base_url ( 'admin/personaccount/reviewed' ) ?>'>已完成</a></li>
     </ul>
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show"  >
