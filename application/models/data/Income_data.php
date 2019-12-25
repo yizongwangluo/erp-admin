@@ -38,8 +38,7 @@ class Income_data extends \Application\Component\Common\IData
                 $info = $query->result_array();
             }
 
-        }
-        else{
+        }else{
             $sql_total = 'select COUNT(*) as total from admin_org_temp where u_id='.$u_id.' GROUP BY s_u_id';
             $query = $this->db->query($sql_total);
             $total = $query->result_array()[0]['total'];
@@ -115,7 +114,7 @@ class Income_data extends \Application\Component\Common\IData
         $year = $date[0];
         $month = $date[1];
 
-        $query = $this->db->query('select id as u_id,user_name,org_id from admin');
+        $query = $this->db->query('select id as u_id,user_name,org_id from admin where is_disable=0'); //查看未被禁用的账号列表
         $user_list = $query->result_array();
 
         if(count($user_list)){

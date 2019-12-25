@@ -14,6 +14,7 @@ class Crontab extends \MY_Controller
 		set_time_limit ( 0 );
 		$this->load->model ( 'orders/shopify_orders' );
 		$this->load->model ( 'data/income_data' );
+		$this->load->model ( 'operate/salary_operate' );
 	}
 
 	/**
@@ -61,7 +62,6 @@ class Crontab extends \MY_Controller
 	public function run_every_month ()
 	{
 		$this->income_data->timing_lists();
+		$this->salary_operate->set_salary_list();
 	}
-
-
 }
