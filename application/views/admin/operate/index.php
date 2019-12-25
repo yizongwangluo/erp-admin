@@ -33,8 +33,8 @@
                         <td>店铺域名</td>
                         <td>店铺负责人
                             <span class="layui-table-sort layui-inline">
-                    <a href='index?title=real_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=real_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=user_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=user_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
                         <td>付款订单数
@@ -43,13 +43,13 @@
                     <a href='index?title=paid_orders&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
-                        <td>广告费用
+                        <td>广告费用($)
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=ad_cost&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
                     <a href='index?title=ad_cost&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
-                        <td>营业额
+                        <td>营业额($)
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=turnover&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
                     <a href='index?title=turnover&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
@@ -61,19 +61,19 @@
                     <a href='index?title=ROI&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
-                        <td>每单广告成本
+                        <td>每单广告成本($)
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=unit_ad_cost&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
                     <a href='index?title=unit_ad_cost&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
-                        <td>客单价
+                        <td>客单价($)
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=unit_price&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
                     <a href='index?title=unit_price&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
-                        <td>毛利</td>
+                        <td>毛利($)</td>
                         <td>毛利率</td>
                         <td>审核状态
                             <span class="layui-table-sort layui-inline">
@@ -90,7 +90,7 @@
                             <tr>
                                 <td><?=$v['datetime']?></td>
                                 <td><?=$v['domain']?></td>
-                                <td><?=$v['real_name']?></td>
+                                <td><?=$v['user_name']?></td>
                                 <td><?=$v['paid_orders']?></td>
                                 <?php if($v['ad_cost'] == null){ ?>
                                     <td style="color: red">数据未上传</td>
