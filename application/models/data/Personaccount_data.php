@@ -36,6 +36,7 @@ FROM
 			a.person_status,
 			a.person_remark,
 			b.real_name,
+			b.user_name,
 			c.company_name
 		FROM
 			personaccount a
@@ -66,13 +67,15 @@ FROM
 			a.person_status,
 			a.person_remark,
 			b.s_real_name AS real_name,
+			b.s_user_name AS user_name,
 			c.company_name
 		FROM
 			personaccount a
 		INNER JOIN (
 			SELECT
 				s_u_id,
-				s_real_name
+				s_real_name,
+				s_user_name
 			FROM
 				admin_org_temp
 			WHERE
@@ -180,17 +183,16 @@ FROM
     public function get_users($admin_id)
     {
         if($admin_id == 1){
-            $sql = "select id as s_u_id,real_name as s_real_name from admin order by s_u_id desc";
+            $sql = "select id as s_u_id,real_name as s_real_name,user_name as s_user_name from admin order by s_u_id desc";
         }else{
-            $sql = "select s_u_id,s_real_name from admin_org_temp where u_id = $admin_id group by s_u_id order by s_u_id desc";
+            $sql = "select s_u_id,s_real_name,s_user_name from admin_org_temp where u_id = $admin_id group by s_u_id order by s_u_id desc";
         }
         $users = $this->db->query ( $sql )->result_array ();
         return $users;
     }
 
-    public function get_company($admin_id)
+    public function get_company()
     {
-//        $sql = "select id,company_name from company a inner join (select s_u_id from admin_org_temp where u_id = $admin_id group by s_u_id) b on a.belong_to = b.s_u_id order by id desc";
         $sql = "select id,company_name from company order by id desc";
         $company = $this->db->query ( $sql )->result_array ();
         return $company;

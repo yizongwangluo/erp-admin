@@ -43,7 +43,7 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where domain like '%{$search}%' or company_name like '%{$search}%' or shop_remark like '%{$search}%' or real_name like '%{$search}%'";
+            $condition[] = " where domain like '%{$search}%' or company_name like '%{$search}%' or shop_remark like '%{$search}%' or user_name like '%{$search}%'";
         }
         if (empty($condition)){
             return array ();
@@ -71,7 +71,7 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         } else {
             $admin_id = $this->admin['id'];
             $data['users'] = $this->shop_data->get_users ($admin_id);
-            $data['company'] = $this->shop_data->get_company ($admin_id);
+            $data['company'] = $this->shop_data->get_company ();
             $this->load->view ( '' ,$data);
         }
 
@@ -83,7 +83,7 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         $admin_id = $this->admin['id'];
         $data['info'] = $this->shop_data->get_info ( $id );
         $data['users'] = $this->shop_data->get_users ( $admin_id );
-        $data['company'] = $this->shop_data->get_company ( $admin_id );
+        $data['company'] = $this->shop_data->get_company ();
         $this->load->view ( '@/add', $data );
     }
 

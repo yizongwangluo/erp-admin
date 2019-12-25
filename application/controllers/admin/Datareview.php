@@ -42,8 +42,6 @@ class Datareview extends \Application\Component\Common\AdminPermissionValidateCo
     {
         $start_time = $input['start_time'];
         $end_time = $input['end_time'];
-//        $start_time = strtotime($start_time);
-//        $end_time = strtotime($end_time);
         if($start_time != '' && $end_time != ''){
             //结束时间与开始时间的时间差
             $time_stamp_diff = strtotime($end_time) - strtotime($start_time);
@@ -55,13 +53,13 @@ class Datareview extends \Application\Component\Common\AdminPermissionValidateCo
         if (!empty($search)){
 
             if (!empty($start_time) && !empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and datetime >= '{$start_time}' and datetime <= '{$end_time}'";
+                $condition[] = " where (user_name like '%{$search}%' or domain like '%{$search}%') and datetime >= '{$start_time}' and datetime <= '{$end_time}'";
             }elseif (!empty($start_time) && empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and datetime >= '{$start_time}'";
+                $condition[] = " where (user_name like '%{$search}%' or domain like '%{$search}%') and datetime >= '{$start_time}'";
             }elseif (empty($start_time) && !empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or domain like '%{$search}%') and datetime <= '{$end_time}'";
+                $condition[] = " where (user_name like '%{$search}%' or domain like '%{$search}%') and datetime <= '{$end_time}'";
             }else{
-                $condition[] = " where real_name like '%{$search}%' or domain like '%{$search}%'";
+                $condition[] = " where user_name like '%{$search}%' or domain like '%{$search}%'";
             }
 
         }else{

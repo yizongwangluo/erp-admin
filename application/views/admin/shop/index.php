@@ -58,8 +58,8 @@
                         </td>
                         <td>所属人
                             <span class="layui-table-sort layui-inline">
-                    <a href='index?title=real_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=real_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=user_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=user_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
                         <td>备注</td>
@@ -100,7 +100,7 @@
                                 </td>
                                 <td><?=$v['authorization_erp']?></td>
                                 <td><?=$v['company_name']?></td>
-                                <td><?=$v['real_name']?></td>
+                                <td><?=$v['user_name']?></td>
                                 <td><?=$v['shop_remark']?></td>
                                 <td>
                                     <a href='<?php echo base_url ( 'admin/shop/edit/'.$v['id'] ) ?>'><button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button></a>

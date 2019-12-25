@@ -9,7 +9,7 @@
                             <select name="search" lay-search="">
                                 <option value="">直接选择或搜索选择</option>
                                 <?php foreach ($users as $v): ?>
-                                    <option value="<?=$v['s_real_name']?>" <?= $v['s_real_name'] == $this->input->get ( 'search' ) ? selected : '' ?> ><?=$v['s_real_name']?></option>
+                                    <option value="<?=$v['s_user_name']?>" <?= $v['s_real_name'] == $this->input->get ( 'search' ) ? selected : '' ?> ><?=$v['s_user_name']?></option>
                                 <?php endforeach;?>
                             </select>
                     </div>
@@ -30,7 +30,7 @@
                         </select>
                     </div>
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索</button>
-                    <button class="layui-btn-normal layui-btn" type="button" id="payroll" >发放工资</button>
+                    <button class="layui-btn-normal layui-btn" type="button" id="payroll" >发放薪资</button>
                 </div>
                 <div style='overflow:auto'>
                     <table class="layui-table"  style='white-space: nowrap'>
@@ -45,8 +45,8 @@
                             </th>
                             <th>员工
                                 <span class="layui-table-sort layui-inline">
-                    <a href='lists?title=real_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&status=<?php echo $this->input->get ( 'status' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='lists?title=real_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&status=<?php echo $this->input->get ( 'status' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='lists?title=user_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&status=<?php echo $this->input->get ( 'status' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='lists?title=user_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&status=<?php echo $this->input->get ( 'status' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                             </th>
                             <th>底薪
@@ -83,7 +83,7 @@
                                 <tr>
                                     <td><input type="checkbox" name="ckbx" id="<?= $v['id'] ?>"/></td>
                                     <td><?= $v['date'] ?></td>
-                                    <td><?= $v['real_name']?></td>
+                                    <td><?= $v['user_name']?></td>
                                     <td><?= $v['basic_salary']?></td>
                                     <td><?=$v['commission']?></td>
                                     <td><?=$v['total']?></td>
@@ -154,19 +154,25 @@
                 if(items[i].checked)
                     ids.push(items[i].id);
             }
-
-            $.post('/admin/salary/payroll', {ids:ids}, function (response) {
-                if (!response.status) {
-                    layer.msg(response.msg, {time: 2000, icon: 6});
-                    layer.close(index);
-                    return false;
-                } else {
-                    layer.msg('发放成功', {time: 2000, icon: 6}, function () {
-                        window.location = '/admin/salary/lists';
-                    })
-                }
-            },'json');
-
+            if(ids.length == 0){
+                layer.msg('请选择员工！', {time: 2000, icon: 5});
+                layer.close(index);
+            }
+            layer.confirm('确定发放薪资吗？', {
+                btn : [ '确定', '取消' ]//按钮
+            }, function(index) {
+                $.post('/admin/salary/payroll', {ids:ids}, function (response) {
+                    if (!response.status) {
+                        layer.msg(response.msg, {time: 2000, icon: 6});
+                        layer.close(index);
+                        return false;
+                    } else {
+                        layer.msg('发放成功', {time: 2000, icon: 6}, function () {
+                            window.location = '/admin/salary/lists';
+                        })
+                    }
+                },'json');
+            });
         }
     }
 

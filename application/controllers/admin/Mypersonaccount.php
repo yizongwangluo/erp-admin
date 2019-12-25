@@ -42,7 +42,7 @@ class Mypersonaccount extends \Application\Component\Common\AdminPermissionValid
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where person_username like '%{$search}%' or RdoIp like '%{$search}%' or Rdo_username like '%{$search}%' or real_name like '%{$search}%'";
+            $condition[] = " where person_username like '%{$search}%' or RdoIp like '%{$search}%' or Rdo_username like '%{$search}%' or user_name like '%{$search}%'";
         }
         if (empty($condition)){
             return array ();

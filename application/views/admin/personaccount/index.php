@@ -60,8 +60,8 @@
                             </td>
                             <td>所属人
                                 <span class="layui-table-sort layui-inline">
-                <a href='index?title=real_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                <a href='index?title=real_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                <a href='index?title=user_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                <a href='index?title=user_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                             </td>
                             <td>状态
@@ -99,7 +99,7 @@
                                         ?>
                                     </td>
                                     <td><?=$v['company_name']?></td>
-                                    <td><?=$v['real_name']?></td>
+                                    <td><?=$v['user_name']?></td>
                                     <td>
                                         <?= $v['person_status'] == 0 ? 正常 : 锁号?>
                                     </td>

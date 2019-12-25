@@ -42,7 +42,7 @@ class Personaccount extends \Application\Component\Common\AdminPermissionValidat
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where person_username like '%{$search}%' or RdoIp like '%{$search}%' or Rdo_username like '%{$search}%' or company_name like '%{$search}%' or real_name like '%{$search}%' or person_remark like '%{$search}%'";
+            $condition[] = " where person_username like '%{$search}%' or RdoIp like '%{$search}%' or Rdo_username like '%{$search}%' or company_name like '%{$search}%' or user_name like '%{$search}%' or person_remark like '%{$search}%'";
         }
         if (empty($condition)){
             return array ();
@@ -70,7 +70,7 @@ class Personaccount extends \Application\Component\Common\AdminPermissionValidat
         } else {
             $admin_id = $this->admin['id'];
             $data['users'] = $this->personaccount_data->get_users ($admin_id);
-            $data['company'] = $this->personaccount_data->get_company ($admin_id);
+            $data['company'] = $this->personaccount_data->get_company ();
             $this->load->view ( '' ,$data);
         }
 
@@ -82,7 +82,7 @@ class Personaccount extends \Application\Component\Common\AdminPermissionValidat
         $admin_id = $this->admin['id'];
         $data['info'] = $this->personaccount_data->get_info ( $id );
         $data['users'] = $this->personaccount_data->get_users ( $admin_id );
-        $data['company'] = $this->personaccount_data->get_company ( $admin_id );
+        $data['company'] = $this->personaccount_data->get_company ();
         $this->load->view ( '@/add', $data );
     }
 

@@ -82,7 +82,7 @@
     <label class="layui-form-label">所属人：</label>
     <div class="layui-inline">
         <div class="detail">
-            <?= $user['real_name'] ?>
+            <?= $user['user_name'] ?>（<?= $user['real_name'] ?>）
         </div>
     </div>
 </div>
