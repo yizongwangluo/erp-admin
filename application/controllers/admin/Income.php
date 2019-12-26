@@ -17,7 +17,7 @@ class Income extends \Application\Component\Common\AdminPermissionValidateContro
 	}
 
 	/**
-	 * 个人业绩及收入 列表
+	 * 个人业绩及收入 列表 sc
 	 */
 	public function index(){
 
