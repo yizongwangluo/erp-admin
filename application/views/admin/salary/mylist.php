@@ -28,8 +28,8 @@
                             </td>
                             <td>员工
                                 <span class="layui-table-sort layui-inline">
-                    <a href='mylist?title=real_name&sort=asc&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='mylist?title=real_name&sort=desc&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='mylist?title=user_name&sort=asc&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='mylist?title=user_name&sort=desc&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                             </td>
                             <td>底薪
@@ -64,7 +64,7 @@
                             <?php foreach ($data as $v): ?>
                                 <tr>
                                     <td><?= $v['date'] ?></td>
-                                    <td><?= $v['real_name']?></td>
+                                    <td><?= $v['user_name']?></td>
                                     <td><?= $v['basic_salary']?></td>
                                     <td><?=$v['commission']?></td>
                                     <td><?=$v['total']?></td>

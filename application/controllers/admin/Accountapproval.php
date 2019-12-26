@@ -101,10 +101,8 @@ class Accountapproval  extends \Application\Component\Common\AdminPermissionVali
     //查询条件
     private function query_lists ($input)
     {
-        $start_time = $input['start_time'];
-        $end_time = $input['end_time'];
-        $start_time = strtotime($start_time);
-        $end_time = strtotime($end_time);
+        $start_time = strtotime($input['start_time']);
+        $end_time = strtotime($input['end_time']);
         if($start_time != '' && $end_time != ''){
             //结束时间与开始时间的时间差
             $time_stamp_diff = $end_time - $start_time;
@@ -113,29 +111,30 @@ class Accountapproval  extends \Application\Component\Common\AdminPermissionVali
         }
         $condition = array ();
         $search = trim($input['search']);
+        $type = $input['type'];
+        $account_type = $input['account_type'];
+        $where_sql = "";
+        $where = [];
         if (!empty($search)){
-
-            if (!empty($start_time) && !empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or apply_remark like '%{$search}%' or apply_summary like '%{$search}%') and date >= ".$start_time." and date <= ".$end_time;
-            }elseif (!empty($start_time) && empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or apply_remark like '%{$search}%' or apply_summary like '%{$search}%') and date >= ".$start_time;
-            }elseif (empty($start_time) && !empty($end_time)){
-                $condition[] = " where (real_name like '%{$search}%' or apply_remark like '%{$search}%' or apply_summary like '%{$search}%') and date <= ".$end_time;
-            }else{
-                $condition[] = " where real_name like '%{$search}%' or apply_remark like '%{$search}%' or apply_summary like '%{$search}%'";
-            }
-
-
-        }else{
-            if (!empty($start_time) && !empty($end_time)) {
-                $condition[] = " where date >= ".$start_time." and date <= ".$end_time;
-            }elseif (!empty($start_time) && empty($end_time)){
-                $condition[] = " where date >= ".$start_time;
-            }elseif (empty($start_time) && !empty($end_time)){
-                $condition[] = " where date <= ".$end_time;
-            }
+            $where[] = " (user_name like '%{$search}%' or apply_remark like '%{$search}%' or apply_summary like '%{$search}%')";
+        }
+        if (!empty($start_time)){
+            $where[] = " date >= '$start_time'";
+        }
+        if (!empty($end_time)){
+            $where[] = " date <= '$end_time'";
+        }
+        if (is_numeric($type)){
+            $where[] = " type = $type";
+        }
+        if (is_numeric($account_type)){
+            $where[] = " account_type = $account_type";
+        }
+        if($where){
+            $where_sql .= ' where '.implode(' and ',$where);
         }
 
+        $condition[] = $where_sql;
 
         if (empty($condition)){
             return array ();

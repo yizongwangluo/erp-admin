@@ -21,7 +21,7 @@ class Datareview_data extends \Application\Component\Common\IData
 FROM
 	(
 		SELECT
-			a.*, b.real_name,
+			a.*, b.user_name,
 			c.domain
 		FROM
 			operate a
@@ -37,14 +37,14 @@ FROM
 FROM
 	(
 		SELECT
-			a.*, b.real_name,
+			a.*, b.user_name,
 			c.domain
 		FROM
 			operate a
 		INNER JOIN (
 			SELECT
 				s_u_id,
-				s_real_name AS real_name
+				s_user_name AS user_name
 			FROM
 				admin_org_temp
 			WHERE
@@ -67,7 +67,7 @@ FROM
 FROM
 	(
 		SELECT
-			a.*, b.real_name,
+			a.*, b.user_name,
 			c.domain
 		FROM
 			operate a
@@ -83,14 +83,14 @@ FROM
 FROM
 	(
 		SELECT
-			a.*, b.real_name,
+			a.*, b.user_name,
 			c.domain
 		FROM
 			operate a
 		INNER JOIN (
 			SELECT
 				s_u_id,
-				s_real_name AS real_name
+				s_user_name AS user_name
 			FROM
 				admin_org_temp
 			WHERE
@@ -113,9 +113,9 @@ FROM
 FROM
 	(
 		SELECT
-			a.*, b.real_name,
+			a.*, b.user_name,
 			c.domain,
-			d.real_name AS reviewer_name
+			d.user_name AS reviewer_name
 		FROM
 			operate a
 		LEFT JOIN admin b ON a.user_id = b.id
@@ -131,15 +131,15 @@ FROM
 FROM
 	(
 		SELECT
-			a.*, b.real_name,
+			a.*, b.user_name,
 			c.domain,
-			d.real_name AS reviewer_name
+			d.user_name AS reviewer_name
 		FROM
 			operate a
 		INNER JOIN (
 			SELECT
 				s_u_id,
-				s_real_name AS real_name
+				s_user_name AS user_name
 			FROM
 				admin_org_temp
 			WHERE

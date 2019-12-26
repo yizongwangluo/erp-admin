@@ -52,8 +52,8 @@
                         </td>
                         <td>所属人
                             <span class="layui-table-sort layui-inline">
-                    <a href='index?title=real_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=real_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=user_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=user_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
                         <td>操作</td>
@@ -95,7 +95,7 @@
                                 </td>
                                 <td><?=$v['authorization_erp']?></td>
                                 <td><?=$v['company_name']?></td>
-                                <td><?=$v['real_name']?></td>
+                                <td><?=$v['user_name']?></td>
                                 <td><button class="layui-btn-xs layui-btn layui-btn-normal" type="button"  data-modal="<?php echo base_url ( 'admin/myshop/detail/'.$v['id'] ) ?>"  data-title="店铺详情" data-width="450px">详情</button></td>
                             </tr>
                         <?php endforeach;?>

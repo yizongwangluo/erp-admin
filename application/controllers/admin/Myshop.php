@@ -42,7 +42,7 @@ class Myshop extends \Application\Component\Common\AdminPermissionValidateContro
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where domain like '%{$search}%' or company_name like '%{$search}%' or real_name like '%{$search}%'";
+            $condition[] = " where domain like '%{$search}%' or company_name like '%{$search}%' or user_name like '%{$search}%'";
         }
         if (empty($condition)){
             return array ();

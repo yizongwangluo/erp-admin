@@ -74,7 +74,7 @@ class Salary  extends \Application\Component\Common\AdminPermissionValidateContr
         $where_sql = "";
         $where = [];
         if (!empty($search)){
-                $where[] = " real_name = '$search'";
+                $where[] = " user_name = '$search'";
             }
         if (!empty($start_time)){
             $where[] = " date >= '$start_time'";
@@ -119,6 +119,7 @@ class Salary  extends \Application\Component\Common\AdminPermissionValidateContr
         $this->load->view ( '@/add', $data );
     }
 
+    //更改薪资发放状态
     public function payroll()
     {
         if ( IS_POST ) {

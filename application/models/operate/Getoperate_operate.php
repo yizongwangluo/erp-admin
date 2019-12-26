@@ -6,7 +6,7 @@
  * Time: 9:59
  */
 
-class Getoperate_data extends \Application\Component\Common\IData
+class Getoperate_operate extends \Application\Component\Common\IData
 {
     public function __construct ()
     {

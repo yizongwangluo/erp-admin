@@ -34,8 +34,8 @@
             </td>
             <td>所属人
                 <span class="layui-table-sort layui-inline">
-                <a href='index?title=real_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                <a href='index?title=real_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                <a href='index?title=user_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                <a href='index?title=user_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
             </td>
             <td>Cookies</td>
@@ -53,7 +53,7 @@
                     <td><?=$v['Rdo_username']?></td>
                     <td><?=$v['Rdo_password']?></td>
                     <td><?=$v['Rdo_port']?></td>
-                    <td><?=$v['real_name']?></td>
+                    <td><?=$v['user_name']?></td>
                     <td>
                         <button class="layui-btn layui-btn-xs layui-btn-normal" type="button" data-modal="<?php echo base_url ( 'admin/personaccount/cookies/'.$v['id'] ) ?>"  data-title="Cookies" data-width="450px">查看</button>
                         <textarea id="test<?=$v['id']?>" type="longtext" style="display: none;"><?=$v['cookies']?></textarea>

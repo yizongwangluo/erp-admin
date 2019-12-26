@@ -4,10 +4,6 @@
     <ul class="layui-tab-title">
         <li class="layui-this">店铺列表</li>
         <li class=""><a href='<?php echo base_url ( 'admin/shop/add' ) ?>'>新增店铺</a></li>
-        <li><a href='<?php echo base_url ( 'admin/shop/lists' ) ?>'>申请列表</a></li>
-        <li><a href='<?php echo base_url ( 'admin/shop/unreviewed' ) ?>'>待审批</a></li>
-        <li><a href='<?php echo base_url ( 'admin/shop/rejected' ) ?>'>已驳回</a></li>
-        <li><a href='<?php echo base_url ( 'admin/shop/reviewed' ) ?>'>已完成</a></li>
     </ul>
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
@@ -58,8 +54,8 @@
                         </td>
                         <td>所属人
                             <span class="layui-table-sort layui-inline">
-                    <a href='index?title=real_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=real_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=user_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=user_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
                         <td>备注</td>
@@ -100,11 +96,11 @@
                                 </td>
                                 <td><?=$v['authorization_erp']?></td>
                                 <td><?=$v['company_name']?></td>
-                                <td><?=$v['real_name']?></td>
+                                <td><?=$v['user_name']?></td>
                                 <td><?=$v['shop_remark']?></td>
                                 <td>
-                                    <a href='<?php echo base_url ( 'admin/shop/edit/'.$v['id'] ) ?>'><button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button></a>
-                                    <button data-url="<?php echo base_url ( 'admin/shop/del' ) ?>" data-id="<?= $v['id'] ?>" type="button" class="layui-btn layui-btn-danger layui-btn-sm confirm_post"><i class="layui-icon"></i></button>
+                                    <a href='<?php echo base_url ( 'admin/shop/edit/'.$v['id'] ) ?>'><button type="button" class="layui-btn layui-btn-xs"><i class="layui-icon"></i></button></a>
+                                    <button data-url="<?php echo base_url ( 'admin/shop/del' ) ?>" data-id="<?= $v['id'] ?>" type="button" class="layui-btn layui-btn-danger layui-btn-xs confirm_post"><i class="layui-icon"></i></button>
                                 </td>
                             </tr>
                         <?php endforeach;?>

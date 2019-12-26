@@ -24,6 +24,21 @@
                             <input class="layui-input date-time" value="<?php echo input('end_time'); ?>" name="end_time" placeholder="截止时间">
                         </div>
                     </div>
+                    <div class="layui-inline  col-xs-1" style="padding-left: 15px">
+                        <select name="type">
+                            <option value="">全部</option>
+                            <option value = 0 <?= $this->input->get ( 'type' ) == '0' ? selected : '' ?>>新账号</option>
+                            <option value = 1 <?= $this->input->get ( 'type' ) == '1' ? selected : '' ?>>旧账号</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline  col-xs-1" >
+                        <select name="account_type">
+                            <option value="">全部</option>
+                            <option value = 0 <?= $this->input->get ( 'account_type' ) == '0' ? selected : '' ?>>店铺</option>
+                            <option value = 1 <?= $this->input->get ( 'account_type' ) == '1' ? selected : '' ?>>企业账号</option>
+                            <option value = 2 <?= $this->input->get ( 'account_type' ) == '2' ? selected : '' ?>>个人账号</option>
+                        </select>
+                    </div>
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
                 <div style='overflow:auto'>
@@ -32,34 +47,34 @@
                     <tr>
                         <td>日期
                             <span class="layui-table-sort layui-inline">
-                    <a href='rejected?title=date&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='rejected?title=date&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='rejected?title=date&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&type=<?php echo $this->input->get ( 'type' ); ?>&account_type=<?php echo $this->input->get ( 'account_type' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='rejected?title=date&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&type=<?php echo $this->input->get ( 'type' ); ?>&account_type=<?php echo $this->input->get ( 'account_type' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
                         <td>申请类型
                             <span class="layui-table-sort layui-inline">
-                    <a href='rejected?title=type&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='rejected?title=type&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='rejected?title=type&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&type=<?php echo $this->input->get ( 'type' ); ?>&account_type=<?php echo $this->input->get ( 'account_type' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='rejected?title=type&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&type=<?php echo $this->input->get ( 'type' ); ?>&account_type=<?php echo $this->input->get ( 'account_type' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
                         <td>账号类型
                             <span class="layui-table-sort layui-inline">
-                    <a href='rejected?title=account_type&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='rejected?title=account_type&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='rejected?title=account_type&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&type=<?php echo $this->input->get ( 'type' ); ?>&account_type=<?php echo $this->input->get ( 'account_type' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='rejected?title=account_type&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&type=<?php echo $this->input->get ( 'type' ); ?>&account_type=<?php echo $this->input->get ( 'account_type' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
                         <td>申请概要</td>
                         <td>申请人
                             <span class="layui-table-sort layui-inline">
-                    <a href='rejected?title=real_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='rejected?title=real_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='rejected?title=user_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&type=<?php echo $this->input->get ( 'type' ); ?>&account_type=<?php echo $this->input->get ( 'account_type' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='rejected?title=user_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&type=<?php echo $this->input->get ( 'type' ); ?>&account_type=<?php echo $this->input->get ( 'account_type' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
                         <td>备注</td>
                         <td>审批状态
                             <span class="layui-table-sort layui-inline">
-                    <a href='rejected?title=apply_status&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='rejected?title=apply_status&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='rejected?title=apply_status&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&type=<?php echo $this->input->get ( 'type' ); ?>&account_type=<?php echo $this->input->get ( 'account_type' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='rejected?title=apply_status&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&type=<?php echo $this->input->get ( 'type' ); ?>&account_type=<?php echo $this->input->get ( 'account_type' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
                         </td>
                         <td>批注</td>
@@ -82,7 +97,7 @@
                                 }
                                 ?>
                                 <td><?=$v['apply_summary']?></td>
-                                <td><?=$v['real_name']?></td>
+                                <td><?=$v['user_name']?></td>
                                 <td><?=$v['apply_remark']?></td>
                                 <?php
                                 if($v['apply_status'] == 0){
