@@ -22,6 +22,14 @@
                             <input class="layui-input date-time" value="<?php echo input('end_time'); ?>" name="end_time" placeholder="截止时间">
                         </div>
                     </div>
+                    <div class="layui-inline  col-xs-1" style="padding-left: 10px">
+                        <select name="apply_status">
+                            <option value="">全部</option>
+                            <option value = 0 <?= $this->input->get ( 'apply_status' ) == '0' ? selected : '' ?>>待审批</option>
+                            <option value = 1 <?= $this->input->get ( 'apply_status' ) == '1' ? selected : '' ?>>已驳回</option>
+                            <option value = 2 <?= $this->input->get ( 'apply_status' ) == '2' ? selected : '' ?>>已完成</option>
+                        </select>
+                    </div>
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
                 <div style='overflow:auto'>
@@ -30,34 +38,34 @@
         <tr>
             <td>日期
                 <span class="layui-table-sort layui-inline">
-                    <a href='index?title=date&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=date&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=date&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&apply_status=<?php echo $this->input->get ( 'apply_status' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=date&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&apply_status=<?php echo $this->input->get ( 'apply_status' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
             </td>
             <td>申请类型
                 <span class="layui-table-sort layui-inline">
-                    <a href='index?title=type&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=type&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=type&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&apply_status=<?php echo $this->input->get ( 'apply_status' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=type&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&apply_status=<?php echo $this->input->get ( 'apply_status' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
             </td>
             <td>账号类型
                 <span class="layui-table-sort layui-inline">
-                    <a href='index?title=account_type&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=account_type&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=account_type&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&apply_status=<?php echo $this->input->get ( 'apply_status' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=account_type&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&apply_status=<?php echo $this->input->get ( 'apply_status' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
             </td>
             <td>申请概要</td>
             <td>申请人
                 <span class="layui-table-sort layui-inline">
-                    <a href='index?title=user_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=user_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=user_name&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&apply_status=<?php echo $this->input->get ( 'apply_status' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=user_name&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&apply_status=<?php echo $this->input->get ( 'apply_status' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
             </td>
             <td>备注</td>
             <td>审批状态
                 <span class="layui-table-sort layui-inline">
-                    <a href='index?title=apply_status&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=apply_status&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=apply_status&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&apply_status=<?php echo $this->input->get ( 'apply_status' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=apply_status&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>&apply_status=<?php echo $this->input->get ( 'apply_status' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
             </td>
             <td>批注</td>
