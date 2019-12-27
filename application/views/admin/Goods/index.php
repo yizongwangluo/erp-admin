@@ -47,7 +47,7 @@
                       <td style="color: <?=$v['is_tongtu']!=1?'red':'';?>"><?=$v['is_tongtu']?'已同步':'未同步'?></td>
                       <td>
                           <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods/info/{$v['id']}"); ?>">查看</a>
-                          <button data-url="<?php echo base_url ( 'admin/goods/synchronization' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到通途</button>
+                          <button data-url="<?php echo base_url ( 'admin/goods/add_sku_tongtu' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到通途</button>
                          <!-- <button style="display: <?/*=$v['status']==1?'none':'';*/?>;" data-url="<?php /*echo base_url ( 'admin/goods/delete' ) */?>" data-id="<?/*= $v['id'] */?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>-->
                       </td>
                   </tr>

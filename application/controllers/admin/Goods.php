@@ -127,7 +127,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data['goods'][$k]['goodsAverageCost'] = $v['price']; //货品平均成本
 			$data['goods'][$k]['goodsCurrentCost'] = $v['price']; //货品成本(最新成本)
 			$data['goods'][$k]['goodsSku'] = $v['code']; //货号(SKU)
-			$data['goods'][$k]['goodsVariation'][0]['variationName'] = $v['norms'];//规格名称
+			$data['goods'][$k]['goodsVariation'][0]['variationName'] = 'norms';//规格名称
 			$data['goods'][$k]['goodsVariation'][0]['variationValue'] = $v['norms'];//规格值
 			$data['goods'][$k]['goodsWeight'] = (int)$v['weight']; //重量 克
 		}
