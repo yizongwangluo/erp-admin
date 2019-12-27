@@ -9,7 +9,7 @@
                             <select name="search" lay-search="">
                                 <option value="">直接选择或搜索选择</option>
                                 <?php foreach ($users as $v): ?>
-                                    <option value="<?=$v['s_user_name']?>" <?= $v['s_real_name'] == $this->input->get ( 'search' ) ? selected : '' ?> ><?=$v['s_user_name']?></option>
+                                    <option value="<?=$v['s_user_name']?>" <?= $v['s_user_name'] == $this->input->get ( 'search' ) ? selected : '' ?> ><?=$v['s_user_name']?></option>
                                 <?php endforeach;?>
                             </select>
                     </div>

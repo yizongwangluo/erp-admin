@@ -134,4 +134,14 @@ FROM
         $domains = $this->db->query ( $sql )->result_array ();
         return $domains;
     }
+
+    public function get_users($admin_id){
+        if($admin_id == 1){
+            $sql = "select id as s_u_id,real_name as s_real_name,user_name as s_user_name from admin order by s_u_id desc";
+        }else{
+            $sql = 'select s_u_id,s_real_name,s_user_name from admin_org_temp where u_id = '.$admin_id.' group by s_u_id order by s_u_id desc';
+        }
+        $users = $this->db->query ( $sql )->result_array ();
+        return $users;
+    }
 }

@@ -30,7 +30,7 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
             $sort = $order_s;
         }
         $result = $this->operate_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );                  $result['users'] = $this->operate_data->get_users($admin_id);
         $this->load->view('',$result);
     }
 
@@ -47,27 +47,26 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
         }
         $condition = array ();
         $search = trim($input['search']);
-        if (!empty($search)){
-
-            if (!empty($start_time) && !empty($end_time)){
-                $condition[] = " where (user_name like '%{$search}%' or domain like '%{$search}%') and datetime >= '{$start_time}' and datetime <= '{$end_time}'";
-            }elseif (!empty($start_time) && empty($end_time)){
-                $condition[] = " where (user_name like '%{$search}%' or domain like '%{$search}%') and datetime >= '{$start_time}'";
-            }elseif (empty($start_time) && !empty($end_time)){
-                $condition[] = " where (user_name like '%{$search}%' or domain like '%{$search}%') and datetime <= '{$end_time}'";
-            }else{
-                $condition[] = " where user_name like '%{$search}%' or domain like '%{$search}%'";
-            }
-
-        }else{
-            if (!empty($start_time) && !empty($end_time)) {
-                $condition[] = " where datetime >= '{$start_time}' and datetime <= '{$end_time}'";
-            }elseif (!empty($start_time) && empty($end_time)){
-                $condition[] = " where datetime >= '{$start_time}'";
-            }elseif (empty($start_time) && !empty($end_time)){
-                $condition[] = " where datetime <= '{$end_time}'";
-            }
+        $user = $input['user'];
+        $where_sql = "";
+        $where = [];
+        if (!empty($user)){
+            $where[] = " user_name = '$user'";
         }
+        if (!empty($search)){
+            $where[] = " (user_name like '%{$search}%' or domain like '%{$search}%')";
+        }
+        if (!empty($start_time)){
+            $where[] = " datetime >= '$start_time'";
+        }
+        if (!empty($end_time)){
+            $where[] = " datetime <= '$end_time'";
+        }
+        if($where){
+            $where_sql .= ' where '.implode(' and ',$where);
+        }
+
+        $condition[] = $where_sql;
 
         if (empty($condition)){
             return array ();
