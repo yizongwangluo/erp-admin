@@ -84,7 +84,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item" id="save_from">
                 <div class="layui-input-block">
                     <button class="layui-btn" type="button" onclick="save_form_sku()">确定</button>
                 </div>

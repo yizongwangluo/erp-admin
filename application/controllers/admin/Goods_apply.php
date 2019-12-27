@@ -166,6 +166,17 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 	}
 
 	/**
+	 * 查看详情
+	 * @param $id
+	 */
+	public function info($id){
+
+		$info = $this->goods_apply_data->get_info($id);
+
+		$this->load->view ('',['info'=>$info]);
+	}
+
+	/**
 	 * 保存
 	 */
 	public function save_distribution(){

@@ -103,35 +103,47 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 	/**
 	 * 同步商品到通途
-	 * @param int $id
-	 * @param array $input
 	 */
-	public function add_sku_tongtu($id = 0,$input = []){
+	public function add_sku_tongtu(){
 
-		if($id && $input){
-			$data = [];
-			$data['productCode'] = $input['code'];
-			$data['productName'] = $input['code'];
-			$data['productStatus'] = "1";
+		$id = input('id');
 
-			$sku_list = $this->goods_sku_data->lists(['spu_id'=>$id,'is_real'=>0]);
+		//查询该spu
+		$info = $this->goods_data->get_info($id);
+		if(!$info){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'未查询到相关sku信息');
+		}
 
-			$data['salesType'] = $sku_list?"1":"0"; //有sku时为变参销售，没有则是普通销售
+		$data = [];
+		$data['productCode'] = $info['code'];
+		$data['productName'] = $info['name'];
+		$data['productStatus'] = "1";
 
-			foreach($sku_list as $k=>$v){
-				$data['goods'][$k]['goodsAverageCost'] = $v['price']; //货品平均成本
-				$data['goods'][$k]['goodsCurrentCost'] = $v['price']; //货品成本(最新成本)
-				$data['goods'][$k]['goodsSku'] = $v['code']; //货号(SKU)
-				$data['goods'][$k]['goodsVariation'][0]['variationName'] = $v['norms_type'];//规格名称
-				$data['goods'][$k]['goodsVariation'][0]['variationValue'] = $v['norms'];//规格值
-				$data['goods'][$k]['goodsWeight'] = (int)$v['weight']; //重量 克
-			}
+		$sku_list = $this->goods_sku_data->lists(['spu_id'=>$id]);
 
+		$data['salesType'] = $sku_list?"1":"0"; //有sku时为变参销售，没有则是普通销售
+
+		foreach($sku_list as $k=>$v){
+			$data['goods'][$k]['goodsAverageCost'] = $v['price']; //货品平均成本
+			$data['goods'][$k]['goodsCurrentCost'] = $v['price']; //货品成本(最新成本)
+			$data['goods'][$k]['goodsSku'] = $v['code']; //货号(SKU)
+			$data['goods'][$k]['goodsVariation'][0]['variationName'] = $v['norms'];//规格名称
+			$data['goods'][$k]['goodsVariation'][0]['variationValue'] = $v['norms'];//规格值
+			$data['goods'][$k]['goodsWeight'] = (int)$v['weight']; //重量 克
+		}
+
+		if(!$info['is_tongtu']){
 			$ret = $this->erpApi->add_goods($data);
+		}else{
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'更新接口尚未接入');
+		}
 
-			if(!$ret){
-				$this->output->ajax_return(AJAX_RETURN_FAIL,'商品同步到通途失败，请手动同步！');
-			}
+		if(!$ret){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'商品同步到通途失败，请手动同步！');
+		}else{
+			//修改同步通途状态
+			$this->goods_data->update($id,['is_tongtu'=>1]);
+			$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
 		}
 	}
 

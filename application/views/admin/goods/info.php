@@ -182,17 +182,16 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" type="button" onclick="save_form()">确定</button>
                         <button class="layui-btn" type="button" onclick="javascript:history.back(-1);">返回</button>
                     </div>
                 </div>
             </div>
         </form>
-        <!--<div class="px">
+        <div class="px">
             <script type="text/html" id="barDemo">
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                <a class="layui-btn layui-btn-xs" lay-event="info">查看</a>
             </script>
-        </div>-->
+        </div>
     </div>
 
     <script type="text/javascript">
@@ -222,35 +221,25 @@
                         ,{field:'size', title: '包装尺寸(长*宽*高)'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
                         ,{field:'weight', title: '重量（g）'}
                         ,{field:'cycle', title: '采购周期'}
-                        /*,{field:'right', title:'操作', toolbar: '#barDemo',minWidth:150}*/
+                        ,{field:'right', title:'操作', toolbar: '#barDemo',minWidth:100}
                     ]]
                 });
             });
 
             //监听行工具事件
-          /*  table.on('tool(test)', function(obj){
+            table.on('tool(test)', function(obj){
                 var data = obj.data;
-                if(obj.event === 'del'){
-                    layer.confirm('确定删除该数据？', function(index){
-                        $.post('/admin/goods_sku_apply/delete',{id:data.id},function(e){
-                            if(!e.status){
-                                layer.msg(e.msg, {time: 2000, icon: 6});
-                                return false;
-                            }
-                        });
-                        obj.del();
-                        layer.close(index);
-                    });
-                } else if(obj.event === 'edit'){
+                if(obj.event === 'info'){
                     layer.open({
                         type: 2,
-                        title: '修改SKU',
+                        title: '查看SKU详情',
                         area: ['500px','500px'],
                         shadeClose: true, //点击遮罩关闭
                         maxmin: true,
                         content: '/admin/goods_apply/edit_sku_distribution',
                         success: function(layero, index){
                             var body = layer.getChildFrame('body', index);
+                            body.find('#save_from').hide();
                             $.each(data,function(k,v){
                                 if(k=='type' || k=='is_real'){
                                     layui.use('form', function() { //监控复选框状态
@@ -267,23 +256,7 @@
                         }
                     });
                 }
-            });*/
+            });
         });
-
-        function save_form() {
-            var form = $('form'),index = layer.load(),data = form.serializeArray();
-
-            $.post(form.attr('action'), data , function (response) {
-                if (!response.status) {
-                    layer.msg(response.msg, {time: 2000, icon: 6});
-                    layer.close(index);
-                    return false;
-                } else {
-                    layer.msg('保存成功', {time: 2000, icon: 6}, function () {
-                        window.location.href = '<?php echo site_url ( 'admin/goods_apply/distribution' ); ?>';
-                    })
-                }
-            }, 'json');
-        }
     </script>
 <?php $this->load->view ( 'admin/common/footer' ) ?>
