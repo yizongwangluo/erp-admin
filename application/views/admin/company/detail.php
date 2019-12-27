@@ -18,8 +18,7 @@
     <label class="layui-form-label">营业执照图片：</label>
     <div class="layui-inline">
         <div class="detail">
-            <img src="<?= $info['business_license_image'] ?>" style="width: 150px;height: 150px;margin-right: 20px">
-            <a href="<?= $info['business_license_image'] ?>" class="layui-btn layui-btn-primary layui-btn-xs" target="_blank">查看原图</a>
+            <?= $info['business_license_image'] ?>
         </div>
     </div>
 </div>

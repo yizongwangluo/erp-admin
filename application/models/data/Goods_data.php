@@ -51,6 +51,14 @@ class Goods_data extends \Application\Component\Common\IData{
             $sql_info = str_replace('{{}}',$condition['info'],$sql);
             $query = $this->db->query($sql_info);
             $info = $query->result_array();
+
+            foreach($info as $k=>$v){
+                $sku_list = $this->db->query('select code,norms,price,weight,status,code from goods_sku where spu_id= '.$v['id'])->result_array();
+                $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
+                $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
+                $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
+                $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));
+            }
         }
 
         return array(
@@ -123,14 +131,36 @@ class Goods_data extends \Application\Component\Common\IData{
     }
 
     /**
-     * 提交审核
-     * @param int $id
+     * 同步
+     * @param array $apply_info
      * @return bool
      */
-    public function to_examine($id = 0){
-        if($id){
-            return $this->update($id,['status'=>2]);
-        }
-    }
+    public function synchronization($apply_info = []){
 
+        $info = $this->find(['code'=>$apply_info['code']]);
+        //过滤参数
+        unset($apply_info['id']);
+        unset($apply_info['sales_volume']);
+        unset($apply_info['u_id']);
+        unset($apply_info['addtime']);
+        unset($apply_info['edittime']);
+        unset($apply_info['status']);
+        unset($apply_info['type']);
+        //过滤参数end
+
+        $time = time();
+        $apply_info['edittime'] = $time;
+        if($info){ //修改
+            if(!$this->update($info['id'],$apply_info)){
+                $this->set_error('(修改)同步失败，请稍后重试');return false;
+            }
+        }else{ //新增
+            $apply_info['addtime'] = $time;
+            $info['id'] = $this->store($apply_info);
+            if(!$info['id']){
+                $this->set_error('(新增)同步失败，请稍后重试');return false;
+            }
+        }
+        return $info['id'];
+    }
 }

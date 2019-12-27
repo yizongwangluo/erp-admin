@@ -11,22 +11,21 @@
                 <input type="hidden" value="<?=$info['id']?>"  name="id">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">*代理商</label>
+                        <label class="layui-form-label">*代理商</label>
                         <div class="layui-input-inline">
                             <input type="text" name="agent" value="<?=$info['agent']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">*公司名称</label>
+                        <label class="layui-form-label">*公司名称</label>
                         <div class="layui-input-inline">
                             <input type="text" name="company_name" value="<?=$info['company_name']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">*营业执照</label>
+                        <label class="layui-form-label">*营业执照</label>
                         <div class="layui-inline">
-                            <img src="<?php echo $info['business_license_image'] ? : '';?> "  class="thumb_img" style="width: 100px;height: 100px"/>
-                            <input id="thumb_img" name="business_license_image" value="<?=$info['business_license_image']?>" type="hidden" class="layui-input thumb_img" />
+                            <input id="thumb_img" name="business_license_image" value="<?=$info['business_license_image']?>" type="text" class="layui-input thumb_img" />
                         </div>
                         <div class="layui-inline">
                             <a id="thumb_img_btn"  href="javascript:void(0)" class="layui-btn upload-img-all" >上传图片</a>
@@ -36,19 +35,19 @@
 
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">*广告主联系人姓名</label>
+                        <label class="layui-form-label">*广告主联系人姓名</label>
                         <div class="layui-input-inline">
                             <input type="text" name="ad_connect_name" value="<?=$info['ad_connect_name']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">*广告主联系人邮箱</label>
+                        <label class="layui-form-label">*广告主联系人邮箱</label>
                         <div class="layui-input-inline">
                             <input type="text" name="ad_connect_email" value="<?=$info['ad_connect_email']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">FB粉丝页链接</label>
+                        <label class="layui-form-label">FB粉丝页链接</label>
                         <div class="layui-input-inline">
                             <input type="text" name="fanslink" value="<?=$info['fanslink']?>" placeholder="" class="layui-input">
                             <em>多个链接以 , 隔开</em>
@@ -57,19 +56,19 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">时区</label>
+                        <label class="layui-form-label">时区</label>
                         <div class="layui-input-inline">
                             <input type="text" name="time_zone" value="<?=$info['time_zone']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">BM</label>
+                        <label class="layui-form-label">BM</label>
                         <div class="layui-input-inline">
                             <input type="text" name="BM" value="<?=$info['BM']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">开户状态</label>
+                        <label class="layui-form-label">开户状态</label>
                         <div class="layui-input-inline">
                             <select name="account_status" lay-filter="account_status">
                                 <option value="">请选择</option>
@@ -82,19 +81,19 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">下户时间</label>
+                        <label class="layui-form-label">下户时间</label>
                         <div class="layui-input-inline">
                             <input type="text" class="layui-input" id="date" placeholder="请选择日期" name="logout_time" value="<?= $info['logout_time'] ? date('Y-m-d',$info['logout_time']) : '' ?>">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">BM API</label>
+                        <label class="layui-form-label">BM API</label>
                         <div class="layui-input-inline">
                             <input type="text" name="BMAPI" value="<?=$info['BMAPI']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">所属人</label>
+                        <label class="layui-form-label">所属人</label>
                         <div class="layui-input-inline">
                             <select name="belong_to" lay-search="">
                                 <option value="">直接选择或搜索选择</option>
@@ -107,7 +106,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">备注</label>
+                        <label class="layui-form-label">备注</label>
                         <div class="layui-input-inline">
                             <input type="text" name="company_remark" value="<?=$info['company_remark']?>" placeholder="" class="layui-input">
                         </div>

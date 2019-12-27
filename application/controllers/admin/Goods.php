@@ -14,7 +14,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	{
 		parent::__construct ();
 		$this->load->model ( 'data/goods_data' );
+		$this->load->model ( 'data/goods_apply_data' );
 		$this->load->model ( 'data/goods_sku_data' );
+		$this->load->model ( 'facade/goods_distribution_facade' );
 
 	}
 
@@ -33,6 +35,17 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		$result['page_html'] = create_page_html ( '?', $data['total'] );
 
 		$this->load->view ( '', $data );
+	}
+
+	/**
+	 * 查看详情
+	 * @param $id
+	 */
+	public function info($id){
+
+		$info = $this->goods_data->get_info($id);
+
+		$this->load->view ('',['info'=>$info]);
 	}
 
 	/**
@@ -122,6 +135,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		}
 	}
 
+	/**
+	 * 删除
+	 */
 	public function delete(){
 
 		$id = input('id');
@@ -137,49 +153,18 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	}
 
 	/**
-	 * 提交审核
+	 * 同步spu
 	 */
-	public function to_examine($id){
+	public function synchronization(){
+		$goods_apply_id = input('id');
+		if($goods_apply_id){
+			$ret = $this->goods_distribution_facade->synchronization($goods_apply_id); //同步
 
-		$ret = $this->goods_data->to_examine($id);
-
-		if($ret){ //成功
-			$this->goods_sku_data->to_examine_spuid($id);
-			$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
-		}else{
-			$this->output->ajax_return(AJAX_RETURN_FAIL,$this->goods_data->get_error());
+			if($ret){ //成功
+				$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
+			}else{
+				$this->output->ajax_return(AJAX_RETURN_FAIL,$this->goods_data->get_error());
+			}
 		}
 	}
-
-	/**
-	 * 审核
-	 */
-	public function examine_list(){
-
-		$input = $this->input->get();
-		$page = max(1,$input['page']);
-		unset($input['page']);
-
-		$data = $this->goods_data->get_list($this->admin['id'],$input,$page);
-		$data['where'] = $input;
-
-		$result['page_html'] = create_page_html ( '?', $data['total'] );
-
-		$this->load->view ( '', $data );
-	}
-
-	/**
-	 * 审核
-	 */
-	public function examine($id){
-
-		$ret = $this->goods_data->to_examine($id);
-
-		if($ret){ //成功
-			$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
-		}else{
-			$this->output->ajax_return(AJAX_RETURN_FAIL,$this->goods_data->get_error());
-		}
-	}
-
 }

@@ -138,4 +138,18 @@ class Goods_sku extends \Application\Component\Common\AdminPermissionValidateCon
 		}
 	}
 
+
+	/**
+	 * 查询sku列表
+	 * @param int $spu_id
+	 */
+	public function sku_list($spu_id = 0){
+
+		$list = $this->goods_sku_data->lists(['spu_id'=>$spu_id]);
+//		foreach($list as $k=>$value){
+//			$list[$k]['img']= base_url($value['img']);
+//		}
+		echo json_encode(['code'=>0,'msg'=>'ok','data'=>$list]);
+	}
+
 }
