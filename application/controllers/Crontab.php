@@ -15,6 +15,7 @@ class Crontab extends \MY_Controller
 		$this->load->model ( 'orders/shopify_orders' );
 		$this->load->model ( 'data/income_data' );
 		$this->load->model ( 'operate/salary_operate' );
+		$this->load->model ( 'operate/getoperate_operate' );
 	}
 
 	/**
@@ -46,6 +47,8 @@ class Crontab extends \MY_Controller
 	public function run_every_day ()
 	{
 		$this->shopify_orders->index(); //定时获取shopify订单
+
+		$this->getoperate_operate->get_datas(); //定时生成昨日运营数据
 
 	}
 

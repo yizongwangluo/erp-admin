@@ -27,10 +27,12 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $mix_time = $time.'T23:59:59';
 
         foreach($shop_list as $k=>$value){
-            $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['domain'].'/admin/api/2020-01/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_mix='.$mix_time.'&limit=250';
+            $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['domain'].'/admin/api/2020-01/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
             $this->get_order_page($value,$url,$time,$min_time,$mix_time);
         }
     }
+
+
     public function index_bak(){
 
         $shop_info = $this->order_synchro_data->get_shop_one();
