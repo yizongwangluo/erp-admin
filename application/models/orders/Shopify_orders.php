@@ -27,10 +27,9 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $mix_time = $time.'T23:59:59';
 
         foreach($shop_list as $k=>$value){
-            $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['domain'].'/admin/api/2019-10/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_mix='.$mix_time.'&limit=10';
-            $this->get_order_page($value,$url,$time,$min_time,$mix_time,2);
+            $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['domain'].'/admin/api/2020-01/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_mix='.$mix_time.'&limit=250';
+            $this->get_order_page($value,$url,$time,$min_time,$mix_time);
         }
-
     }
     public function index_bak(){
 
@@ -72,7 +71,6 @@ class Shopify_orders extends \Application\Component\Common\IFacade
 
         $order_json = curl_get_https($url);
         $order_list = json_decode($order_json,true);
-
         $order_cout = count($order_list['orders']);
 
         if($order_cout>0){ //有订单时

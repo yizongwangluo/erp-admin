@@ -18,9 +18,9 @@ class Order_synchro_log_data extends \Application\Component\Common\IData{
      * @param int $page
      * @return int
      */
-    public function add_log($shop_id = 0,$url = '',$min_time = '',$mix_time = '',$page = 1){
+    public function add_log($shop_id = 0,$url = '',$min_time = '',$mix_time = '',$page = 1,$datetime = ''){
 
-        return $this->store(['shop_id'=>$shop_id,'link'=>$url,'min_time'=>$min_time,'mix_time'=>$mix_time,'page'=>$page]);
+        return $this->store(['shop_id'=>$shop_id,'link'=>$url,'min_time'=>$min_time,'mix_time'=>$mix_time,'page'=>$page,'datetime'=>time()]);
 
     }
 
