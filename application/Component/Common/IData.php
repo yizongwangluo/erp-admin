@@ -252,7 +252,7 @@ abstract class IData extends ILayer implements DateInterface
         if (!$order_by) {
             $order_by = array(static::_get_pk_field(), 'asc');
         }
-        $sql_all = $sql.$condition[0].' order by '.$order_by[0].' '.$order_by[1];
+        $sql_all = $sql.$condition[0];
 //        echo $sql_all;
         $datas = $this->db->query ( $sql_all )->result_array ();
         $total = count($datas);

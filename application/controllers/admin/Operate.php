@@ -12,6 +12,7 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
     {
         parent::__construct ();
         $this->load->model ( 'data/operate_data' );
+        $this->load->model ( 'data/my_data' );
     }
 
     //运营数据列表
@@ -30,7 +31,8 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
             $sort = $order_s;
         }
         $result = $this->operate_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],10 );                 $result['users'] = $this->operate_data->get_users($admin_id);
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );               $result['users'] = $this->operate_data->get_users($admin_id);
+        $result['sum'] = $this->operate_data->get_sum( $sql, $condition );
         $this->load->view('',$result);
     }
 
@@ -94,6 +96,24 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
     {
         $data['info'] = $this->operate_data->get_info ( $id );
         $this->load->view ( '@/add', $data );
+    }
+
+    //运营数据详情页
+    public function detail ( $id = null )
+    {
+        $data['info'] = $this->operate_data->get_info ( $id );
+        $user_id = $data['info']['user_id'];
+        $shop_id = $data['info']['shop_id'];
+        $data['user'] = $this->my_data->get_user ( $user_id );
+        $data['domain'] = $this->my_data->get_domain ( $shop_id );
+        $this->load->view ( '' , $data );
+    }
+
+    //产品成本明细
+    public function product_list  ( $id = null )
+    {
+        $product_list = $this->operate_data->get_product_list( $id );
+        echo json_encode(['code'=>0,'msg'=>'ok','data'=>$product_list]);
     }
 
 }

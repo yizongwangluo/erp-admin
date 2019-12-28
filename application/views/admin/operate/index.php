@@ -50,39 +50,45 @@
                     <a href='index?title=turnover&sort=asc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
                     <a href='index?title=turnover&sort=desc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
+                            <br>总（<?=$sum['turnover']?>）
                         </td>
                         <td>付款订单数
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=paid_orders&sort=asc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
                     <a href='index?title=paid_orders&sort=desc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
+                            <br>总（<?=$sum['paid_orders']?>）
                         </td>
                         <td>广告费用($)
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=ad_cost&sort=asc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
                     <a href='index?title=ad_cost&sort=desc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
+                            <br>总（<?=$sum['ad_cost']?>）
                         </td>
                         <td>手续费($)
                             <span class="layui-table-sort layui-inline">
-                    <a href='index?title=ad_cost&sort=asc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=ad_cost&sort=desc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=formalities_cost&sort=asc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=formalities_cost&sort=desc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
+                            <br>总（<?=$sum['formalities_cost']?>）
                         </td>
                         <td>产品总成本(¥)
                             <span class="layui-table-sort layui-inline">
-                    <a href='index?title=ad_cost&sort=asc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
-                    <a href='index?title=ad_cost&sort=desc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                    <a href='index?title=product_total_cost&sort=asc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='index?title=product_total_cost&sort=desc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
+                            <br>总（<?=$sum['product_total_cost']?>）
                         </td>
-                        <td>毛利($)</td>
-                        <td>毛利(¥)</td>
-                        <td>毛利率</td>
+                        <td>毛利($)<br>总（<?=$sum['gross_profit']?>）</td>
+                        <td>毛利(¥)<br>总（<?=$sum['gross_profit_rmb']?>）</td>
+                        <td>毛利率<br>总（<?=$sum['gross_profit_rate']?>）</td>
                         <td>ROI
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=ROI&sort=asc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
                     <a href='index?title=ROI&sort=desc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
                 </span>
+                            <br>总（<?=$sum['ROI']?>）
                         </td>
                         <td>备注</td>
                         <td>审核状态
@@ -130,12 +136,18 @@
                                 <?php } ?>
 
                                 <?php if($v['review_status'] == 2){ ?>
-                                    <td>审核人：<?=$v['reviewer_name']?></td>
+                                    <td><a class="layui-btn-xs layui-btn layui-btn-danger" type="button"  href="<?php echo base_url ( 'admin/operate/detail/'.$v['id'] ) ?>">详情</a></td>
                                 <?php }else{
                                     if($v['ad_cost'] != null){ ?>
-                                        <td><button class="layui-btn-xs layui-btn" type="button"  data-modal="<?php echo base_url ( 'admin/operate/edit/'.$v['id'] ) ?>"  data-title="上传广告费用" data-width="450px">修改广告费用</button></td>
+                                        <td>
+                                            <a class="layui-btn-xs layui-btn layui-btn-danger" type="button"  href="<?php echo base_url ( 'admin/operate/detail/'.$v['id'] ) ?>">详情</a>
+                                            <button class="layui-btn-xs layui-btn" type="button"  data-modal="<?php echo base_url ( 'admin/operate/edit/'.$v['id'] ) ?>"  data-title="上传广告费用" data-width="450px">修改广告费用</button>
+                                        </td>
                                    <?php }else{ ?>
-                                        <td><button class="layui-btn-xs layui-btn layui-btn-normal" type="button"  data-modal="<?php echo base_url ( 'admin/operate/edit/'.$v['id'] ) ?>"  data-title="上传广告费用" data-width="450px">上传广告费用</button></td>
+                                        <td>
+                                            <a class="layui-btn-xs layui-btn layui-btn-danger" type="button"  href="<?php echo base_url ( 'admin/operate/detail/'.$v['id'] ) ?>">详情</a>
+                                            <button class="layui-btn-xs layui-btn layui-btn-normal" type="button"  data-modal="<?php echo base_url ( 'admin/operate/edit/'.$v['id'] ) ?>"  data-title="上传广告费用" data-width="450px">上传广告费用</button>
+                                        </td>
                                    <?php } ?>
                                 <?php } ?>
                             </tr>

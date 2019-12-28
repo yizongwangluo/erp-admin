@@ -134,7 +134,8 @@ FROM
         return $domains;
     }
 
-    public function get_users($admin_id){
+    public function get_users($admin_id)
+    {
         if($admin_id == 1){
             $sql = "select id as s_u_id,real_name as s_real_name,user_name as s_user_name from admin order by s_u_id desc";
         }else{
@@ -142,5 +143,71 @@ FROM
         }
         $users = $this->db->query ( $sql )->result_array ();
         return $users;
+    }
+    
+    public function get_sum( $sql, $condition )
+    {
+        $sql_sum = $sql.$condition[0];
+        $data = $this->db->query ( $sql_sum )->result_array ();
+        $sum = [];
+        foreach($data as $v){
+            $sum['turnover'] += $v['turnover'];
+            $sum['paid_orders'] += $v['paid_orders'];
+            $sum['ad_cost'] += $v['ad_cost'];
+            $sum['formalities_cost'] += $v['formalities_cost'];
+            $sum['product_total_cost'] += $v['product_total_cost'];
+            $sum['gross_profit'] += $v['gross_profit'];
+            $sum['gross_profit_rmb'] += $v['gross_profit_rmb'];
+        }
+        //总营业额
+        $sum['turnover'] = floor($sum['turnover'] * 100) / 100;
+        //总广告费
+        $sum['ad_cost'] = floor($sum['ad_cost'] * 100) / 100;
+        //总手续费
+        $sum['formalities_cost'] = floor($sum['formalities_cost'] * 100) / 100;
+        //总产品总成本
+        $sum['product_total_cost'] = floor($sum['product_total_cost'] * 100) / 100;
+        //总毛利（$）
+        $sum['gross_profit'] = floor($sum['gross_profit'] * 100) / 100;
+        //总毛利（￥）
+        $sum['gross_profit_rmb'] = floor($sum['gross_profit_rmb'] * 100) / 100;
+        //总毛利率 = 总毛利/总营业额
+        $sum['gross_profit_rate'] = bcdiv($sum['gross_profit'],$sum['turnover'],9);
+        $sum['gross_profit_rate'] = empty($sum['gross_profit_rate']) ? '0.000000000' : $sum['gross_profit_rate'];
+        //总ROI = 总营业额/总广告费
+        $sum['ROI'] = bcdiv($sum['turnover'],$sum['ad_cost'],2);
+        $sum['ROI'] = empty($sum['ROI']) ? '0.00' : $sum['ROI'];
+        return $sum;
+
+}
+
+    public function get_product_list( $id )
+    {
+        //根据id查出已有的运营数据
+        $operate = $this->db->query ( "SELECT * FROM operate WHERE id = $id" )->row_array ();
+        $shop_id = $operate['shop_id'];
+        $date = $operate['datetime'];
+        //获取该店铺该天的付款订单id (状态为已支付)
+        $sql = "SELECT GROUP_CONCAT(shopify_o_id) AS orders FROM `order` WHERE  shop_id = $shop_id AND datetime = '$date' AND financial_status = 'paid'";
+        $orders = $this->db->query ( $sql )->row_array ()['orders'];
+        if(!empty($orders)){
+            //获取该店铺该天已付订单的所有商品(商品名称,sku编码,出售总数,产品重量,产品价格)
+            $sql = "SELECT a.sku_id,sum(a.quantity) as quantity,b.weight,b.price,c.name FROM order_goods a LEFT JOIN goods_sku b ON a.sku_id = b.code LEFT JOIN goods c ON b.spu_id = c.id WHERE shop_id = $shop_id AND shopify_o_id IN ( $orders ) GROUP BY sku_id";
+            $data = $this->db->query ( $sql )->result_array ();
+            //获取产品成本明细
+            $a = 1;
+            foreach($data as $k => $v){
+                $v['id'] = $a;
+                foreach ($v as $key => $val){
+                    $data[$k]['id'] = $v['id'];
+                    $data[$k]['freight'] = $operate['freight'];
+                    $data[$k]['product_cost'] = bcadd(($v['quantity']*$v['price']),($v['quantity']*$v['weight']*$data[$k]['freight']),2);
+                }
+                $a ++;
+            }
+        }else{
+            $data = array();
+        }
+        return $data;
     }
 }
