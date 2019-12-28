@@ -276,7 +276,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			//写入文件
 			log_message('addexcel_save',json_encode($error),true);
 			//保存到数据库
-			$this->excel_error_log_data->store(['err_name'=>'导入失败','datetime'=>date('Y-m-d H:i:s'),'content'=>json_encode($error),'u_id'=>$this->admin['id']]);
+			$this->excel_error_log_data->store(['name'=>'导入失败','datetime'=>date('Y-m-d H:i:s'),'content'=>json_encode($error),'u_id'=>$this->admin['id']]);
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'导入失败，请下载失败日志');
 		}
 
