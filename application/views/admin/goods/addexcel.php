@@ -11,7 +11,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">excel文件：</label>
             <div class="layui-inline">
-                <div class="layui-inline" style="min-width: 420px"><input id="thumb_file"  name="file_name" value="D:\phpStudy\PHPTutorial\WWW\a-lxj\erp-admin-yizong\erp-admin/upload/files/by5vn6hyxh5e06de5b1671e.xlsx" type="text" class="layui-input" /></div>
+                <div class="layui-inline" style="min-width: 420px"><input id="thumb_file"  name="file_name" value="" type="text" class="layui-input" /></div>
                 <div class="layui-inline"><button type="button" class="layui-btn upload-file-all"><i class="layui-icon"></i>上传文件</button></div>
             </div>
             <em><a href="/商品导入模板201912.xlsx">下载导入模板</a></em>
