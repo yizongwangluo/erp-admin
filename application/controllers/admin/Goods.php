@@ -139,8 +139,8 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'更新接口尚未接入');
 		}
 
-		if(!$ret){
-			$this->output->ajax_return(AJAX_RETURN_FAIL,'商品同步到通途失败，请手动同步！');
+		if(!$ret['code']){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,$ret['msg']);
 		}else{
 			//修改同步通途状态
 			$this->goods_data->update($id,['is_tongtu'=>1]);
@@ -192,7 +192,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'请上传文件');
 		}
 
-		$data = $this->_excel_common($file_name);//读取excel文件
+		$data = $this->_excel_goods($file_name);//读取excel文件
+
+		print_r($data);exit;
 
 		$goods = [];
 		$error = [];

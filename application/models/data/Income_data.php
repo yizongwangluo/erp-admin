@@ -208,6 +208,7 @@ class Income_data extends \Application\Component\Common\IData
         //查看提成规则
         $sql = 'select id from royalty_rules where o_id='.$org_id;
         $royalty_rules = $this->db->query($sql)->row_array();
+
         if($royalty_rules){ //有提成规则时
 
             $px = $sum_money['gross_profit_rmb']; //毛利 人民币
@@ -217,6 +218,8 @@ class Income_data extends \Application\Component\Common\IData
             $data['money'] = $get_royalty['money'];
             $data['remarks'] = $get_royalty['remarks'];
 
+        }else{
+            $data['remarks'] = '未找到相应提成规则，请检查该员工信息';
         }
         return $data;
     }

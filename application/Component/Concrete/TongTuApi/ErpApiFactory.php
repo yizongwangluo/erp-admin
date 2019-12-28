@@ -77,16 +77,16 @@ class ErpApiFactory
     public function add_goods($data = []){
 
         $url = $this->get_link('/openapi/tongtool/createProduct');
-
         $data['merchantId'] = $this->merchantId[0]['partnerOpenId'];
-
         $ret = $this->curl_post_https_json($url,$data);
         $ret = json_decode($ret,true);
 
+        $a = ['code'=>true];
         if($ret['code']!=200){
-            return false;
+            $a['code'] =false;
+            $a['msg']=$ret['message']?$ret['message']:'商品同步到通途失败，请手动同步！';
         }
-        return true;
+        return $a;
     }
 
     /**

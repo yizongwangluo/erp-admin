@@ -8,7 +8,7 @@
 <div class="layui-tab admin-layui-tab layui-tab-brief">
     <ul class="layui-tab-title">
         <li class="layui-this">商品列表</li>
-        <li><a href="<?php echo base_url ( 'admin/goods/add' ) ?>">导入</a></li>
+        <li><a href="<?php echo base_url ( 'admin/goods/addexcel' ) ?>">导入</a></li>
     </ul>
     <div class="layui-tab-content">
             <form action="?" method="get">
