@@ -110,7 +110,8 @@ class MY_Controller extends CI_Controller
 					$data[$currentRow][$currentColumn] = $data[$currentRow][$currentColumn]->__toString();
 				}
 			}
-			$data[$currentRow] = array_filter($data[$currentRow]);//过滤空数组
+//			$data[$currentRow] = array_filter($data[$currentRow]);//过滤空数组
+			$data[$currentRow] = $data[$currentRow];//过滤空数组
 		}
 		return array_filter($data);//过滤空数组
 	}
