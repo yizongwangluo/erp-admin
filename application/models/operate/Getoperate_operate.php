@@ -49,12 +49,8 @@ class Getoperate_operate extends \Application\Component\Common\IData
                     'sku_total_cost' => '0',
                     'unit_price' => '0',
                     'formalities_cost' =>'0',
-                    'register_cost' => '0',
                     'product_total_cost' => '0',
-                    'exchange_rate' => '0',
-                    'freight' => '0',
-                    'service_charge' => '0',
-                    'operate_remark' => '缺少提成规则'
+                    'operate_remark' => '缺少提成规则！'
                 );
             }else{
                 //获取店铺前一天的总营业额,付款订单数,付款订单id (状态为已支付)
@@ -119,7 +115,7 @@ class Getoperate_operate extends \Application\Component\Common\IData
     }
 
     //同步某个店铺某天的运营数据
-    public function get_data($shop_id, $date)
+    public function get_data( $shop_id , $date )
     {
         set_time_limit(0);
         $today = date("Y-m-d");//今天的日期
@@ -145,34 +141,57 @@ class Getoperate_operate extends \Application\Component\Common\IData
             $data['unit_price'] = empty($data['unit_price']) ? '0' : $data['unit_price'];
             //根据shop_id和datetime查出已有的运营数据
             $operate = $this->db->query ( "SELECT * FROM operate WHERE shop_id = $shop_id AND datetime = '$date'" )->row_array ();
+            $service_charge = $operate['service_charge'];//手续费百分比
+            $register_cost =$operate['register_cost'];//挂号费
+            $freight = $operate['freight'];//每克运费
+            $exchange_rate = $operate['exchange_rate'];//汇率
+            if(empty($service_charge) && empty($register_cost) && empty($freight) && empty($exchange_rate)){
+                $user_id = $operate['user_id'];
+                //根据user_id获取部门id
+                $org_id = $this->db->query ( "select org_id from admin where id = $user_id" )->row_array ()['org_id'];
+                //根据部门id获取相应的提成规则的手续费(百分比),挂号费,汇率,每克运费
+                $sql = "select service_charge,register_fee,exchange_rate,freight from royalty_rules where o_id in ($org_id) and type = 1";
+                $fees = $this->db->query ( $sql )->row_array ();
+                if(!empty($fees)){
+                    $service_charge = $fees['service_charge'];//手续费百分比
+                    $register_cost =$fees['register_fee'];//挂号费
+                    $freight = $fees['freight'];//每克运费
+                    $exchange_rate = $fees['exchange_rate'];//汇率
+                }else{
+                    $this->set_error(' 缺少提成规则！');
+                    return false;
+                }
+            }
+
             //手续费 = 营业额*系统设置比例
-            $formalities_cost = bcmul($data['turnover'],($operate['service_charge']*0.01),2);
+            $formalities_cost = bcmul($data['turnover'],($service_charge*0.01),2);
             $formalities_cost = empty($formalities_cost) ? '0' : $formalities_cost;
             //产品总成本 = 所有SKU成本 + 付款订单数*挂号费 + 产品总重量 * 每克运费
-            $product_total_cost = $data['sku_total_cost']+bcmul($data['paid_orders'],$operate['register_cost'],2)+bcmul($data['total_weight'],$operate['freight'],2);
+            $product_total_cost = $data['sku_total_cost']+bcmul($data['paid_orders'],$register_cost,2)+bcmul($data['total_weight'],$freight,2);
             $product_total_cost = empty($product_total_cost) ? '0' : $product_total_cost;
             //判断是否已经上传广告费用
             if(empty($operate['ad_cost'])){//广告费未上传时,数据为空
-                $ad_cost = '';
-                $ROI = '';
-                $unit_ad_cost = '';
-                $gross_profit = '';
-                $gross_profit_rmb = '';
-                $gross_profit_rate = '';
+                $ad_cost = null;
+                $ROI = null;
+                $unit_ad_cost = null;
+                $gross_profit = null;
+                $gross_profit_rmb = null;
+                $gross_profit_rate = null;
                 $review_status = 0;
             }else{//上传广告费后,计算相应数据
                 $ad_cost = $operate['ad_cost'];
                 $ROI = bcdiv($data['turnover'],$operate['ad_cost'],2);//ROI=营业额/广告费
+                $ROI = empty($ROI) ? '0' : $ROI;
                 //每单广告成本=广告费/付款订单数
                 $unit_ad_cost = bcdiv($operate['ad_cost'],$data['paid_orders'],2);
                 $unit_ad_cost = empty($unit_ad_cost) ? '0' : $unit_ad_cost;
                 //产品总成本转换为美元
-                $product_total_cost_usd = bcdiv($product_total_cost,$operate['exchange_rate'],2);
+                $product_total_cost_usd = bcdiv($product_total_cost,$exchange_rate,2);
                 $product_total_cost_usd = empty($product_total_cost_usd) ? '0' : $product_total_cost_usd;
                 //毛利=营业额-广告费-手续费-产品总成本(美元)
                 $gross_profit = $data['turnover']-$operate['ad_cost']-$formalities_cost-$product_total_cost_usd;
                 //毛利(人民币)
-                $gross_profit_rmb = bcmul($gross_profit,$operate['exchange_rate'],2);
+                $gross_profit_rmb = bcmul($gross_profit,$exchange_rate,2);
                 $gross_profit_rmb = empty($gross_profit_rmb) ? '0' : $gross_profit_rmb;
                 //毛利率=毛利/营业额
                 $gross_profit_rate = bcdiv($gross_profit,$data['turnover'],9);
@@ -190,17 +209,22 @@ class Getoperate_operate extends \Application\Component\Common\IData
                 'product_total_cost' => $product_total_cost,
                 'ad_cost' => $ad_cost,
                 'review_status' => $review_status,
-                'review_time' => '',
-                'reviewer' => '',
+                'review_time' => null,
+                'reviewer' => null,
                 'ROI' => $ROI,
                 'unit_ad_cost' => $unit_ad_cost,
                 'gross_profit' => $gross_profit,
                 'gross_profit_rmb' => $gross_profit_rmb,
-                'gross_profit_rate' => $gross_profit_rate
+                'gross_profit_rate' => $gross_profit_rate,
+                'operate_remark' => null,
+                'service_charge' => $service_charge,
+                'register_cost' => $register_cost,
+                'freight' => $freight,
+                'exchange_rate' => $exchange_rate
             );
-            //过滤掉值为''和null的数据
+            //过滤掉值为''的数据
             function  filtrfunction($arr){
-                if($arr === '' || $arr === null){
+                if($arr === ''){
                     return false;
                 }
                 return true;

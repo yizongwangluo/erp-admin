@@ -116,7 +116,6 @@ FROM
         }else{
             unset($in['id']);
             if (!$this->operate_data->update($id,$data)){
-                echo $this->db->last_query();exit;
                 $this->set_error ('数据更新失败，请稍后再试！');
                 return false;
             }
