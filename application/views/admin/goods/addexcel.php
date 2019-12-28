@@ -4,6 +4,7 @@
     <ul class="layui-tab-title">
         <li><a href="<?php echo base_url ( 'admin/goods/index' ) ?>">商品列表</a></li>
         <li class="layui-this">导入</li>
+        <li><a href="<?php echo base_url ( 'admin/goods/error_log' ) ?>">导入错误日志</a></li>
     </ul>
 </div>
 <div style="margin-top: 30px;">

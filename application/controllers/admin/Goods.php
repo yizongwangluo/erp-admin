@@ -18,6 +18,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		$this->load->model ( 'data/goods_sku_data' );
 		$this->load->model ( 'facade/goods_distribution_facade' );
 		$this->load->model ( 'goods/goods_excel_goods' );
+		$this->load->model ( 'data/excel_error_log_data' );
 
 	}
 
@@ -192,16 +193,14 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'请上传文件');
 		}
 
-		$data = $this->_excel_goods($file_name);//读取excel文件
-
-		print_r($data);exit;
+		$data = $this->_excel_common($file_name);//读取excel文件
 
 		$goods = [];
 		$error = [];
 		//整理数组
 		foreach($data as $value){
 			if(!$value['A'] ||!$value['B'] ||!$value['C'] ||!$value['D'] || !is_numeric($value['E']) || !$value['R'] || !$value['S'] ||  !$value['U'] ||  !$value['T']){
-				$value['X'] = '必填项为空,起批量必须为数字';
+				$value['X'] = '必填项为空,或起批量不为数字';
 				$error[] = $value;
 			}else{
 
@@ -267,7 +266,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 				$ret = $this->goods_excel_goods->add_excel($this->admin['id'],$goods);
 				if(!$ret){
-					$value['Y'] = $this->goods_excel_goods->get_error();
+					$value['X'] = $this->goods_excel_goods->get_error();
 					$error[] = $value;
 				}
 			}
@@ -276,9 +275,32 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		if(count($error)){
 			//写入文件
 			log_message('addexcel_save',json_encode($error),true);
+			//保存到数据库
+			$this->excel_error_log_data->store(['err_name'=>'导入失败','datetime'=>date('Y-m-d H:i:s'),'content'=>json_encode($error),'u_id'=>$this->admin['id']]);
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'导入失败，请下载失败日志');
 		}
 
 		$this->output->ajax_return(AJAX_RETURN_SUCCESS,'OK');
+	}
+
+	/**
+	 * 查询错误日志列表
+	 */
+	public function error_log(){
+
+		$list = $this->excel_error_log_data->get_field_by_where(['id','name','datetime','u_id'],[],true);
+
+		$this->load->view ( '', ['list'=>$list] );
+	}
+
+
+	public function error_dow($id = 0){
+
+		$info = $this->excel_error_log_data->get_info($id);
+
+		$data = json_decode($info['content']);
+
+		$this->_exportExcel($data,$info['name'].$info['datetime'],26);
+
 	}
 }
