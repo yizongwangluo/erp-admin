@@ -137,7 +137,7 @@
                 </div>
             </div>
         </div>
-        <a class="layui-btn-sm layui-btn layui-btn-normal" type="button"  href="<?php echo $_SERVER['HTTP_REFERER']; ?>" style="position:absolute;right: 20%">返回上一页</a>
+        <button class="layui-btn-sm layui-btn layui-btn-normal" type="button" onclick="javascript:history.back(-1);" style="position:absolute;right: 10%">返回上一页</button>
 
     </div>
 </div>
