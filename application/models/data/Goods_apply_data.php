@@ -47,10 +47,12 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             $sql_val = [];
             foreach($sku_list as $k=>$value){
                 $code = '';
-                if($value['is_real']){ //测试sku
+                $is_real = $value['is_real']?$value['is_real']:0;
+                $type = $value['type']?$value['type']:0;
+                if($is_real){ //测试sku
                     $code = date('YmdHis').'_'.$id.'_'.$k;
                 }
-                $sql_val[] = "({$id},'{$code}','{$value['norms']}','{$value['img']}',{$value['price']},'{$value['size']}',{$value['weight']},{$value['cycle']},'{$value['information']}','{$value['remarks']}',{$u_id},{$value['type']},{$value['is_real']},{$status})";
+                $sql_val[] = "({$id},'{$code}','{$value['norms']}','{$value['img']}',{$value['price']},'{$value['size']}',{$value['weight']},{$value['cycle']},'{$value['information']}','{$value['remarks']}',{$u_id},{$type},{$is_real},{$status})";
             }
 
             $sql.=implode(',',$sql_val);

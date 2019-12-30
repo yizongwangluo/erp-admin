@@ -9,7 +9,7 @@
         <span> ERP管理后台 </span>
     </a>
     <ul class="layui-nav">
-        <li class="layui-nav-item"><a href="/" target="_blank">【网站首页】</a></li>
+<!--        <li class="layui-nav-item"><a href="/" target="_blank">【网站首页】</a></li>-->
         <li class="layui-nav-item">
             <a href="javascript:void(0)">当前用户：<?php echo $admin['user_name']; ?></a>
             <dl class="layui-nav-child">

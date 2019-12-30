@@ -15,7 +15,6 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		parent::__construct ();
 		$this->load->model ( 'data/goods_apply_data' );
 		$this->load->model ( 'data/goods_sku_apply_data' );
-
 	}
 
 	/**
@@ -67,13 +66,13 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 
 		if($id){ //修改
 
-			if(!$input['code']){ //编码未填写
+			if(!$input['code'] && $input['status']==1){ //编码未填写
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写SPU编码');
 			}
 
 			$ret = $this->goods_apply_data->update($id,$input);
 			//查询是否有sku未填写编码
-			if($this->goods_sku_apply_data->get_no_code($id)){
+			if($this->goods_sku_apply_data->get_no_code($id) && $input['status']==1){
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写相关SKU编码');
 			}
 			//修改sku状态
@@ -82,7 +81,6 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		}else{ //新增
 			$ret = $this->goods_apply_data->add($this->admin['id'],$input);
 		}
-
 
 		if($ret){ //成功
 			$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
