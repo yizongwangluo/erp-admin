@@ -119,7 +119,7 @@
                         <button type="button" class="layui-btn" data-url="<?php echo base_url ( 'admin/company/index' ) ?>" lay-submit lay-filter="post">保存</button>
                     </div>
                     <div class="layui-inline">
-                        <a href='<?php echo base_url ( 'admin/company/index' ) ?>'><button type="button" class="layui-btn ">取消</button></a>
+                        <button class="layui-btn" type="button" onclick="javascript:history.back(-1);">取消</button>
                     </div>
                 </div>
             </form>
