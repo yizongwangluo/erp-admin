@@ -11,6 +11,7 @@
             <table class="layui-table">
                 <thead>
                 <th>ID</th>
+                <th>工号</th>
                 <th>用户名</th>
                 <th>真实姓名</th>
                 <th>最后登陆时间</th>
@@ -21,6 +22,7 @@
                 <?php foreach ($data as $item): ?>
                 <tr>
                     <td><?=$item['id'];?></td>
+                    <td><?=$item['job_number'];?></td>
                     <td><?=$item['user_name'];?></td>
                     <td><?=$item['real_name'];?></td>
                     <td><?=date ('Y-m-d H:i:s',$item['login_time'])?></td>

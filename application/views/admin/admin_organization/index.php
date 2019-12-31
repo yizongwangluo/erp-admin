@@ -6,7 +6,7 @@
             <li class=""><a href="<?php echo base_url ( 'admin/admin_organization/add' ) ?>">新增岗位</a></li>
         </ul>
         <div class="layui-tab-content">
-            <div id="test1" class="demo-tree demo-tree-box" style="width: 20%;min-height:600px ; height: 100%;float: left; overflow: scroll;"></div>
+            <div id="test1" class="demo-tree demo-tree-box" style="width: 20%;height: 600px;float: left; overflow: scroll;"></div>
 
             <div class="layui-tab-item layui-show" style="float: left;width: 70%;margin-left: 30px;">
 
@@ -89,6 +89,7 @@
             ,where:{o_id:1}
             ,cols: [[
                 {field:'id', title: 'ID'}
+                ,{field:'job_number', title: '工号'}
                 ,{field:'user_name', title: '用户名'}
                 ,{field:'real_name', title: '性别'}
                 ,{field:'is_disable', title: '是否禁用', templet: function(res){

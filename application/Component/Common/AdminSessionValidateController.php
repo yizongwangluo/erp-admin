@@ -55,7 +55,7 @@ class AdminSessionValidateController extends \MY_Controller
 		}
 
 		if ( $login_user['is_disable'] ) {
-			$this->output->error ( '该账号已被禁1用！', base_url ( 'admin/login/logout' ) );
+			$this->output->error ( '该账号已被禁用！', base_url ( 'admin/login/logout' ) );
 		}
 
 		$this->admin = $login_user;
