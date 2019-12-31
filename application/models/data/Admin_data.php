@@ -19,6 +19,15 @@ class Admin_data extends \Application\Component\Common\IData
     }
 
     /**
+     * 按工号获取
+     * @param $job_number
+     * @return array
+     */
+    public function get_info_by_job_number($job_number){
+        return $this->_get_info(['job_number'=>$job_number]);
+    }
+
+    /**
      * 加密密码
      * @param $password
      * @return string

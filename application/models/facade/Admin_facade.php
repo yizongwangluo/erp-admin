@@ -103,6 +103,12 @@ class Admin_facade extends \Application\Component\Common\IFacade
 			return false;
 		}
 
+		$admin = $this->admin_data->get_info_by_job_number ( $job_number );
+		if ( $admin ) {
+			$this->set_error ( '该工号已存在！' );
+			return false;
+		}
+
 		if ( !$this->admin_data->store ( [
 			'user_name' => $user_name,
 			'user_password' => $this->admin_data->encrypt_password ( $user_password ),
@@ -147,6 +153,12 @@ class Admin_facade extends \Application\Component\Common\IFacade
 			$this->set_error ( '该用户名已被使用！' );
 			return false;
 		}
+		$admin = $this->admin_data->get_info_by_job_number ( $job_number );
+		if ( $admin['id'] != $userid ) {
+			$this->set_error ( '该工号已存在！' );
+			return false;
+		}
+
 		if ( !$this->admin_data->update ( $userid, [
 			'user_name' => $user_name,
 			'user_password' => $this->admin_data->encrypt_password ( $user_password ),
