@@ -57,7 +57,7 @@ class Purchase_data extends \Application\Component\Common\IData{
         if(!$input['u_id']){
             $this->set_error('未读取到当前操作管理员');return false;
         }
-        if(!$input['sku_id']){
+        if(!$input['sku_code']){
             $this->set_error('sku编号必填');return false;
         }
         if(!$input['add_sku_number']){
@@ -68,7 +68,7 @@ class Purchase_data extends \Application\Component\Common\IData{
         }
 
         $data = [];
-        $data['sku_id'] = $input['sku_id'];
+        $data['sku_code'] = $input['sku_code'];
         $data['add_sku_number'] = $input['add_sku_number'];
         $data['remarks'] = $input['remarks'];
         $data['days'] = $input['days'];
@@ -89,7 +89,7 @@ class Purchase_data extends \Application\Component\Common\IData{
         if(!$input['u_id']){
             $this->set_error('未读取到当前操作管理员');return false;
         }
-        if(!$input['sku_id']){
+        if(!$input['sku_code']){
             $this->set_error('sku编号必填');return false;
         }
         if(!$input['add_sku_number']){

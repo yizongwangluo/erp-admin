@@ -48,6 +48,7 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" type="button" onclick="save_form()">保存</button>
+            <button class="layui-btn" type="button" onclick="javascript:history.back(-1);">返回</button>
         </div>
     </div>
     </div>

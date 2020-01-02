@@ -8,7 +8,7 @@
 <div class="layui-tab admin-layui-tab layui-tab-brief">
     <ul class="layui-tab-title">
         <li class="layui-this">我的申请</li>
-        <li><a href="/admin/sku_stock/add">添加</a></li>
+        <li><a href="/admin/sku_stock/add">新增</a></li>
     </ul>
     <div class="layui-tab-content">
             <form action="?" method="get">
