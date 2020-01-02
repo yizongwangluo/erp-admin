@@ -17,6 +17,7 @@ class Shopify_orders extends \Application\Component\Common\IFacade
     public function index(){
 
         $shop_list = $this->shop_data->lists();
+
         //没有店铺时 跳出程序
         if(empty($shop_list)){
             return false;
@@ -75,19 +76,19 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $order_list = json_decode($order_json,true);
         $order_cout = count($order_list['orders']);
 
+
+        //添加同步日志
+        $log_id = $this->order_synchro_log_data->add_log($arr['id'],$url,$min_time,$mix_time,$page,$order_cout);
+
         if($order_cout>0){ //有订单时
-
-            //添加同步日志
-            $log_id = $this->order_synchro_log_data->add_log($arr['id'],$url,$min_time,$mix_time,$page);
-
             //同步订单到本地
             $ret = $this->order_data->add_order($arr['id'],$time,$order_list['orders']);
 
             if(!$ret){ return false; } //添加失败，跳出程序
-
-            //修改订单同步状态
-            $this->order_synchro_log_data->edit_log($log_id,1);
         }
+
+        //修改订单同步状态
+        $this->order_synchro_log_data->edit_log($log_id,1);
 
         $next_link = $this->get_header($url,$arr['shop_api_key'],$arr['shop_api_pwd']); //下页链接
 
