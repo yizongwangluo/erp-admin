@@ -48,14 +48,14 @@
                 <?php foreach ($data as $v): ?>
                   <tr>
                       <td><?=$v['id']?></td>
-                      <td><?=$v['sku_id']?></td>
+                      <td><?=$v['sku_code']?></td>
                       <td><?=$v['add_sku_number']?></td>
                       <td><?=$v['days']?></td>
                       <td><?=$v['remarks']?></td>
                       <td><?=$v['user_name']?></td>
-                      <td><?=$v['addtime']?></td>
+                      <td><?=date('Y-m-d H:i:s',$v['addtime'])?></td>
                       <td><?=$v['approval_u_id']?></td>
-                      <td><?=$v['approval_time']?></td>
+                      <td><?=$v['approval_time']?date('Y-m-d H:i:s',$v['approval_time']):''?></td>
                       <td><?=$v['approval_remarks']?></td>
                       <td style="color: <?=$v['status']!=1?'red':'';?>"><?=$this->enum_field->get_values ( 'sku_status' )[$v['status']]?></td>
                       <td>

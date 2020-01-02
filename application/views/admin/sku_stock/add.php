@@ -17,7 +17,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">*sku编号：</label>
             <div class="layui-inline">
-                <input name="sku_id" lay-verify="required" value="<?= $info['sku_id'] ?>" type="number" class="layui-input">
+                <input name="sku_code" lay-verify="required" value="<?= $info['sku_code'] ?>" type="text" class="layui-input">
             </div>
         </div>
     </div>

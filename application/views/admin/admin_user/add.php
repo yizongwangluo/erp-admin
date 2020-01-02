@@ -32,13 +32,13 @@
         <div class="layui-inline">
             <label class="layui-form-label">入职时间</label>
             <div class="layui-input-inline">
-                <input name="entry_time" value="<?= $user_info['entry_time'] ? date('Y-m-d',$user_info['entry_time']) : '' ?>" required lay-verify="required" placeholder="入职时间" class="layui-input date-time">
+                <input name="entry_time" value="<?= $user_info['entry_time'] ? date('Y-m-d',$user_info['entry_time']) : '' ?>" required placeholder="入职时间" class="layui-input date-time">
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">试用期限</label>
             <div class="layui-input-inline">
-                <input type="text" name="trial_period" value="<?=$user_info['trial_period']?>" required lay-verify="required" placeholder="请输入试用期限" class="layui-input">
+                <input type="text" name="trial_period" value="<?=$user_info['trial_period']?>" required  placeholder="请输入试用期限" class="layui-input">
                 <em>(单位：月)</em>
             </div>
         </div>
@@ -46,7 +46,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">转正时间</label>
         <div class="layui-input-inline">
-            <input name="turn_time" value="<?= $user_info['turn_time'] ? date('Y-m-d',$user_info['turn_time']) : '' ?>" required lay-verify="required" placeholder="转正时间" class="layui-input date-time">
+            <input name="turn_time" value="<?= $user_info['turn_time'] ? date('Y-m-d',$user_info['turn_time']) : '' ?>" required  placeholder="转正时间" class="layui-input date-time">
         </div>
     </div>
     <div class="layui-form-item">

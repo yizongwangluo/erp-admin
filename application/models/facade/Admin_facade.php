@@ -72,7 +72,7 @@ class Admin_facade extends \Application\Component\Common\IFacade
 			}
 		}
 
-		//添加到临时表中
+		//添加权限关联 到临时表中
 		$re = $this->admin_org_temp_data->add_arr($admin['id'],$user_list);
 		if(!$re){
 			$this->set_error ( '用户权限读取失败' );return false;

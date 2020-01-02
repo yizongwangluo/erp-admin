@@ -13,7 +13,7 @@ class Purchase_data extends \Application\Component\Common\IData{
         if($uid==0){
             $sql = 'select {{}} from purchase LEFT join admin b on a.u_id=b.id';
         }else{
-            $sql = 'select {{}} from purchase a INNER JOIN (select s_u_id,s_user_name as user_name from admin_org_temp where u_id=1 GROUP BY s_u_id) b on a.u_id=b.s_u_id ';
+            $sql = 'select {{}} from purchase a INNER JOIN (select s_u_id,s_user_name as user_name from admin_org_temp where u_id='.$uid.' GROUP BY s_u_id) b on a.u_id=b.s_u_id ';
         }
 
         $sql_where =[];

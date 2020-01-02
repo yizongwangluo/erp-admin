@@ -48,7 +48,7 @@
                 <?php foreach ($data as $v): ?>
                   <tr>
                       <td><?=$v['id']?></td>
-                      <td><?=$v['sku_id']?></td>
+                      <td><?=$v['sku_code']?></td>
                       <td><?=$v['add_sku_number']?></td>
                       <td><?=$v['days']?></td>
                       <td><?=$v['remarks']?></td>
