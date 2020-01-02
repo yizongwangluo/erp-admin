@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/static/admin/css/ztree-metro-style.css">
 <div class="layui-tab admin-layui-tab layui-tab-brief">
 	<div class="layui-tab-content">
-		<div class="layui-tab-item layui-show" style="height: 400px;overflow-y:scroll; ">
+		<div class="layui-tab-item layui-show" style="max-height: 400px;overflow-y:scroll; ">
             <ul id="tree" class="ztree"></ul>
 		</div>
         <input type="hidden" id="group_id" name="id" value="<?=$id?>">

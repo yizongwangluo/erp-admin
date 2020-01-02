@@ -72,29 +72,32 @@ class Shopify_orders extends \Application\Component\Common\IFacade
 
         log_message('get_order_page',json_encode($arr),true);
 
+        //添加同步日志
+        $log_id = $this->order_synchro_log_data->add_log($arr['id'],$url,$min_time,$mix_time,$page);
+
         $order_json = curl_get_https($url);
+
+        log_message('curl_get_https','log_id='.$log_id.'|||'.$order_json,true);
+
         $order_list = json_decode($order_json,true);
         $order_cout = count($order_list['orders']);
 
+        if($order_list){
+            if($order_cout>0){ //有订单时
+                //同步订单到本地
+                $ret = $this->order_data->add_order($arr['id'],$time,$order_list['orders']);
 
-        //添加同步日志
-        $log_id = $this->order_synchro_log_data->add_log($arr['id'],$url,$min_time,$mix_time,$page,$order_cout);
+                if(!$ret){ return false; } //添加失败，跳出程序
+            }
+            //修改订单同步状态
+            $this->order_synchro_log_data->edit_log($log_id,1,$order_cout);
 
-        if($order_cout>0){ //有订单时
-            //同步订单到本地
-            $ret = $this->order_data->add_order($arr['id'],$time,$order_list['orders']);
+            $next_link = $this->get_header($url,$arr['shop_api_key'],$arr['shop_api_pwd']); //下页链接
 
-            if(!$ret){ return false; } //添加失败，跳出程序
-        }
-
-        //修改订单同步状态
-        $this->order_synchro_log_data->edit_log($log_id,1);
-
-        $next_link = $this->get_header($url,$arr['shop_api_key'],$arr['shop_api_pwd']); //下页链接
-
-        if($next_link){
-            $page++;
-            $this->get_order_page($arr,$next_link,$time,$min_time,$mix_time,$page);
+            if($next_link){
+                $page++;
+                $this->get_order_page($arr,$next_link,$time,$min_time,$mix_time,$page);
+            }
         }
     }
 

@@ -31,7 +31,7 @@ class Order_synchro_log_data extends \Application\Component\Common\IData{
      * @param int $type
      * @return bool
      */
-    public function  edit_log($id = 0,$type = 1){
-        return $this->update($id,['type'=>$type]);
+    public function  edit_log($id = 0,$type = 1,$order_cout = 0){
+        return $this->update($id,['type'=>$type,'order_cout'=>$order_cout]);
     }
 }

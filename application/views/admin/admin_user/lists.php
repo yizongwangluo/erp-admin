@@ -25,7 +25,7 @@
                     <td><?=$item['job_number'];?></td>
                     <td><?=$item['user_name'];?></td>
                     <td><?=$item['real_name'];?></td>
-                    <td><?=date ('Y-m-d H:i:s',$item['login_time'])?></td>
+                    <td><?=$item['login_time']?date ('Y-m-d H:i:s',$item['login_time']):''?></td>
                     <td><?=$item['is_disable'] == 1? '是':'否'?></td>
                     <td>
                         <button class="layui-btn-mini layui-btn" type="button" data-modal="<?php echo base_url ( 'admin/admin_user/edit/'.$item['id'] ) ?>" data-width="800px" data-title="编辑管理员">编辑</button>
