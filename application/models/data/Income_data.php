@@ -37,9 +37,8 @@ class Income_data extends \Application\Component\Common\IData
                 $query = $this->db->query($sql);
                 $info = $query->result_array();
             }
-
         }else{
-            $sql_total = 'select COUNT(*) as total from admin_org_temp where u_id='.$u_id.' GROUP BY s_u_id';
+            $sql_total = 'select COUNT(DISTINCT s_u_id) as total from admin_org_temp where u_id='.$u_id;
             $query = $this->db->query($sql_total);
             $total = $query->result_array()[0]['total'];
             if($total){

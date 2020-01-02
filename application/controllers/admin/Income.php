@@ -31,7 +31,6 @@ class Income extends \Application\Component\Common\AdminPermissionValidateContro
 		$data = $this->income_data->get_lists($this->admin['id'],$where,$page,$limit);
 
 		$data['where'] = $where;
-
 		$data['page_html'] = create_page_html ( '?', $data['total'], $limit);
 		$this->load->view ( '', $data );
 

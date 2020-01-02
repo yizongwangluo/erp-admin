@@ -48,9 +48,9 @@
                 ?>
                 </tbody>
             </table>
-        <div class="admin-page">
-            <?php echo $page_html; ?>
-        </div>
+    </div>
+    <div class="admin-page">
+        <?php echo $page_html; ?>
     </div>
 </div>
 <script>
