@@ -57,14 +57,27 @@ class Admin_user extends \Application\Component\Common\AdminPermissionValidateCo
             $entry_time = input ('entry_time');
             $turn_time = input ('turn_time');
             $trial_period = input ('trial_period');
+            $phone = input('phone');
+            $id_card_no = input('id_card_no');
+            $region = input('region');
+            $education = input('education');
+            $birthday = input('birthday');
+            $basic_salary = input('basic_salary');
+            $post_salary = input('post_salary');
+            $fixed_subsidy = input('fixed_subsidy');
+            $account_bank = input('account_bank');
+            $bank_account = input('bank_account');
+            $remark = input('remark');
+
 			if (!empty($user_id)){
-				if ( !$this->admin_facade->update ($user_id, $user_name, $user_password, $real_name, $role_id, $status,$org_id, $job_number, $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period ) ) {
+				if ( !$this->admin_facade->update ($user_id, $user_name, $user_password, $real_name, $role_id, $status,$org_id, $job_number, $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period, $phone, $id_card_no, $region, $education, $birthday, $basic_salary, $post_salary, $fixed_subsidy, $account_bank, $bank_account, $remark) ) {
 					$this->output->ajax_return ( AJAX_RETURN_FAIL, $this->admin_facade->get_error () );
 				}
 			}else{
-				if ( !$this->admin_facade->create ( $user_name, $user_password, $real_name, $role_id, $status,$org_id, $job_number, $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period ) ) {
-					$this->output->ajax_return ( AJAX_RETURN_FAIL, $this->admin_facade->get_error () );
-				}
+				if ( !$this->admin_facade->create ( $user_name, $user_password, $real_name, $role_id, $status,$org_id, $job_number, $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period, $phone, $id_card_no, $region, $education, $birthday, $basic_salary, $post_salary, $fixed_subsidy, $account_bank, $bank_account, $remark ) ) {
+                    $this->output->ajax_return ( AJAX_RETURN_FAIL, $this->admin_facade->get_error () );
+                }
+
 			}
 			$this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
 		} else {

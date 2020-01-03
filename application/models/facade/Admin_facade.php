@@ -94,7 +94,7 @@ class Admin_facade extends \Application\Component\Common\IFacade
 	 * @param string $role_id
 	 * @return bool
 	 */
-	public function create ( $user_name, $user_password, $real_name = '', $role_id = '', $is_disable = 0 ,$org_id = '', $job_number = '', $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period)
+	public function create ( $user_name, $user_password, $real_name = '', $role_id = '', $is_disable = 0 ,$org_id = '', $job_number = '', $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period, $phone, $id_card_no, $region, $education, $birthday, $basic_salary, $post_salary, $fixed_subsidy, $account_bank, $bank_account, $remark)
 	{
 
 		$admin = $this->admin_data->get_info_by_user_name ( $user_name );
@@ -118,11 +118,23 @@ class Admin_facade extends \Application\Component\Common\IFacade
 			'is_disable' => $is_disable,
 			'dateline' => time (),
             'job_number' =>$job_number,
-            'probationary_salary' => $probationary_salary,
-            'positive_salary' => $positive_salary,
+            'probationary_salary' => $probationary_salary ? : NULL,
+            'positive_salary' => $positive_salary ? : NULL,
             'entry_time' => strtotime($entry_time),
             'turn_time' => strtotime($turn_time),
-            'trial_period' =>$trial_period
+            'trial_period' =>$trial_period ? : NULL,
+            'phone' => $phone,
+            'id_card_no' => $id_card_no,
+            'region' => $region,
+            'education' => $education,
+            'birthday' => $birthday ? : NULL,
+            'basic_salary' => $basic_salary ? : NULL,
+            'post_salary' => $post_salary ? : NULL,
+            'fixed_subsidy' => $fixed_subsidy ? : NULL,
+            'account_bank' => $account_bank,
+            'bank_account' => $bank_account,
+            'remark' => $remark
+
 		] )
 		) {
 			$this->set_error ( '建立账号失败' );
@@ -142,7 +154,7 @@ class Admin_facade extends \Application\Component\Common\IFacade
 	 * @param int $is_disable
 	 * @return bool
 	 */
-	public function update ( $userid, $user_name, $user_password, $real_name = '', $role_id = '', $is_disable = 0 ,$org_id = '', $job_number = '', $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period)
+	public function update ( $userid, $user_name, $user_password, $real_name = '', $role_id = '', $is_disable = 0 ,$org_id = '', $job_number = '', $probationary_salary, $positive_salary, $entry_time, $turn_time, $trial_period, $phone, $id_card_no, $region, $education, $birthday, $basic_salary, $post_salary, $fixed_subsidy, $account_bank, $bank_account, $remark)
 	{
 		if ( empty($role_id) ) {
 			$this->set_error ( '权限组必须选择哦' );
@@ -167,11 +179,22 @@ class Admin_facade extends \Application\Component\Common\IFacade
 			'org_id' => $org_id,
 			'is_disable' => $is_disable,
             'job_number' =>$job_number,
-            'probationary_salary' => $probationary_salary,
-            'positive_salary' => $positive_salary,
+            'probationary_salary' => $probationary_salary ? : NULL,
+            'positive_salary' => $positive_salary ? : NULL,
             'entry_time' => strtotime($entry_time),
             'turn_time' => strtotime($turn_time),
-            'trial_period' =>$trial_period
+            'trial_period' =>$trial_period ? : NULL,
+            'phone' => $phone,
+            'id_card_no' => $id_card_no,
+            'region' => $region,
+            'education' => $education,
+            'birthday' => $birthday ? : NULL,
+            'basic_salary' => $basic_salary ? : NULL,
+            'post_salary' => $post_salary ? : NULL,
+            'fixed_subsidy' => $fixed_subsidy ? : NULL,
+            'account_bank' => $account_bank,
+            'bank_account' => $bank_account,
+            'remark' => $remark
 		] )
 		) {
 			$this->set_error ( '后台管理员信息更新失败' );
