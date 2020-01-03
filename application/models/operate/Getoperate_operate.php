@@ -50,7 +50,8 @@ class Getoperate_operate extends \Application\Component\Common\IData
                     'unit_price' => '0',
                     'formalities_cost' =>'0',
                     'product_total_cost' => '0',
-                    'operate_remark' => '缺少提成规则！'
+                    'operate_remark' => '缺少提成规则！',
+                    'insert_time' => date('Y-m-d h:i:s', time())
                 );
             }else{
                 //获取店铺前一天的总营业额,付款订单数,付款订单id (状态为已支付)
@@ -105,7 +106,8 @@ class Getoperate_operate extends \Application\Component\Common\IData
                     'product_total_cost' => $product_total_cost,
                     'exchange_rate' => $exchange_rate,
                     'freight' => $freight,
-                    'service_charge' => $service_charge
+                    'service_charge' => $service_charge,
+                    'insert_time' => date('Y-m-d h:i:s', time())
                 );
             }
 
@@ -220,7 +222,8 @@ class Getoperate_operate extends \Application\Component\Common\IData
                 'service_charge' => $service_charge,
                 'register_cost' => $register_cost,
                 'freight' => $freight,
-                'exchange_rate' => $exchange_rate
+                'exchange_rate' => $exchange_rate,
+                'insert_time' => date('Y-m-d h:i:s', time())
             );
             //过滤掉值为''的数据
             function  filtrfunction($arr){
