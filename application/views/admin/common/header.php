@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>ERP管理后台</title>
+    <title>大龙猫OA系统</title>
     <link rel="stylesheet" href="/static/common/layui/css/layui.css">
     <link rel="stylesheet" href="/static/admin/css/admin.css?c=201912231342">
     <script>

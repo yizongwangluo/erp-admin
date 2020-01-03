@@ -6,7 +6,7 @@
 <div class="layui-header">
     <a class="logo" href="<?=base_url ('admin')?>">
 <!--        <img src="/static/admin/images/layui/admin_logo.png">-->
-        <span> ERP管理后台 </span>
+        <span> 大龙猫OA系统 </span>
     </a>
     <ul class="layui-nav">
 <!--        <li class="layui-nav-item"><a href="/" target="_blank">【网站首页】</a></li>-->
