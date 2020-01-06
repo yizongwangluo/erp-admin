@@ -133,4 +133,15 @@ class Goods_sku_data extends \Application\Component\Common\IData{
         }
     }
 
+    /**
+     * 同步sku
+     * @param array $input
+     * @return mixed
+     */
+    public function synchronization($input = []){
+        $insert_query = $this->db->insert_string('goods_sku', $input);
+        $insert_query = str_replace('INSERT INTO','INSERT IGNORE INTO',$insert_query); //存在则忽略，不存在则添加
+        return $this->db->query($insert_query);
+    }
+
 }

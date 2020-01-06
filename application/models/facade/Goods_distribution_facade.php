@@ -43,7 +43,7 @@ class Goods_distribution_facade extends \Application\Component\Common\IFacade {
             unset($sku_info['status']);
             unset($sku_info['u_id']);
             unset($sku_info['is_real']);
-            $ret = $this->goods_sku_data->store($sku_info,true);
+            $ret = $this->goods_sku_data->synchronization($sku_info);
             if(!$ret){
                 $this->set_error('同步sku出错，请重新同步！');return false;
             }
