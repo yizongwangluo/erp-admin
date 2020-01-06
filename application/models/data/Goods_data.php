@@ -29,9 +29,11 @@ class Goods_data extends \Application\Component\Common\IData{
 
         $sql = 'select {{}} from goods a '.$table_b;
 
-
         if(is_numeric($where['status'])){
             $sql_where[] = ' a.status='.$where['status'];
+        }
+        if(is_numeric($where['category_id'])){
+            $sql_where[] = ' a.category_id='.$where['category_id'];
         }
         if($where['keyword']){
             $sql_where[]=" FIND_IN_SET('".$where['keyword']."',a.keyword)";
@@ -91,7 +93,7 @@ class Goods_data extends \Application\Component\Common\IData{
             $this->set_error('请上传产品图片');return false;
         }
 
-        $input = array_filter($input);
+        //$input = array_filter($input);
 
         $input['status'] = $input['status'] || is_numeric($input['status'])?$input['status'] : 0; //修改审核状态为未审核
 

@@ -7,19 +7,19 @@
 </style>
 <div class="layui-tab admin-layui-tab layui-tab-brief">
     <ul class="layui-tab-title">
-        <li><a href="<?=base_url('admin/goods_apply/index')?>">申请列表</a></li>
-        <li  class="layui-this">申请</li>
+        <li ><a href="/admin/goods/index">商品列表</a></li>
+        <li  class="layui-this">编辑商品</li>
     </ul>
-<form action="<?php echo base_url ( 'admin/goods_apply/save' ) ?>" method="post" class="layui-form">
+<form action="<?php echo base_url ( 'admin/goods/save' ) ?>" method="post" class="layui-form">
     <div class="layui-field-box">
     <input type="hidden" name="id" value="<?= $info['id'] ?>">
     <div class="layui-form-item">
-        <!--<div class="layui-inline">
+        <div class="layui-inline">
             <label class="layui-form-label">*SPU编码：</label>
             <div class="layui-inline">
-                <input name="code" lay-verify="required" value="<?/*= $info['code'] */?>" type="text" class="layui-input">
+                <input name="code" lay-verify="required" value="<?= $info['code'] ?>" type="text" class="layui-input">
             </div>
-        </div>-->
+        </div>
         <div class="layui-inline">
             <label class="layui-form-label">*产品名：</label>
             <div class="layui-inline">
@@ -39,23 +39,20 @@
                 <select name="category_id" lay-verify="required">
                     <option value="">请选择</option>
                     <?php foreach($category_list as $key=>$value){ ?>
-                        <option value="<?php echo $value['id'] ?>" <?=$value['status']==2?'disabled':'';?> ><?php echo $value['name'] ?></option>
+                        <option value="<?php echo $value['id'] ?>" <?=$value['status']==2?'disabled':'';?> <?=$value['id']==$info['category_id']?'selected':''?> ><?php echo $value['name'] ?></option>
                     <?php   } ?>
                 </select>
             </div>
         </div>
-        </div>
-        <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">*产品图片：</label>
             <div class="layui-inline">
-                <img src="" class="thumb_img" style="max-width: 115px;" onclick="javascript:window.open('_blank').location=this.src">
-                <input id="thumb_img" name="img" value="" type="hidden" class="layui-input thumb_img" />
+                <img src="<?=$info['img']?>" class="thumb_img" style="max-width: 115px;" onclick="javascript:window.open('_blank').location=this.src">
+                <input id="thumb_img" name="img" value="<?=$info['img']?>" type="hidden" class="layui-input thumb_img" />
             </div>
             <div class="layui-inline">
                 <a id="thumb_img_btn"  href="javascript:void(0)" class="layui-btn upload-img-all" >上传图片</a>
             </div>
-            <em>点击图片看大图</em>
         </div>
     </div>
     <div class="layui-form-item">
@@ -69,12 +66,6 @@
             <label class="layui-form-label">起批量：</label>
             <div class="layui-inline">
                 <input name="batch_quantity" lay-verify="required" value="<?= $info['batch_quantity'] ?>" type="text" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">运费：</label>
-            <div class="layui-inline">
-                <input name="freight" lay-verify="required" value="<?= $info['freight'] ?>" type="text" class="layui-input">
             </div>
         </div>
         <div class="layui-inline">
@@ -98,6 +89,12 @@
             <div class="layui-inline">
                 <input name="language" lay-verify="required" value="<?= $info['language'] ?>" type="text" class="layui-input">
                 <em>多语言用,号分隔</em>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">运费：</label>
+            <div class="layui-inline">
+                <input name="freight" lay-verify="required" value="<?= $info['freight'] ?>" type="text" class="layui-input">
             </div>
         </div>
     </div>
@@ -198,18 +195,13 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal" type="button" onclick="save_form(0)">暂存</button>
-            <button class="layui-btn" type="button" onclick="save_form(2)">提交审核</button>
+            <button class="layui-btn" type="button" onclick="save_form()">确定</button>
+            <button class="layui-btn" type="button" onclick="javascript:history.back(-1);">返回</button>
         </div>
     </div>
     </div>
 </form>
     <div class="px">
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <button type="button" class="layui-btn layui-btn-sm" lay-event="add" ><i class="layui-icon">&#xe654;</i></button>
-            </div>
-        </script>
         <script type="text/html" id="barDemo">
             <a class="layui-btn layui-btn-xs"  lay-event="edit" >编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -218,8 +210,7 @@
 </div>
 
 <script type="text/javascript">
-    var data_sku = [],sku_id = 0,sku_edit_id = 0;
-    var table;
+    var table,is_status = <?=json_encode($this->enum_field->get_values('is_status'))?>;
 
     layui.use('table', function(){
         table = layui.table;
@@ -231,13 +222,13 @@
             table.render({
                 elem: '#test'
                 ,id: 'idTest'
-                ,data:data_sku
-                ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                ,url:'/admin/goods_sku/sku_list/<?=$info['id']?>'
                 ,defaultToolbar: []
                 ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                 ,cols: [[
                     {field:'id', width:80, title: 'ID' }
                     ,{field:'norms',  title: '规格',minWidth:100}
+                    ,{field:'code',  title: 'SKU编码'}
                     ,{field:'img',  title: '图片', templet: function(res){
                         return '<a href="'+res.img+'" target="_blank"><img width="50px" src="'+res.img+'"></a>'
                     }}
@@ -250,71 +241,63 @@
             });
         });
 
-        table.on('toolbar(test)', function(obj){
-
-            switch(obj.event) {
-                case 'add':
-                layer.open({
-                    type: 2,
-                    title: '添加SKU',
-                    area: ['500px','500px'],
-                    shadeClose: true, //点击遮罩关闭
-                    maxmin: true,
-                    content: '/admin/goods_apply/add_sku',
-                    success: function(layero, index){
-                        layer.getChildFrame('body', index).find('input[name="r_id"]').val(<?=$info['id']?>);
-                    }
-                });
-            }
-        });
-
         //监听行工具事件
         table.on('tool(test)', function(obj){
             var data = obj.data;
             if(obj.event === 'del'){
                 layer.confirm('确定删除该数据？', function(index){
-                    var data_tmp = [];
-                    $.each(data_sku,function(i,item){
-                        if(data.id!=item.id){
-                            data_tmp.push(item);
+                    $.post('/admin/goods_sku/delete',{id:data.id},function(e){
+                        if(!e.status){
+                            layer.msg(e.msg, {time: 2000, icon: 6});
+                            return false;
                         }
                     });
-                    data_sku = data_tmp;
                     obj.del();
                     layer.close(index);
                 });
             } else if(obj.event === 'edit'){
-                sku_edit_id = data.id;
-
                 layer.open({
                     type: 2,
                     title: '修改SKU',
                     area: ['500px','500px'],
                     shadeClose: true, //点击遮罩关闭
                     maxmin: true,
-                    content: '/admin/goods_apply/add_sku?type=1',
+                    content: '/admin/goods_sku/edit',
                     success: function(layero, index){
+                        var body = layer.getChildFrame('body', index);
+                        $.each(data,function(k,v){
+                            if(k=='type' || k=='is_real'){
+                                layui.use('form', function() { //监控复选框状态
+                                    var form = layui.form;
+                                    body.find("input[name='"+k+"'][value='"+v+"']").prop('checked',true);
+                                    console.log(k+'：'+v);
+                                    form.render();
+                                });
+                            }else{
+                                if(k=='img'){
+                                    body.find('.thumb_img').attr('src',v);
+                                }
+                                body.find('input[name="'+k+'"]').val(v);
+                            }
+                        });
+                        body.find('input[name="spu_id"]').val(<?=$info['id']?>);
                     }
                 });
             }
         });
     });
 
-    function save_form(status) {
+    function save_form() {
         var form = $('form'),index = layer.load(),data = form.serializeArray();
 
-        data.push({"name":"data_sku","value":JSON.stringify(data_sku)});
-        data.push({"name":"status","value":status}); //审核状态
-
         $.post(form.attr('action'), data , function (response) {
-
             if (!response.status) {
                 layer.msg(response.msg, {time: 2000, icon: 6});
                 layer.close(index);
                 return false;
             } else {
                 layer.msg('保存成功', {time: 2000, icon: 6}, function () {
-                    window.location.href = '<?php echo site_url ( 'admin/goods_apply/index' ); ?>';
+                    window.location.href = '<?php echo site_url ( 'admin/goods/index' ); ?>';
                 })
             }
         }, 'json');

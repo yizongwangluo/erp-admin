@@ -30,13 +30,25 @@
             <label class="layui-form-label">关键词：</label>
             <div class="layui-inline">
                 <input name="keyword" lay-verify="required" value="<?= $info['keyword'] ?>" type="text" class="layui-input">
-                <em>多个关键词以,号隔开</em>
+            </div>
+            <em>多个关键词以,号隔开</em>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">类别：</label>
+            <div class="layui-inline">
+                <select name="category_id" lay-verify="required">
+                    <option value="">请选择</option>
+                    <?php foreach($category_list as $key=>$value){ ?>
+                        <option value="<?php echo $value['id'] ?>" <?=$value['status']==2?'disabled':'';?> <?=$value['id']==$info['category_id']?'selected':''?> ><?php echo $value['name'] ?></option>
+                    <?php   } ?>
+                </select>
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">*产品图片：</label>
             <div class="layui-inline">
-                <input id="thumb_img" name="img" value="<?=$info['img']?>" type="text" class="layui-input thumb_img" />
+                <img src="<?= $info['img'] ?>" class="thumb_img" style="max-width: 115px;" onclick="javascript:window.open('_blank').location=this.src">
+                <input id="thumb_img" name="img" value="<?=$info['img']?>" type="hidden" class="layui-input thumb_img" />
             </div>
             <div class="layui-inline">
                 <a id="thumb_img_btn"  href="javascript:void(0)" class="layui-btn upload-img-all" >上传图片</a>
@@ -216,7 +228,7 @@
                     ,{field:'code',  title: 'SKU编码'}
                     ,{field:'norms',  title: '规格',minWidth:100}
                     ,{field:'img',  title: '图片', templet: function(res){
-                        return '<a href="'+res.img+'" target="_blank">查看</a>'
+                        return '<a href="'+res.img+'" target="_blank"><img width="50px" src="'+res.img+'"></a>'
                     }}
                     ,{field:'price', width:80, title: '采购价格'}
                     ,{field:'size', title: '包装尺寸(长*宽*高)'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
@@ -250,11 +262,13 @@
                                     form.render();
                                 });
                             }else{
+                                if(k=='img'){
+                                    body.find('.thumb_img').attr('src',v);
+                                }
                                 body.find('input[name="'+k+'"]').val(v);
                             }
-
-                            body.find('input[name="spu_id"]').val(<?=$info['id']?>);
                         });
+                        body.find('input[name="spu_id"]').val(<?=$info['id']?>);
                     }
                 });
             }

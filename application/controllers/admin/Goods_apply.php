@@ -15,6 +15,7 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		parent::__construct ();
 		$this->load->model ( 'data/goods_apply_data' );
 		$this->load->model ( 'data/goods_sku_apply_data' );
+		$this->load->model ( 'data/goods_category_data' );
 	}
 
 	/**
@@ -28,6 +29,7 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		$limit = 10;
 
 		$data = $this->goods_apply_data->get_list($this->admin['id'],$input,$page,$limit);
+		$data['category_list'] = $this->goods_category_data->lists();
 		$data['where'] = $input;
 
 		$result['page_html'] = create_page_html ( '?', $data['total'] );
@@ -39,7 +41,8 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 	 * 新增商品
 	 */
 	public function add(){
-		$this->load->view ( );
+		$category_list = $this->goods_category_data->lists();
+		$this->load->view ('',['category_list'=>$category_list]);
 	}
 
 	/**
@@ -49,8 +52,9 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 
 		$view = '@/edit';
 		$info = $this->goods_apply_data->get_info($id);
+		$category_list = $this->goods_category_data->lists();
 
-		$this->load->view ($view,['info'=>$info]);
+		$this->load->view ($view,['info'=>$info,'category_list'=>$category_list]);
 	}
 
 	/**
@@ -145,6 +149,7 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		$limit = 10;
 
 		$data = $this->goods_apply_data->get_list($this->admin['id'],$input,$page,$limit);
+		$data['category_list'] = $this->goods_category_data->lists();
 		$data['where'] = $input;
 
 		$result['page_html'] = create_page_html ( '?', $data['total'] );
@@ -159,8 +164,9 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 	public function edit_distribution($id){
 
 		$info = $this->goods_apply_data->get_info($id);
+		$category_list = $this->goods_category_data->lists();
 
-		$this->load->view ('',['info'=>$info]);
+		$this->load->view ('',['info'=>$info,'category_list'=>$category_list]);
 	}
 
 	/**
@@ -170,8 +176,9 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 	public function info($id){
 
 		$info = $this->goods_apply_data->get_info($id);
+		$category_list = $this->goods_category_data->lists();
 
-		$this->load->view ('',['info'=>$info]);
+		$this->load->view ('',['info'=>$info,'category_list'=>$category_list]);
 	}
 
 	/**

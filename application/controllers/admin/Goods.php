@@ -19,6 +19,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		$this->load->model ( 'facade/goods_distribution_facade' );
 		$this->load->model ( 'goods/goods_excel_goods' );
 		$this->load->model ( 'data/excel_error_log_data' );
+		$this->load->model ( 'data/goods_category_data' );
 
 	}
 
@@ -32,6 +33,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		unset($input['page']);
 
 		$data = $this->goods_data->get_list($this->admin['id'],$input,$page);
+		$data['category_list'] = $this->goods_category_data->lists();
 		$data['where'] = $input;
 
 		$result['page_html'] = create_page_html ( '?', $data['total'] );
@@ -46,15 +48,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	public function info($id){
 
 		$info = $this->goods_data->get_info($id);
+		$category_list = $this->goods_category_data->lists();
 
-		$this->load->view ('',['info'=>$info]);
-	}
-
-	/**
-	 * 新增商品
-	 */
-	public function add(){
-		$this->load->view ( );
+		$this->load->view ('',['info'=>$info,'category_list'=>$category_list]);
 	}
 
 	/**
@@ -62,14 +58,10 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	 */
 	public function edit($id){
 
-		$view = '@/add';
 		$info = $this->goods_data->get_info($id);
+		$category_list = $this->goods_category_data->lists();
 
-		if(input('sh')){
-			$view = '@/examine';
-		}
-
-		$this->load->view ($view,['info'=>$info]);
+		$this->load->view ('',['info'=>$info,'category_list'=>$category_list]);
 	}
 
 	/**
@@ -84,14 +76,6 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 		if($id){ //修改
 			$ret = $this->goods_data->edit($id,$input);
-
-			if($input['status']!==false){
-				$ret = $this->goods_sku_data->edit_spuid($id,$input['status']); //修改对应sku状态
-				if($ret && $input['status']==1){ //审核通过，同步sku到通途系统
-					$this->add_sku_tongtu($id,$input);
-				}
-			}
-
 		}else{ //新增
 			$ret = $this->goods_data->add($input);
 		}

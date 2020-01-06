@@ -34,28 +34,6 @@ class Goods_sku extends \Application\Component\Common\AdminPermissionValidateCon
 	}
 
 	/**
-	 * 新增商品
-	 */
-	public function add(){
-		$this->load->view ( );
-	}
-
-	/**
-	 * 修改
-	 */
-	public function edit($id){
-
-		$view = '@/add';
-		$info = $this->goods_sku_data->get_info($id);
-
-		if(input('sh')){
-			$view = '@/examine';
-		}
-
-		$this->load->view ($view,['info'=>$info]);
-	}
-
-	/**
 	 * 保存
 	 */
 	public function save(){

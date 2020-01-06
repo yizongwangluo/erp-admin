@@ -12,7 +12,15 @@
     <div class="layui-tab-content">
             <form action="?" method="get">
                 <div class="layui-form">
-                    <div class="layui-inline  col-xs-3">
+                    <div class="layui-inline">
+                        <select name="category_id" lay-verify="required" lay-search>
+                            <option value="">请选择类别</option>
+                            <?php foreach($category_list as $key=>$value){ ?>
+                                <option value="<?php echo $value['id'] ?>" <?php if($value['id']==$where['category_id']){ echo 'selected'; } ?> <?=$value['status']==2?'disabled':''?> ><?php echo $value['name'] ?></option>
+                            <?php   } ?>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
                         <input type="text" name="keyword" value="<?=$where['keyword']?>"
                                class="layui-input" placeholder="输入关键词"/>
                     </div>

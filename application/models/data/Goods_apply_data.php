@@ -34,7 +34,6 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             $this->set_error('请填写视频链接');return false;
         }
 
-
         $arr = array_filter($arr);
         $id = $this->store($arr);
 
@@ -88,6 +87,9 @@ class Goods_apply_data extends \Application\Component\Common\IData{
 
         if(is_numeric($where['status'])){
             $sql_where[] = ' a.status='.$where['status'];
+        }
+        if($where['category_id']){
+            $sql_where[]= ' a.category_id='.$where['category_id'];
         }
         if($where['keyword']){
             $sql_where[]=" FIND_IN_SET('".$where['keyword']."',a.keyword)";

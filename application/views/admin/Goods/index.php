@@ -13,7 +13,15 @@
     <div class="layui-tab-content">
             <form action="?" method="get">
                 <div class="layui-form">
-                    <div class="layui-inline  col-xs-3">
+                    <div class="layui-inline">
+                        <select name="category_id" lay-verify="required" lay-search>
+                            <option value="">请选择类别</option>
+                            <?php foreach($category_list as $key=>$value){ ?>
+                                <option value="<?php echo $value['id'] ?>" <?php if($value['id']==$where['category_id']){ echo 'selected'; } ?> <?=$value['status']==2?'disabled':''?> ><?php echo $value['name'] ?></option>
+                            <?php   } ?>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
                         <input type="text" name="keyword" value="<?=$where['keyword']?>"
                                class="layui-input" placeholder="输入关键词"/>
                     </div>
@@ -47,6 +55,7 @@
                       <td style="color: <?=$v['is_tongtu']!=1?'red':'';?>"><?=$v['is_tongtu']?'已同步':'未同步'?></td>
                       <td>
                           <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods/info/{$v['id']}"); ?>">查看</a>
+                          <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods/edit/{$v['id']}"); ?>">编辑</a>
                           <button data-url="<?php echo base_url ( 'admin/goods/add_sku_tongtu' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到通途</button>
                          <!-- <button style="display: <?/*=$v['status']==1?'none':'';*/?>;" data-url="<?php /*echo base_url ( 'admin/goods/delete' ) */?>" data-id="<?/*= $v['id'] */?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>-->
                       </td>
