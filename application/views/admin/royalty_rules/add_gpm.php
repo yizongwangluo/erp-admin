@@ -7,19 +7,19 @@
     <div class="layui-field-box">
     <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label w">*毛利润（最小）：</label>
+            <label class="layui-form-label w">*GPM %（最小）：</label>
             <div class="layui-inline">
                 <input name="range_start" lay-verify="required" value="0" type="number" class="layui-input">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label w">*毛利润（最大）：</label>
+            <label class="layui-form-label w">*GPM %（最大）：</label>
             <div class="layui-inline">
                 <input name="range_end" lay-verify="required" value="" type="number" class="layui-input">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label w">	系数：</label>
+            <label class="layui-form-label w">系数 %：</label>
             <div class="layui-inline">
                 <input name="ratio" lay-verify="required" value="0" type="number" class="layui-input">
             </div>

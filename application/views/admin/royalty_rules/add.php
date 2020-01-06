@@ -48,7 +48,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">*挂号费：</label>
             <div class="layui-inline">
-                <input name="register_fee" lay-verify="required" value="" type="text" class="layui-input">
+                <input name="register_fee" lay-verify="required" value="" type="number" class="layui-input">
             </div>
         </div>
         <div class="layui-inline">
@@ -143,9 +143,9 @@ layui.use('table', function(){
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
                 {field:'id', width:80, title: 'ID' }
-                ,{field:'range_start',  title: '营业额（最小）', minWidth: 150}
-                ,{field:'range_end',  title: '营业额（最大）', minWidth: 150}
-                ,{field:'ratio', width:80, title: '系数'}
+                ,{field:'range_start',  title: '毛利（最小）', minWidth: 150}
+                ,{field:'range_end',  title: '毛利（最大）', minWidth: 150}
+                ,{field:'ratio', width:80, title: '系数 %'}
                 ,{field:'remarks', title: '备注'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
                 ,{field:'right', title:'操作', toolbar: '#barDemo', minWidth: 120}
             ]]
@@ -161,9 +161,9 @@ layui.use('table', function(){
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
                 {field:'id', width:80, title: 'ID' }
-                ,{field:'range_start',  title: '毛利润（最小）', minWidth: 150}
-                ,{field:'range_end',  title: '毛利润（最大）', minWidth: 150}
-                ,{field:'ratio', width:80, title: '系数'}
+                ,{field:'range_start',  title: 'GPM %（最小）', minWidth: 150}
+                ,{field:'range_end',  title: 'GPM %（最大）', minWidth: 150}
+                ,{field:'ratio', width:80, title: '系数 %'}
                 ,{field:'remarks', title: '备注'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
                 ,{field:'right', title:'操作', toolbar: '#barDemo2', minWidth: 120}
             ]]

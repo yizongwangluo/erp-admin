@@ -139,9 +139,9 @@ layui.use('table', function(){
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
                 {field:'id', width:80, title: 'ID' }
-                ,{field:'range_start',  title: '营业额（最小）', minWidth: 150}
-                ,{field:'range_end',  title: '营业额（最大）', minWidth: 150}
-                ,{field:'ratio', width:80, title: '系数'}
+                ,{field:'range_start',  title: '毛利（最小）', minWidth: 150}
+                ,{field:'range_end',  title: '毛利（最大）', minWidth: 150}
+                ,{field:'ratio', width:80, title: '系数 %'}
                 ,{field:'remarks', title: '备注'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
                 ,{field:'right', title:'操作', toolbar: '#barDemo', minWidth: 120}
             ]]
@@ -158,9 +158,9 @@ layui.use('table', function(){
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
                 {field:'id', width:80, title: 'ID' }
-                ,{field:'range_start',  title: '毛利润（最小）', minWidth: 150}
-                ,{field:'range_end',  title: '毛利润（最大）', minWidth: 150}
-                ,{field:'ratio', width:80, title: '系数'}
+                ,{field:'range_start',  title: 'GPM %（最小）', minWidth: 150}
+                ,{field:'range_end',  title: 'GPM %（最大）', minWidth: 150}
+                ,{field:'ratio', width:80, title: '系数 %'}
                 ,{field:'remarks', title: '备注'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
                 ,{field:'right', title:'操作', toolbar: '#barDemo2', minWidth: 120}
             ]]
@@ -173,7 +173,7 @@ table.on('toolbar(test)', function(obj){
         case 'add':
             layer.open({
                 type: 2,
-                title: '添加 提成系数（PX）',
+                title: '修改 提成系数（PX）',
                 area: ['500px','350px'],
                 shadeClose: true, //点击遮罩关闭
                 maxmin: true,
@@ -191,7 +191,7 @@ table.on('toolbar(test2)', function(obj){
         case 'add':
             layer.open({
                 type: 2,
-                title: '添加 提成系数（GPM）',
+                title: '修改 提成系数（GPM）',
                 area: ['500px','350px'],
                 shadeClose: true, //点击遮罩关闭
                 maxmin: true,

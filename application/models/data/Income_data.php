@@ -306,7 +306,7 @@ class Income_data extends \Application\Component\Common\IData
      */
     public function get_coefficient($a = 0,$arr = []){
         foreach($arr as $v){
-            if($a>$v['range_start'] && $a<=$v['range_end']){
+            if($a>=$v['range_start'] && $a<$v['range_end']){
                 return $v['ratio'];
             }
         }
