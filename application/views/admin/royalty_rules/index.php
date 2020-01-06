@@ -10,7 +10,7 @@
               <thead>
                 <tr>
                     <td>ID</td>
-                    <td>部门</td>
+                    <td>规格名称</td>
                     <td>手续费</td>
                     <td>运费(g)</td>
                     <td>挂号费</td>
@@ -22,7 +22,7 @@
                 <?php foreach ($data as $v): ?>
                   <tr>
                       <td><?=$v['id']?></td>
-                      <td><?=$o_list[$v['o_id']]?></td>
+                      <td><?=$v['name']?></td>
                       <td><?=$v['service_charge']?></td>
                       <td><?=$v['freight']?></td>
                       <td><?=$v['register_fee']?></td>

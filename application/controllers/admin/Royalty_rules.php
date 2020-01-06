@@ -29,8 +29,8 @@ class Royalty_rules extends \Application\Component\Common\AdminPermissionValidat
 		$where = $this->input->get();
 
 		$data = $this->royalty_rules_data->get_lists($this->admin['id'],$where,[],$page,$limit);
-		$o_list = $this->admin_organization_data->get_field_by_where(['id','name'],[],true);
-		$data['o_list'] = array_column($o_list,'name','id');
+//		$o_list = $this->admin_organization_data->get_field_by_where(['id','name'],[],true);
+//		$data['o_list'] = array_column($o_list,'name','id');
 		$data['page_html'] = create_page_html ( '?', $data['total'], $limit);
 
 		$this->load->view ( '', $data );

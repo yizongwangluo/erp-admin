@@ -31,6 +31,12 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
+            <label class="layui-form-label">*规则名称：</label>
+            <div class="layui-inline">
+                <input name="name" lay-verify="required" value="" type="text" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
             <label class="layui-form-label">*手续费：</label>
             <div class="layui-inline">
                 <input name="service_charge" lay-verify="required" value="" type="number" class="layui-input">

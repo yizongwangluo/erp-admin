@@ -58,6 +58,9 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
         if(empty($input['o_id'])){
             $this->set_error('请选择部门');return false;
         }
+        if(empty($input['name'])){
+            $this->set_error('请填写规则名称');return false;
+        }
         if(!is_numeric($input['service_charge'])){
             $this->set_error('请填写手续费');return false;
         }
@@ -71,9 +74,14 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
             $this->set_error('请填写挂号费');return false;
         }
 
+        if($this->removal(['name'=>$input['name']])){
+            $this->set_error('该规则名称已存在，无法重复添加');return false;
+        }
+
         if($this->removal($input)){
             $this->set_error('该部门提成规则已存在，无法重复添加');return false;
         }
+
 
         unset($input['data_px']);
         unset($input['data_gpm']);
@@ -95,6 +103,9 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
         if(empty($input['o_id'])){
             $this->set_error('请选择部门');return false;
         }
+        if(empty($input['name'])){
+            $this->set_error('请填写规则名称');return false;
+        }
         if(!is_numeric($input['service_charge'])){
             $this->set_error('请填写手续费');return false;
         }
@@ -106,6 +117,10 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
         }
         if(!is_numeric($input['register_fee'])){
             $this->set_error('请填写挂号费');return false;
+        }
+
+        if($this->removal(['id'=>$id,'name'=>$input['name']])){
+            $this->set_error('该规则名称已存在，无法重复添加');return false;
         }
 
         if($this->removal(['id'=>$id,'o_id'=>$input['o_id']])){
@@ -132,6 +147,7 @@ class Royalty_rules_data extends \Application\Component\Common\IData{
 
         $data['id !=']      = $input['id'] ? $input['id']:'';
         $data['o_id']    	 = $input['o_id'];
+        $data['name']    	 = $input['name'];
 
         $data = array_filter($data); //过滤空白数组
 
