@@ -161,7 +161,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			if($ret){ //成功
 				$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
 			}else{
-				$this->output->ajax_return(AJAX_RETURN_FAIL,$this->goods_data->get_error());
+				$this->output->ajax_return(AJAX_RETURN_FAIL,$this->goods_distribution_facade->get_error());
 			}
 		}
 	}

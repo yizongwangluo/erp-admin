@@ -40,6 +40,7 @@ class Goods_distribution_facade extends \Application\Component\Common\IFacade {
         foreach($sku_list as $value){
             $sku_info = $value;
             $sku_info['spu_id'] = $id;
+            unset($sku_info['id']);
             unset($sku_info['status']);
             unset($sku_info['u_id']);
             unset($sku_info['is_real']);
