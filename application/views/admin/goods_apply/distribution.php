@@ -24,6 +24,13 @@
                         <input type="text" name="keyword" value="<?=$where['keyword']?>"
                                class="layui-input" placeholder="输入关键词"/>
                     </div>
+                    <div class="layui-inline">
+                        <select name="status" lay-verify="required" lay-search>
+                            <?php foreach($this->enum_field->get_values('is_status') as $key=>$value){ ?>
+                                <option value="<?php echo $key ?>" <?php if(is_numeric($where['status']) && $where['status']==$key){ echo 'selected'; } ?> <?=empty($key)?'disabled':''?> ><?php echo $value ?></option>
+                            <?php   } ?>
+                        </select>
+                    </div>
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
             </form>
@@ -55,6 +62,7 @@
                       <td>
                           <a style="display: <?=$v['status']==1?'none':'';?>;" class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods_apply/edit_distribution/{$v['id']}"); ?>">编辑</a>
                           <button style="display: <?=$v['status']==1?'none':'';?>;" data-url="<?php echo base_url ( 'admin/goods_apply/delete' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>
+                          <button style="display: <?=$v['status']!=1?'none':'';?>;" data-url="<?php echo base_url ( 'admin/goods/synchronization' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到主表</button>
                       </td>
                   </tr>
                 <?php endforeach;

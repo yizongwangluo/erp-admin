@@ -143,7 +143,7 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 	public function distribution(){
 
 		$input = $this->input->get();
-		$input['status'] = 2;
+		$input['status'] = $input['status']?$input['status']:2;
 		$page = max(1,$input['page']);
 		unset($input['page']);
 		$limit = 10;
