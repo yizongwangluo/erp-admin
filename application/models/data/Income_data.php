@@ -13,6 +13,48 @@ class Income_data extends \Application\Component\Common\IData
         parent::__construct ();
     }
 
+    public function get_lists_history($uid = 0,$where = [],$page = 1,$limit =10){
+
+        if($uid==1){ //admin 账号时
+            $table_b = ' left join admin b on a.u_id=b.id ';
+        }else{
+            $table_b = ' INNER JOIN (select s_u_id,s_user_name as user_name from admin_org_temp where u_id='.$uid.' GROUP BY s_u_id) b on a.u_id=b.s_u_id ';
+        }
+
+        $condition['total'] = 'COUNT(*) as total';
+        $condition['info'] = 'a.*,b.user_name';
+
+        $sql = 'select {{}} from income a '.$table_b;
+
+        if($where['datetime']){
+            $sql_where[] = ' a.datetime="'.$where['datetime'].'"';
+        }
+
+        if($sql_where){
+            $sql .= ' where '.implode(' and ',$sql_where);
+        }
+
+        $sql_total = str_replace('{{}}',$condition['total'],$sql);
+        $query = $this->db->query($sql_total);
+        $total = $query->result_array()[0]['total'];
+        $info = [];
+
+        if($total){ //有数据时，查询列表
+            $sql .=  ' limit '.($page-1)*$limit.','.$limit;
+            $sql_info = str_replace('{{}}',$condition['info'],$sql);
+            $query = $this->db->query($sql_info);
+            $info = $query->result_array();
+        }
+
+        return array(
+            'page_count' => $this->page->get_page_count(),
+            'page_num' => $page,
+            'page_size' => $limit,
+            'total' => $total,
+            'data' => $info
+        );
+    }
+
     /**
      * 获取业绩列表
      * @param int $u_id
@@ -28,7 +70,7 @@ class Income_data extends \Application\Component\Common\IData
 
         //admin账号时
         if($u_id==1){
-            $sql_total  = 'select count(*) as total from admin';
+            $sql_total = 'select count(*) as total from admin';
             $query = $this->db->query($sql_total);
             $total = $query->result_array()[0]['total'];
             if($total){

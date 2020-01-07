@@ -28,7 +28,11 @@ class Income extends \Application\Component\Common\AdminPermissionValidateContro
 		unset($where['page']);
 		$limit = 10;
 
-		$data = $this->income_data->get_lists($this->admin['id'],$where,$page,$limit);
+		if($where['datetime']!=date('Y-m')){
+			$data = $this->income_data->get_lists_history($this->admin['id'],$where,$page,$limit);
+		}else{
+			$data = $this->income_data->get_lists($this->admin['id'],$where,$page,$limit);
+		}
 
 		$data['where'] = $where;
 		$data['page_html'] = create_page_html ( '?', $data['total'], $limit);
