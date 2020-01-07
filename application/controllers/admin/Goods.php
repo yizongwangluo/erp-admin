@@ -183,8 +183,8 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		$error = [];
 		//整理数组
 		foreach($data as $value){
-			if(!$value['A'] ||!$value['B'] ||!$value['C'] ||!$value['D'] || !is_numeric($value['E']) || !$value['R'] || !$value['S'] ||  !$value['U'] ||  !$value['T']){
-				$value['X'] = '必填项为空,或起批量不为数字';
+			if(!$value['A'] ||!$value['B'] ||!$value['C'] ||!$value['D'] || !is_numeric($value['E']) || !is_numeric($value['X']) || !$value['R'] || !$value['S'] ||  !$value['U'] ||  !$value['T']){
+				$value['Y'] = '必填项为空,或起批量、类别ID不为数字';
 				$error[] = $value;
 			}else{
 
@@ -238,6 +238,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					'is_pack' => $value['O'],//是否有独立包装 0否 1是
 					'language' => $value['P'],//支持语言(多语言用,号分隔)
 					'remarks'=>$value['Q'],
+					'category_id'=>$value['X'],//类别ID
 					'sku' => [
 						'code' => $value['R'],
 						'norms' => $value['S'],
@@ -250,7 +251,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 				$ret = $this->goods_excel_goods->add_excel($this->admin['id'],$goods);
 				if(!$ret){
-					$value['X'] = $this->goods_excel_goods->get_error();
+					$value['Y'] = $this->goods_excel_goods->get_error();
 					$error[] = $value;
 				}
 			}
