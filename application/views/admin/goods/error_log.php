@@ -31,7 +31,8 @@
                       <td><?=$v['u_id']?></td>
                       <td>
                           <a class="layui-btn layui-btn-xs" href="/admin/goods/error_dow/<?=$v['id']?>">下载</a>
-                     </td>
+                          <button style="display: <?=$v['status']==1?'none':'';?>;" data-url="<?php echo base_url ( 'admin/goods/error_log_del' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>
+                      </td>
                   </tr>
                 <?php endforeach;?>
                 </tbody>

@@ -288,4 +288,22 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		$this->_exportExcel($data,$info['name'].$info['datetime'],26);
 
 	}
+
+	/**
+	 * 删除
+	 */
+	public function error_log_del(){
+
+		$id = input('id');
+
+		if($id){
+			$ret = $this->excel_error_log_data->delete($id);
+
+			if($ret){ //成功
+				$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
+			}else{
+				$this->output->ajax_return(AJAX_RETURN_FAIL,$this->excel_error_log_data->get_error());
+			}
+		}
+	}
 }
