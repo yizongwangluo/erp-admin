@@ -166,16 +166,24 @@ class Income_data extends \Application\Component\Common\IData
             }
 
             $sql = 'INSERT into income(u_id,turnover,ad_cost,product_total_cost,paid_orders,gross_profit_rate,gross_profit_rmb,datetime,money,remarks)  VALUES ';
+            $salary_sql = 'INSERT into salary(user_id,commission,`date`)  VALUES ';
             $sql_val = [];
+            $salary_sql_val = [];
             foreach($user_list as $value){
                 $sql_val[] = '('.$value['u_id'].','.$value['turnover'].','.$value['ad_cost'].','.$value['product_total_cost'].','.$value['paid_orders'].','.$value['gross_profit_rate'].','.$value['gross_profit_rmb'].',"'.$datetime.'",'.$value['money'].',"'.$value['remarks'].'")';
+                $salary_sql_val[] = '('.$value['u_id'].','.$value['money'].',"'.$datetime.'")';
             }
+
             $sql .= implode(',',$sql_val);
             $query = $this->db->query($sql);
-            if($this->db->affected_rows()<=0){
+
+            $salary_sql .= implode(',',$salary_sql_val);
+            $query = $this->db->query($salary_sql);
+
+            /*if($this->db->affected_rows()<=0){
                 log_message('timing_lists','sql = '.$sql,true);
                 $this->set_error('添加失败');return false;
-            }
+            }*/
             return true;
         }
     }
