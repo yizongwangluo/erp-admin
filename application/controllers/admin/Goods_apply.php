@@ -94,6 +94,8 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写SPU编码');
 			}
 
+			$input['edittime'] = time();
+
 			$ret = $this->goods_apply_data->update($id,$input);
 			//查询是否有sku未填写编码
 			if($this->goods_sku_apply_data->get_no_code($id) && $input['status']==1){

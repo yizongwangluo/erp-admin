@@ -26,6 +26,11 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             $this->set_error('请填写产品名称');return false;
         }
 
+        //时间
+        $time = time();
+        $arr['addtime'] = $time;
+        $arr['edittime'] = $time;
+
         $arr = array_filter($arr);
         $id = $this->store($arr);
 

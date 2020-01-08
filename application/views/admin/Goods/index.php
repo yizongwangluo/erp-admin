@@ -22,8 +22,8 @@
                         </select>
                     </div>
                     <div class="layui-inline">
-                        <input type="text" name="keyword" value="<?=$where['keyword']?>"
-                               class="layui-input" placeholder="输入关键词"/>
+                        <input type="text" name="name" value="<?=$where['name']?>"
+                               class="layui-input" placeholder="输入产品名"/>
                     </div>
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
