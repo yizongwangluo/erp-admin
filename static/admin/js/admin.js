@@ -199,7 +199,8 @@ function upImgs($elem,$toClass) {
                elem :$elem,
                url: '/admin/editor/upfile/file',
                accept: 'file', //普通文件
-               exts: 'jpg|png|gif|bmp',
+               //exts: 'jpg|png|gif|bmp',
+               acceptMime: 'image/*',
                before:function () {
                    //layer.load(); //上传loading
                    layer.msg('正在上传中...', {icon: 16, shade: 0.1, time: 10000})
