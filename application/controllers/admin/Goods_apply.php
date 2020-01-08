@@ -16,6 +16,7 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		$this->load->model ( 'data/goods_apply_data' );
 		$this->load->model ( 'data/goods_sku_apply_data' );
 		$this->load->model ( 'data/goods_category_data' );
+		$this->load->model ( 'facade/goods_distribution_facade' );
 	}
 
 	/**
@@ -80,7 +81,16 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写相关SKU编码');
 			}
 			//修改sku状态
-			$this->goods_sku_apply_data->edit_status($id,['status'=>$input['status'],'is_real'=>0]);
+			$sku_app_ret = $this->goods_sku_apply_data->edit_status($id,['status'=>$input['status'],'is_real'=>0]);
+
+			if($sku_app_ret && $ret && $input['status']==1){//同步到主表中
+
+				$c = $this->goods_distribution_facade->synchronization($id);
+
+				if(!$c){ //失败
+					$this->output->ajax_return(AJAX_RETURN_FAIL,$this->goods_distribution_facade->get_error());
+				}
+			}
 
 		}else{ //新增
 			$ret = $this->goods_apply_data->add($this->admin['id'],$input);
