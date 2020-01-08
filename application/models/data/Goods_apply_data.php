@@ -26,14 +26,6 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             $this->set_error('请填写产品名称');return false;
         }
 
-        if(empty($arr['img'])){
-            $this->set_error('请上传产品图片');return false;
-        }
-
-        if(empty($arr['benchmarking'])){
-            $this->set_error('请填写视频链接');return false;
-        }
-
         $arr = array_filter($arr);
         $id = $this->store($arr);
 
@@ -74,7 +66,7 @@ class Goods_apply_data extends \Application\Component\Common\IData{
      */
     public function get_list($uid = 0,$where = [],$page = 1,$limit = 15){
 
-        if($where['keyword'] || $uid==1){ //当输入关键词的时候
+        if($where['name'] || $uid==1){ //当输入关键词的时候
             $table_b = 'left join admin b on a.u_id=b.id ';
         }else{
             $table_b = ' INNER JOIN (select s_u_id,s_user_name as user_name from admin_org_temp where u_id='.$uid.' GROUP BY s_u_id) b on a.u_id=b.s_u_id ';
@@ -91,8 +83,8 @@ class Goods_apply_data extends \Application\Component\Common\IData{
         if($where['category_id']){
             $sql_where[]= ' a.category_id='.$where['category_id'];
         }
-        if($where['keyword']){
-            $sql_where[]=" FIND_IN_SET('".$where['keyword']."',a.keyword)";
+        if($where['name']){
+            $sql_where[]= ' a.name= "'.$where['name'].'" ';
         }
 
         if($sql_where){

@@ -21,8 +21,8 @@
                         </select>
                     </div>
                     <div class="layui-inline">
-                        <input type="text" name="keyword" value="<?=$where['keyword']?>"
-                               class="layui-input" placeholder="输入关键词"/>
+                        <input type="text" name="name" value="<?=$where['name']?>"
+                               class="layui-input" placeholder="输入产品名"/>
                     </div>
                     <div class="layui-inline">
                         <select name="status" lay-verify="required" lay-search>
@@ -60,6 +60,7 @@
                       <td><?=$v['weight']?></td>
                       <td style="color: <?=$v['status']==2?'red':'';?>"><?=$this->enum_field->get_values ( 'is_status' )[$v['status']]?></td>
                       <td>
+                          <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods_apply/info/{$v['id']}"); ?>">查看</a>
                           <a style="display: <?=$v['status']==1?'none':'';?>;" class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods_apply/edit_distribution/{$v['id']}"); ?>">编辑</a>
                           <button style="display: <?=$v['status']==1?'none':'';?>;" data-url="<?php echo base_url ( 'admin/goods_apply/delete' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>
                           <button style="display: <?=$v['status']!=1?'none':'';?>;" data-url="<?php echo base_url ( 'admin/goods/synchronization' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到主表</button>

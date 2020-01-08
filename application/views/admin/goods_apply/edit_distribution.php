@@ -26,11 +26,28 @@
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">关键词：</label>
+            <label class="layui-form-label">*产品英文名：</label>
             <div class="layui-inline">
-                <input name="keyword" lay-verify="required" value="<?= $info['keyword'] ?>" type="text" class="layui-input">
+                <input name="name_en" lay-verify="required" value="<?= $info['name_en'] ?>" type="text" class="layui-input">
             </div>
-            <em>多个关键词以,号隔开</em>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">*中文报关名：</label>
+            <div class="layui-inline">
+                <input name="dc_name" lay-verify="required" value="<?= $info['dc_name'] ?>" type="text" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">*英文报关名：</label>
+            <div class="layui-inline">
+                <input name="dc_name_en" lay-verify="required" value="<?= $info['dc_name_en'] ?>" type="text" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">供应商名称：</label>
+            <div class="layui-inline">
+                <input name="supplier_name" lay-verify="required" value="<?= $info['supplier_name'] ?>" type="text" class="layui-input">
+            </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">类别：</label>
@@ -56,7 +73,7 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">货源地址：</label>
+            <label class="layui-form-label">采购链接：</label>
             <div class="layui-inline">
                 <input name="source_address" lay-verify="required" value="<?= $info['source_address'] ?>" type="text" class="layui-input">
             </div>
@@ -68,7 +85,7 @@
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">*视频链接：</label>
+            <label class="layui-form-label">视频链接：</label>
             <div class="layui-inline">
                 <input name="benchmarking" lay-verify="required" value="<?= $info['benchmarking'] ?>" type="text" class="layui-input">
                 <em>多个链接以 , 隔开</em>
@@ -76,13 +93,6 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">投放区域：</label>
-            <div class="layui-inline">
-                <input name="launch_area" lay-verify="required" value="<?= $info['launch_area'] ?>" type="text" class="layui-input">
-                <em>多地区以/号分隔</em>
-            </div>
-        </div>
         <div class="layui-inline">
             <label class="layui-form-label">支持语言：</label>
             <div class="layui-inline">

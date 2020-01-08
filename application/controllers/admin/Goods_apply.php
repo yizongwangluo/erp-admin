@@ -69,6 +69,25 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		unset($input['id']);
 		$input['u_id'] = $this->admin['id'];
 
+		if(empty($input['name'])){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写产品名称');
+		}
+
+		if($input['status']==2 || $input['status']==1){ //提交审核
+			if(empty($input['name_en'])){
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写产品英文名称');
+			}
+			if(empty($input['dc_name'])){
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写中文报关名');
+			}
+			if(empty($input['dc_name_en'])){
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写英文报关名');
+			}
+			if(empty($input['img'])){
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'请上传产品图片');
+			}
+		}
+
 		if($id){ //修改
 
 			if(!$input['code'] && $input['status']==1){ //编码未填写
@@ -136,6 +155,12 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 
 		$id = input('id');
 		if($id){
+
+			//查询是否还存在sku
+			if($this->goods_sku_apply_data->lists(['spu_id'=>$id])){
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'请先删除产品下的sku再删除该产品！');
+			}
+
 			$ret = $this->goods_apply_data->del($id);
 
 			if($ret){ //成功
