@@ -15,6 +15,14 @@
     </div>
 </div>
 <div class="layui-form-item">
+    <label class="layui-form-label">域名：</label>
+    <div class="layui-inline">
+        <div class="detail">
+            <?= $info['domain'] ?>
+        </div>
+    </div>
+</div>
+<div class="layui-form-item">
     <label class="layui-form-label">营业执照图片：</label>
     <div class="layui-inline">
         <div class="detail">

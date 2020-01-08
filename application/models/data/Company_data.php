@@ -37,11 +37,11 @@ FROM
 			k.account_status,
 			k.logout_time,
 			k.company_remark,
+			k.domain,
 			k.user_name,
 			k.real_name,
 			k.account_num,
-			k.unlimit_num,
-			group_concat(e.domain) AS domain
+			k.unlimit_num
 		FROM
 			(
 				SELECT
@@ -51,6 +51,7 @@ FROM
 					f.account_status,
 					f.logout_time,
 					f.company_remark,
+					f.domain,
 					f.user_name,
 					f.real_name,
 					f.account_num,
@@ -64,6 +65,7 @@ FROM
 							a.account_status,
 							a.logout_time,
 							a.company_remark,
+							a.domain,
 							b.user_name,
 							b.real_name,
 							count(c.company_account_id) AS account_num
@@ -85,7 +87,6 @@ FROM
 				GROUP BY
 					f.id
 			) k
-		LEFT JOIN shop e ON e.company_id = k.id
 		GROUP BY
 			k.id
 	) s";
@@ -112,11 +113,11 @@ FROM
 			k.account_status,
 			k.logout_time,
 			k.company_remark,
+			k.domain,
 			k.user_name,
 			k.real_name,
 			k.account_num,
-			k.unlimit_num,
-			group_concat(e.domain) AS domain
+			k.unlimit_num
 		FROM
 			(
 				SELECT
@@ -126,6 +127,7 @@ FROM
 					f.account_status,
 					f.logout_time,
 					f.company_remark,
+					f.domain,
 					f.user_name,
 					f.real_name,
 					f.account_num,
@@ -139,6 +141,7 @@ FROM
 							a.account_status,
 							a.logout_time,
 							a.company_remark,
+							a.domain,
 							b.s_user_name AS user_name,
 							b.s_real_name AS real_name,
 							count(c.company_account_id) AS account_num
@@ -171,7 +174,6 @@ FROM
 				GROUP BY
 					f.id
 			) k
-		LEFT JOIN shop e ON e.company_id = k.id
 		GROUP BY
 			k.id
 	) s';
@@ -187,6 +189,10 @@ FROM
         }
         if (empty($in['company_name'])) {
             $this->set_error(' 请输入公司名称！');
+            return false;
+        }
+        if (empty($in['domain'])) {
+            $this->set_error(' 请输入域名！');
             return false;
         }
         if (empty($in['business_license_image'])) {
@@ -228,7 +234,8 @@ FROM
             'logout_time' => strtotime($in['logout_time']),
             'BMAPI' => $in['BMAPI'],
             'belong_to' => $in['belong_to'],
-            'company_remark' => $in['company_remark']
+            'company_remark' => $in['company_remark'],
+            'domain' => $in['domain']
         );
 
         function  filtrfunction($arr){

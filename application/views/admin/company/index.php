@@ -74,19 +74,7 @@
                     <td><?=$v['id']?></td>
                     <td><?=$v['company_name']?></td>
                     <td><?=$v['agent']?></td>
-                    <td>
-                        <?php
-                        if(strpos($v['domain'],',') !== false) {
-                            $domains = explode(',',$v['domain']);
-                            foreach ($domains as $domain){
-                                echo $domain."<br>";
-                            }
-                        }else{
-                            echo $v['domain'];
-                        }
-
-                        ?>
-                     </td>
+                    <td><?=$v['domain']?></td>
                     <td>
                         <?php
                             if($v['account_status'] == 0){

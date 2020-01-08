@@ -24,13 +24,21 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">*营业执照</label>
                     <div class="layui-inline">
-                        <img src="<?php echo $info['business_license_image'] ? : '';?> "  class="thumb_img" style="width: 150px;height: 150px"/>
-                        <input id="thumb_img" name="business_license_image" value="<?=$info['business_license_image']?>" type="hidden" class="layui-input thumb_img" />
+                        <label class="layui-form-label">*域名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="domain" value="<?=$info['domain']?>" placeholder="" class="layui-input">
+                        </div>
                     </div>
                     <div class="layui-inline">
-                        <a id="thumb_img_btn"  href="javascript:void(0)" class="layui-btn upload-img-all" >上传图片</a>
+                        <label class="layui-form-label">*营业执照</label>
+                        <div class="layui-inline">
+                            <img src="<?php echo $info['business_license_image'] ? : '';?> "  class="thumb_img" style="width: 150px;height: 150px"/>
+                            <input id="thumb_img" name="business_license_image" value="<?=$info['business_license_image']?>" type="hidden" class="layui-input thumb_img" />
+                        </div>
+                        <div class="layui-inline">
+                            <a id="thumb_img_btn"  href="javascript:void(0)" class="layui-btn upload-img-all" >上传图片</a>
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
