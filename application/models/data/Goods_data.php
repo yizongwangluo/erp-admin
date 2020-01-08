@@ -106,7 +106,7 @@ class Goods_data extends \Application\Component\Common\IData{
 
         $input['status'] = $input['status'] || is_numeric($input['status'])?$input['status'] : 0; //修改审核状态为未审核
 
-        $arr['edittime'] = time();
+        $input['edittime'] = time();
 
         return $this->update($id,$input);
     }
