@@ -70,13 +70,13 @@
                         <input name="remarks" lay-verify="required" value="" type="text" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-inline">
+               <!-- <div class="layui-inline">
                     <label for="" class="layui-form-label">类型</label>
                     <div class="layui-inline sku_type">
                         <input class="type" type="radio" checked value="0" name="type" title="普通sku" lay-filter="type">
                         <input class="type" type="radio" value="1" name="type" title="组合sku" lay-filter="type">
                     </div>
-                </div>
+                </div>-->
                 <div class="layui-inline">
                     <label for="" class="layui-form-label">测试sku</label>
                     <div class="layui-inline">
