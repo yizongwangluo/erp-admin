@@ -161,7 +161,7 @@ FROM
 
         $id = $in['id'];
         $data = array(
-            'person_username' => $in['person_username'],
+            'person_username' => trim($in['person_username']),
             'person_password' => $in['person_password'],
             'RdoIp' => $in['RdoIp'],
             'Rdo_username' => $in['Rdo_username'],
