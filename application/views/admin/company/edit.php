@@ -136,8 +136,18 @@
                     <table class="layui-table"  style='white-space: nowrap'>
                         <thead>
                         <tr>
-                            <td>企业账户ID</td>
-                            <td>网站域名</td>
+                            <td>企业账户ID
+                                <span class="layui-table-sort layui-inline">
+                    <a href='<?=$info['company_id']?>?title=company_account_id&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='<?=$info['company_id']?>?title=company_account_id&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                </span>
+                            </td>
+                            <td>网站域名
+                                <span class="layui-table-sort layui-inline">
+                    <a href='<?=$info['company_id']?>?title=domain&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
+                    <a href='<?=$info['company_id']?>?title=domain&sort=desc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-desc"></i></a>
+                </span>
+                            </td>
                             <td>是否解限
                                 <span class="layui-table-sort layui-inline">
                     <a href='<?=$info['company_id']?>?title=isunlock&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>

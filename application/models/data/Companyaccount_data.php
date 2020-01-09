@@ -13,6 +13,26 @@ class Companyaccount_data extends \Application\Component\Common\IData
         parent::__construct ();
     }
 
+    /**
+     * 判断是否已存在该数据
+     * @param array $input
+     * @return bool
+     */
+    public function removal($input = array()){
+
+        $data = [];
+
+        $data['id !=']      = $input['id'] ? $input['id']:'';
+        $data['company_account_id']    	 = $input['company_account_id'];
+        $data['shop_id']    	 = $input['shop_id'];
+
+        $data = array_filter($data); //过滤空白数组
+
+        $count = $this->count($data);
+
+        return $count>0;
+    }
+
     public function index ($admin_id)
     {
         if($admin_id == 1){
@@ -123,13 +143,22 @@ FROM
         }
 
         if (!$id) {
+            if($this->removal($data)){
+                $this->set_error(' 该企业账户已存在，无法重复添加！');
+                return false;
+            }
             $data = array_filter($data,'filtrfunction');
             if (!$this->store($data)) {
                 $this->set_error('数据增加失败，请稍后再试~');
                 return false;
             }
         }else{
-            unset($in['id']);
+            $data['id'] = $id;
+            if($this->removal($data)){
+                $this->set_error(' 该企业账户已存在！');
+                return false;
+            }
+            unset($data['id']);
             if (!$this->companyaccount_data->update($id,$data)){
                 $this->set_error ('数据更新失败，请稍后再试！');
                 return false;
