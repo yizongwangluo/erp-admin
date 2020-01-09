@@ -14,6 +14,26 @@ class Company_data extends \Application\Component\Common\IData
 
     }
 
+    /**
+     * 判断是否已存在该数据
+     * @param array $input
+     * @return bool
+     */
+    public function removal($input = array()){
+
+        $data = [];
+
+        $data['id !=']      = $input['id'] ? $input['id']:'';
+        $data['company_name']    	 = $input['company_name'];
+        $data['domain']    	 = $input['domain'];
+
+        $data = array_filter($data); //过滤空白数组
+
+        $count = $this->count($data);
+
+        return $count>0;
+    }
+
     public function index( $admin_id ){
         if($admin_id == 1){
             $sql = "SELECT
@@ -221,9 +241,11 @@ FROM
         }
 
         $id = $in['id'];
+        $domain = trim($in['domain']);
+        $domain = preg_replace("/^http(s)?:\/\//", '', $domain);
         $data = array(
             'agent' => $in['agent'],
-            'company_name' => $in['company_name'],
+            'company_name' => trim($in['company_name']),
             'business_license_image' => $in['business_license_image'],
             'ad_connect_name' => $in['ad_connect_name'],
             'ad_connect_email' => $in['ad_connect_email'],
@@ -235,7 +257,7 @@ FROM
             'BMAPI' => $in['BMAPI'],
             'belong_to' => $in['belong_to'],
             'company_remark' => $in['company_remark'],
-            'domain' => $in['domain']
+            'domain' => $domain
         );
 
         function  filtrfunction($arr){
@@ -246,13 +268,23 @@ FROM
         }
 
         if (!$id) {
+            if($this->removal($data)){
+                $this->set_error(' 该企业主体已存在，无法重复添加！');
+                return false;
+            }
             $data = array_filter($data,'filtrfunction');
             if (!$this->store($data)) {
                 $this->set_error('数据增加失败，请稍后再试~');
                 return false;
             }
         }else{
-            unset($in['id']);
+
+            $data['id'] = $id;
+            if($this->removal($data)){
+                $this->set_error(' 该企业主体已存在！');
+                return false;
+            }
+            unset($data['id']);
             if (!$this->company_data->update($id,$data)){
                 $this->set_error ('数据更新失败，请稍后再试！');
                 return false;

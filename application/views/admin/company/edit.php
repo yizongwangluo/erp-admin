@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">*域名</label>
+                        <label class="layui-form-label" style="width: 120px;">*域名 &nbsp;<i style="color: red">https://</i></label>
                         <div class="layui-input-inline">
                             <input type="text" name="domain" value="<?=$info['domain']?>" placeholder="" class="layui-input">
                         </div>
