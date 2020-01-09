@@ -13,6 +13,25 @@ class Personaccount_data extends \Application\Component\Common\IData
         parent::__construct ();
     }
 
+    /**
+     * 判断是否已存在该数据
+     * @param array $input
+     * @return bool
+     */
+    public function removal($input = array()){
+
+        $data = [];
+
+        $data['id !=']      = $input['id'] ? $input['id']:'';
+        $data['person_username']    	 = $input['person_username'];
+
+        $data = array_filter($data); //过滤空白数组
+
+        $count = $this->count($data);
+
+        return $count>0;
+    }
+
     public function index ($admin_id)
     {
         if($admin_id == 1){
@@ -119,10 +138,6 @@ FROM
             $this->set_error(' 请选择首次登陆时间！');
             return false;
         }
-        if (empty($in['cookies'])) {
-            $this->set_error(' 请填写cookies！');
-            return false;
-        }
         if (!is_numeric($in['type'])) {
             $this->set_error(' 请选择类型！');
             return false;
@@ -137,6 +152,10 @@ FROM
         }
         if (!is_numeric($in['person_status'])) {
             $this->set_error(' 请选择状态！');
+            return false;
+        }
+        if (empty($in['cookies'])) {
+            $this->set_error(' 请填写cookies！');
             return false;
         }
 
@@ -165,13 +184,22 @@ FROM
         }
 
         if (!$id) {
+            if($this->removal($data)){
+                $this->set_error(' 该个人账号已存在，无法重复添加！');
+                return false;
+            }
             $data = array_filter($data,'filtrfunction');
             if (!$this->store($data)) {
                 $this->set_error('数据增加失败，请稍后再试~');
                 return false;
             }
         }else{
-            unset($in['id']);
+            $data['id'] = $id;
+            if($this->removal($data)){
+                $this->set_error(' 该个人账号已存在！');
+                return false;
+            }
+            unset($data['id']);
             if (!$this->personaccount_data->update($id,$data)){
                 $this->set_error ('数据更新失败，请稍后再试！');
                 return false;
@@ -193,7 +221,7 @@ FROM
 
     public function get_company()
     {
-        $sql = "select id,company_name from company order by id desc";
+        $sql = "select id,company_name,domain from company order by id desc";
         $company = $this->db->query ( $sql )->result_array ();
         return $company;
     }

@@ -77,7 +77,7 @@
                             <select name="company_id" lay-search="">
                                 <option value="">直接选择或搜索选择</option>
                                 <?php foreach ($company as $v): ?>
-                                    <option value="<?=$v['id']?>" <?php if ( $info['company_id'] == $v['id'] ){echo "selected=\"selected\"";}?>><?=$v['company_name']?></option>
+                                    <option value="<?=$v['id']?>" <?php if ( $info['company_id'] == $v['id'] ){echo "selected=\"selected\"";}?>><?=$v['company_name']?>(<?=$v['domain']?>)</option>
                                 <?php endforeach;?>
                             </select>
                         </div>
