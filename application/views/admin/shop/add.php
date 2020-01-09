@@ -11,7 +11,7 @@
                 <input type="hidden" value="<?=$info['id']?>"  name="id">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">网站域名</label>
+                        <label class="layui-form-label">域名 &nbsp;<i style="color: red">https://</i></label>
                         <div class="layui-input-inline">
                             <input type="text" name="domain" value="<?=$info['domain']?>" placeholder="" class="layui-input">
                         </div>
@@ -108,7 +108,7 @@
                             <select name="company_id" lay-search="">
                                 <option value="">直接选择或搜索选择</option>
                                 <?php foreach ($company as $v): ?>
-                                    <option value="<?=$v['id']?>" <?php if ( $info['company_id'] == $v['id'] ){echo "selected=\"selected\"";}?>><?=$v['company_name']?></option>
+                                    <option value="<?=$v['id']?>" <?php if ( $info['company_id'] == $v['id'] ){echo "selected=\"selected\"";}?>><?=$v['company_name']?>(<?=$v['domain']?>)</option>
                                 <?php endforeach;?>
                             </select>
                         </div>

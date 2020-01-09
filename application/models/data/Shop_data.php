@@ -13,6 +13,25 @@ class Shop_data extends \Application\Component\Common\IData
         parent::__construct ();
     }
 
+    /**
+     * 判断是否已存在该数据
+     * @param array $input
+     * @return bool
+     */
+    public function removal($input = array()){
+
+        $data = [];
+
+        $data['id !=']      = $input['id'] ? $input['id']:'';
+        $data['domain']    	 = $input['domain'];
+
+        $data = array_filter($data); //过滤空白数组
+
+        $count = $this->count($data);
+
+        return $count>0;
+    }
+
     public function index ($admin_id)
     {
         if($admin_id == 1){
@@ -29,6 +48,7 @@ class Shop_data extends \Application\Component\Common\IData
 	authorization_erp,
 	shop_remark,
 	company_name,
+	company_domain,
 	real_name,
 	user_name,
 	code,
@@ -48,6 +68,7 @@ FROM
 			c.authorization_erp,
 			c.shop_remark,
 			c.company_name,
+			c.company_domain,
 			c.code,
 			c.shop_package,
 			d.real_name,
@@ -69,7 +90,8 @@ FROM
 					a.user_id,
 					a.code,
 					a.shop_package,
-					b.company_name
+					b.company_name,
+					b.domain as company_domain
 				FROM
 					shop a
 				LEFT JOIN company b ON a.company_id = b.id
@@ -93,6 +115,7 @@ FROM
 	authorization_erp,
 	shop_remark,
 	company_name,
+	company_domain,
 	real_name,
 	user_name,
 	code,
@@ -112,6 +135,7 @@ FROM
 			c.authorization_erp,
 			c.shop_remark,
 			c.company_name,
+			c.company_domain,
 			c.code,
 			c.shop_package,
 			d.s_real_name AS real_name,
@@ -133,7 +157,8 @@ FROM
 					a.user_id,
 					a.code,
 					a.shop_package,
-					b.company_name
+					b.company_name,
+					b.domain as company_domain
 				FROM
 					shop a
 				LEFT JOIN company b ON a.company_id = b.id
@@ -222,8 +247,10 @@ FROM
         }
 
         $id = $in['id'];
+        $domain = trim($in['domain']);
+        $domain = preg_replace("/^http(s)?:\/\//", '', $domain);
         $data = array(
-            'domain' => $in['domain'],
+            'domain' => $domain,
             'backstage' => $in['backstage'],
             'backstage_username' => $in['backstage_username'],
             'backstage_password' => $in['backstage_password'],
@@ -250,6 +277,10 @@ FROM
         }
 
         if (!$id) {
+            if($this->removal($data)){
+                $this->set_error(' 该店铺已存在，无法重复添加！');
+                return false;
+            }
             $data = array_filter($data,'filtrfunction');
             $id = $this->store($data);
             if (!$id) {
@@ -258,7 +289,12 @@ FROM
             }
             return $id;
         }else{
-            unset($in['id']);
+            $data['id'] = $id;
+            if($this->removal($data)){
+                $this->set_error(' 该店铺已存在！');
+                return false;
+            }
+            unset($data['id']);
             if (!$this->shop_data->update($id,$data)){
                 $this->set_error ('数据更新失败，请稍后再试！');
                 return false;
@@ -283,7 +319,7 @@ FROM
 
     public function get_company()
     {
-        $sql = "select id,company_name from company order by id desc";
+        $sql = "select id,company_name,domain from company order by id desc";
         $company = $this->db->query ( $sql )->result_array ();
         return $company;
     }
