@@ -183,38 +183,10 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		$error = [];
 		//整理数组
 		foreach($data as $value){
-			if(!$value['A'] ||!$value['B'] ||!$value['C'] ||!$value['D'] || !is_numeric($value['E']) || !is_numeric($value['X']) || !$value['R'] || !$value['S'] ||  !$value['U'] ||  !$value['T']){
-				$value['Y'] = '必填项为空,或起批量、类别ID不为数字';
+			if(!$value['A'] ||!$value['B'] ||!$value['C'] ||!$value['D'] || !is_numeric($value['E']) || !is_numeric($value['X']) || !$value['R'] || !$value['S'] ||  !$value['U'] ||  !$value['T'] || !$value['Y'] || !$value['Z']){
+				$value['AA'] = '必填项为空,或起批量、类别ID不为数字';
 				$error[] = $value;
 			}else{
-
-				/*$goods[$value['A']]['code'] = $value['A'];
-				$goods[$value['A']]['name'] = $value['B'];
-				$goods[$value['A']]['name_en'] = $value['C'];
-				$goods[$value['A']]['source_address'] = $value['D']; //货源地址
-				$goods[$value['A']]['batch_quantity'] = $value['E']; //货源地址
-				$goods[$value['A']]['launch_area'] = $value['F']; //投放区域
-				$goods[$value['A']]['is_battery'] = $value['G']?1:0; //是否带电池 0否 1是
-				$goods[$value['A']]['is_imitation'] = $value['H']?1:0; //是否仿冒 0否 1是
-				$goods[$value['A']]['is_liquid'] = $value['I'];//是否液体 0否 1是
-				$goods[$value['A']]['is_magnetism'] = $value['J'];//是否带磁 0否 1是
-				$goods[$value['A']]['is_powder'] = $value['K'];//是否粉末 0否 1是
-				$goods[$value['A']]['is_goods'] = $value['L']; //是否有货 0无 1有
-				$goods[$value['A']]['voltage'] = $value['M']; //电压
-				$goods[$value['A']]['plug_type'] = $value['N'];//插头类型
-				$goods[$value['A']]['is_pack'] = $value['O'];//是否有独立包装 0否 1是
-				$goods[$value['A']]['language'] = $value['P'];//支持语言(多语言用,号分隔)
-				$goods[$value['A']]['remarks'] = $value['Q'];//备注
-
-
-				$goods[$value['A']]['sku_list'][] = [
-					'code'=>$value['R'],
-					'norms'=>$value['S'],
-					'weight'=>$value['T'],
-					'price'=>$value['U'],
-					'size'=>$value['V'],
-					'remarks'=>$value['W']
-				];*/
 
 				//查询spu是否存在
 				$spu_info = $this->goods_data->find(['code'=>$value['A']]);
@@ -224,9 +196,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					'code' => $value['A'],
 					'name' => $value['B'],
 					'name_en' => $value['C'],
-					'source_address' => $value['D'],//货源地址
-					'batch_quantity' => $value['E'], //货源地址
-					'launch_area' => $value['F'], //投放区域
+					'source_address' => $value['D'],//采购链接
+					'batch_quantity' => $value['E'], //起批量
+					'supplier_name' => $value['F'], //供应商名称
 					'is_battery' => $value['G']?1:0, //是否带电池 0否 1是
 					'is_imitation' => $value['H']?1:0, //是否仿冒 0否 1是
 					'is_liquid' => $value['I'],//是否液体 0否 1是
@@ -239,6 +211,8 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					'language' => $value['P'],//支持语言(多语言用,号分隔)
 					'remarks'=>$value['Q'],
 					'category_id'=>$value['X'],//类别ID
+					'dc_name'=>$value['Y'],//类别ID
+					'dc_name_en'=>$value['Z'],//类别ID
 					'sku' => [
 						'code' => $value['R'],
 						'norms' => $value['S'],
@@ -251,7 +225,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 				$ret = $this->goods_excel_goods->add_excel($this->admin['id'],$goods);
 				if(!$ret){
-					$value['Y'] = $this->goods_excel_goods->get_error();
+					$value['AA'] = $this->goods_excel_goods->get_error();
 					$error[] = $value;
 				}
 			}
