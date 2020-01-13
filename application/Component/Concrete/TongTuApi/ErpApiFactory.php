@@ -78,6 +78,7 @@ class ErpApiFactory
 
         $url = $this->get_link('/openapi/tongtool/createProduct');
         $data['merchantId'] = $this->merchantId[0]['partnerOpenId'];
+
         $ret = $this->curl_post_https_json($url,$data);
         $ret = json_decode($ret,true);
 

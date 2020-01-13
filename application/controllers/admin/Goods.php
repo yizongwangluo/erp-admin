@@ -102,8 +102,16 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 		$data = [];
 		$data['productCode'] = $info['code'];
-		$data['productName'] = $info['name'];
+		$data['productName'] = $info['name'];//商品名称
+		$data['productPackingName'] = $info['name'];//中文配货名
+		$data['productPackingEnName'] = $info['name_en']; //英文配货名
+		$data['declareCnName'] = $info['dc_name'];//中文报关名
+		$data['declareEnName'] = $info['dc_name_en'];//英文报关名
 		$data['productStatus'] = "1";
+
+		$data['suppliers'][0]['minPurchaseQuantity'] = (int)$info['batch_quantity'];
+		$data['suppliers'][0]['purchaseRemark'] = $info['remarks'];
+		$data['suppliers'][0]['supplierName'] = $info['supplier_name'];
 
 		$sku_list = $this->goods_sku_data->lists(['spu_id'=>$id]);
 
