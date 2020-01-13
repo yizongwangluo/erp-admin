@@ -177,7 +177,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'请上传文件');
 		}
 
-		$data = $this->_excel_common($file_name);//读取excel文件
+		$data = $this->_excel_common($file_name,'Z');//读取excel文件
 
 		$goods = [];
 		$error = [];
@@ -259,7 +259,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 		$data = json_decode($info['content']);
 
-		$this->_exportExcel($data,$info['name'].$info['datetime'],26);
+		$this->_exportExcel($data,$info['name'].$info['datetime'],28);
 
 	}
 

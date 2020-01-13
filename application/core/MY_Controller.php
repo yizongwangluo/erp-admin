@@ -64,6 +64,16 @@ class MY_Controller extends CI_Controller
 		}
 	}
 
+	public function excel_sum($str = '') {
+		$base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$result = 0;
+
+		for ($i = 0, $j = strlen($str) - 1; $i < strlen($str); $i += 1, $j -= 1) {
+			$result += pow(strlen($base), $j) * (strpos($base,$str[$i]) + 1);
+		}
+	  return $result;
+	}
+
 	/**
 	 * 公共上传excel
 	 * @param string $filename
@@ -71,7 +81,7 @@ class MY_Controller extends CI_Controller
 	 * @throws PHPExcel_Exception
 	 * @throws PHPExcel_Reader_Exception
 	 */
-	public function _excel_common($filename = ''){
+	public function _excel_common($filename = '',$column = ''){
 
 		$data = [];
 		if(!file_exists($filename)) { $this->output->ajax_return ( AJAX_RETURN_FAIL, '不存在该文件'); }//判断文件是否存在
@@ -99,9 +109,17 @@ class MY_Controller extends CI_Controller
 		$sheet = $objPHPExcel->getSheet(0);
 		$highestRow = $sheet->getHighestRow(); // 取得总行数
 		$highestColumn = $sheet->getHighestColumn(); // 取得总列数
+
 		//循环获取表中的数据，$currentRow表示当前行，从哪行开始读取数据，索引值从0开始
 		for($currentRow=2;$currentRow<=$highestRow;$currentRow++){                //从哪列开始，A表示第一列
 			for($currentColumn='A';$currentColumn<=$highestColumn;$currentColumn++){
+
+
+				if($column && $this->excel_sum($currentColumn)>$this->excel_sum($column)){
+					break; //跳出for循环
+				}
+
+
 				//数据坐标
 				$address=$currentColumn.$currentRow;                    //读取到的数据，保存到数组$arr中
 				$data[$currentRow][$currentColumn]= $sheet->getCell($address)->getValue();
@@ -170,6 +188,7 @@ class MY_Controller extends CI_Controller
 		$border_end = 'A'; // 边框结束位置初始化
 		// 写入内容
 		$column = 1;
+
 		foreach($data as $key => $rows){ //获取一行数据
 			$tem_span = "A";
 			foreach($rows as $keyName=>$value){// 写入一行数据
