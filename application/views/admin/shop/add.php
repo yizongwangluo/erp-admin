@@ -17,25 +17,28 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">网站后台</label>
+                        <label class="layui-form-label">后台 &nbsp;<i style="color: red">https://</i></label>
                         <div class="layui-input-inline">
                             <input type="text" name="backstage" value="<?=$info['backstage']?>" placeholder="" class="layui-input">
                         </div>
+                        <div style="float: left;padding: 9px 0;text-align: left;"><em>（例：elvsis.myshopify.com/admin/）</em></div>
                     </div>
+                </div>
+                <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">后台用户名</label>
                         <div class="layui-input-inline">
                             <input type="text" name="backstage_username" value="<?=$info['backstage_username']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">后台密码</label>
                         <div class="layui-input-inline">
                             <input type="text" name="backstage_password" value="<?=$info['backstage_password']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
+                </div>
+                <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">客服邮箱</label>
                         <div class="layui-input-inline">
@@ -46,6 +49,12 @@
                         <label class="layui-form-label">邮箱密码</label>
                         <div class="layui-input-inline">
                             <input type="text" name="email_password" value="<?=$info['email_password']?>" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-inline">
+                            <input name="shop_remark" value="<?= $info['shop_remark'] ?>" type="text" class="layui-input">
                         </div>
                     </div>
                 </div>
@@ -131,12 +140,6 @@
                         <div class="layui-input-inline">
                             <input type="text" name="code" value="<?=$info['code']?>" placeholder="" class="layui-input">
                         </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">备注</label>
-                    <div class="layui-inline col-xs-3">
-                        <input name="shop_remark" value="<?= $info['shop_remark'] ?>" type="text" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item" style="text-align: center;width: 50%;">

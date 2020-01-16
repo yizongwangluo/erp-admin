@@ -188,10 +188,10 @@ FROM
             $this->set_error(' 请输入网站域名！');
             return false;
         }
-//        if (empty($in['backstage'])) {
-//            $this->set_error(' 请输入网站后台！');
-//            return false;
-//        }
+        if (empty($in['backstage'])) {
+            $this->set_error(' 请输入网站后台！');
+            return false;
+        }
 //        if (empty($in['backstage_username'])) {
 //            $this->set_error(' 请输入后台用户名！');
 //            return false;
@@ -241,17 +241,19 @@ FROM
             $this->set_error(' 请选择所属人！');
             return false;
         }
-        if (empty($in['code'])) {
-            $this->set_error(' 请输入代码！');
-            return false;
-        }
+//        if (empty($in['code'])) {
+//            $this->set_error(' 请输入代码！');
+//            return false;
+//        }
 
         $id = $in['id'];
         $domain = trim($in['domain']);
         $domain = preg_replace("/^http(s)?:\/\//", '', $domain);
+        $backstage = trim($in['backstage']);
+        $backstage = preg_replace("/^http(s)?:\/\//", '', $backstage);
         $data = array(
             'domain' => $domain,
-            'backstage' => $in['backstage'],
+            'backstage' => $backstage,
             'backstage_username' => $in['backstage_username'],
             'backstage_password' => $in['backstage_password'],
             'email_password' => $in['email_password'],
