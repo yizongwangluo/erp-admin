@@ -97,7 +97,7 @@ class Admin_organization_data extends \Application\Component\Common\IData{
 
 		$data['id !=']      = $input['id'] ? $input['id']:'';
 		$data['name']    	 = $input['name'];
-		$data['p_id']    	 = $input['p_id'];
+		$data['pid']    	 = $input['pid'];
 
 		$data = array_filter($data); //过滤空白数组
 
