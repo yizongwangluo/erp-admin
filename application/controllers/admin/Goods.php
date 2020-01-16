@@ -191,7 +191,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		$error = [];
 		//整理数组
 		foreach($data as $value){
-			if(!$value['A'] ||!$value['B'] ||!$value['C'] ||!$value['D'] || !is_numeric($value['E']) || !is_numeric($value['X']) || !$value['R'] || !$value['S'] ||  !$value['U'] ||  !$value['T'] || !$value['Y'] || !$value['Z']){
+			if(!$value['A'] ||!$value['B'] ||!$value['C'] || !is_numeric($value['E']) || !is_numeric($value['X']) || !$value['R'] || !$value['S'] ||  !$value['U'] ||  !$value['T'] || !$value['Y'] || !$value['Z']){
 				$value['AA'] = '必填项为空,或起批量、类别ID不为数字';
 				$error[] = $value;
 			}else{
