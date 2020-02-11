@@ -28,7 +28,7 @@ class Goods_sku extends \Application\Component\Common\AdminPermissionValidateCon
 		$data = $this->goods_sku_data->lists_page($input,[],$page);
 		$data['where'] = $input;
 
-		$result['page_html'] = create_page_html ( '?', $data['total'] );
+		$data['page_html'] = create_page_html ( '?', $data['total'] );
 
 		$this->load->view ( '', $data );
 	}

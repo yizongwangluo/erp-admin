@@ -33,7 +33,7 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		$data['category_list'] = $this->goods_category_data->lists();
 		$data['where'] = $input;
 
-		$result['page_html'] = create_page_html ( '?', $data['total'] );
+		$data['page_html'] = create_page_html ( '?', $data['total'] );
 
 		$this->load->view ( '', $data );
 	}
