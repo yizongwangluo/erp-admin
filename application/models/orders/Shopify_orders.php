@@ -87,7 +87,10 @@ class Shopify_orders extends \Application\Component\Common\IFacade
                 //同步订单到本地
                 $ret = $this->order_data->add_order($arr['id'],$time,$order_list['orders']);
 
-                if(!$ret){ return false; } //添加失败，跳出程序
+                if(!$ret){
+                    $this->set_error('订单同步失败！');
+                    return false;
+                } //添加失败，跳出程序
             }
             //修改订单同步状态
             $this->order_synchro_log_data->edit_log($log_id,1,$order_cout);

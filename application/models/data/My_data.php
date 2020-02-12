@@ -45,4 +45,11 @@ class My_data extends \Application\Component\Common\IData
         }
         return $domain;
     }
+
+    public function get_shops()
+    {
+        $sql = "select id,domain from shop";
+        $shops = $this->db->query($sql)->result_array();
+        return $shops;
+    }
 }
