@@ -6,15 +6,18 @@
  * Date: 2017/5/26 0026
  * Time: 9:45
  */
-
+set_time_limit ( 0 );
 class Order_data extends \Application\Component\Common\IData{
 
     public function add($info = []){
         $order_info = $this->find(['shopify_o_id'=>$info['shopify_o_id']]);
-        if($order_info){//存在则修改
-            $this->update($order_info['id'],$info);
-        }else{ //不存在则 添加
-            $this->store($info);
+        if(!$order_info){//不存在则添加
+            $re = $this->store($info);
+            if(!$re){
+                $this->set_error('数据添加失败，请稍后再试~');
+                return false;
+            }
+            return true;
         }
     }
 
@@ -35,13 +38,14 @@ class Order_data extends \Application\Component\Common\IData{
             $order_goods = [];
 
             $order_sql = 'insert into `order` (shopify_o_id,shop_id,total_price_usd,created_at,updated_at,total_weight,financial_status,datetime) values ';
-            $order_goods_sql = 'insert into order_goods (product_id,sku_id,shop_id,shopify_o_id,quantity) values ';
+            $order_goods_sql = 'insert into order_goods (product_id,sku_id,shop_id,shopify_o_id,quantity,datetime) values ';
 
             foreach($order_list as $k=>$value){
-                $order[] = '("'.$value['id'].'",'.$shop_id.','.$value['total_price_usd'].',"'.$value['created_at'].'","'.$value['updated_at'].'",'.$value['total_weight'].',"'.$value['financial_status'].'","'.$time.'")';
+                $date = substr($value['updated_at'],0,strpos($value['updated_at'], 'T'));
+                $order[] = '("'.$value['id'].'",'.$shop_id.','.$value['total_price_usd'].',"'.$value['created_at'].'","'.$value['updated_at'].'",'.$value['total_weight'].',"'.$value['financial_status'].'","'.$date.'")';
 
                 foreach($value['line_items'] as $i=>$item){
-                    $order_goods[] = '("'.$item['product_id'].'","'.$item['sku'].'",'.$shop_id.',"'.$value['id'].'",'.$item['quantity'].')';
+                    $order_goods[] = '("'.$item['product_id'].'","'.$item['sku'].'",'.$shop_id.',"'.$value['id'].'",'.$item['quantity'].',"'.$date.'")';
                 }
             }
 

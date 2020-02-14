@@ -15,7 +15,7 @@ class Getoperate_operate extends \Application\Component\Common\IData
         $this->load->model ( 'data/operate_data' );
     }
 
-    //根据店铺获取前一天的运营数据存入数据库
+    //根据店铺获取前天的运营数据存入数据库
     public function get_datas()
     {
         set_time_limit(0);
@@ -25,9 +25,9 @@ class Getoperate_operate extends \Application\Component\Common\IData
         if(empty($shops)){
             return false;
         }
-        //获取前一天的日期
-        $date = date("Y-m-d",strtotime("-1 day"));
-        //循环将每个店铺前一天的运营数据写入到本地数据库中
+        //获取前天的日期
+        $date = date("Y-m-d",strtotime("-2 day"));
+        //循环将每个店铺前天的运营数据写入到本地数据库中
         foreach ($shops as $v){
             //店铺id
             $shop_id = $v['id'];
@@ -54,7 +54,7 @@ class Getoperate_operate extends \Application\Component\Common\IData
                     'insert_time' => date('Y-m-d h:i:s', time())
                 );
             }else{
-                //获取店铺前一天的总营业额,付款订单数,付款订单id (状态为已支付)
+                //获取店铺前天的总营业额,付款订单数,付款订单id (状态为已支付)
                 $sql = "SELECT SUM(total_price_usd) AS turnover,count(shopify_o_id) AS paid_orders,GROUP_CONCAT(shopify_o_id) AS orders FROM `order` WHERE  shop_id = $shop_id AND datetime = '$date' AND financial_status = 'paid'";
                 $data =$this->db->query ( $sql )->row_array ();
                 $data['turnover'] = empty($data['turnover']) ? '0' : $data['turnover'];//店铺总营业额

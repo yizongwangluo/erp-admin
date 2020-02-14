@@ -1,5 +1,5 @@
 <?php
-
+set_time_limit ( 0 );
 class Shopify_orders extends \Application\Component\Common\IFacade
 {
     public function __construct ()
@@ -23,13 +23,14 @@ class Shopify_orders extends \Application\Component\Common\IFacade
             return false;
         }
 
-        $time = date('Y-m-d',strtotime("-1 day"));
+        $time = date('Y-m-d',strtotime("-2 day"));
         $min_time = $time.'T00:00:00';
         $mix_time = $time.'T23:59:59';
 
         foreach($shop_list as $k=>$value){
             $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
-            $this->get_order_page($value,$url,$time,$min_time,$mix_time);
+            $status = 1;
+            $this->get_order_page( $status,$value,$url,$time,$min_time,$mix_time);
         }
     }
 
@@ -68,7 +69,7 @@ class Shopify_orders extends \Application\Component\Common\IFacade
      * @param int $page
      * @return bool
      */
-    public function get_order_page($arr = [],$url = '',$time = '',$min_time = '',$mix_time = '',$page = 1){
+    public function get_order_page($status = '',$arr = [],$url = '',$time = '',$min_time = '',$mix_time = '',$page = 1){
 
         log_message('get_order_page',json_encode($arr),true);
 
@@ -81,25 +82,22 @@ class Shopify_orders extends \Application\Component\Common\IFacade
 
         $order_list = json_decode($order_json,true);
         $order_cout = count($order_list['orders']);
-
+        $count = 0;
         if($order_list){
             if($order_cout>0){ //有订单时
                 //同步订单到本地
-                $ret = $this->order_data->add_order($arr['id'],$time,$order_list['orders']);
-
-                if(!$ret){
-                    $this->set_error('订单同步失败！');
-                    return false;
-                } //添加失败，跳出程序
+                $count = $this->add_order($arr['id'],$order_list['orders'],$status);
             }
+
             //修改订单同步状态
-            $this->order_synchro_log_data->edit_log($log_id,1,$order_cout);
+            $this->order_synchro_log_data->edit_log($log_id,1,$count);
+//            $this->order_synchro_log_data->edit_log($log_id,1,$order_cout);
 
             $next_link = $this->get_header($url,$arr['shop_api_key'],$arr['shop_api_pwd']); //下页链接
 
             if($next_link){
                 $page++;
-                $this->get_order_page($arr,$next_link,$time,$min_time,$mix_time,$page);
+                $this->get_order_page($status,$arr,$next_link,$time,$min_time,$mix_time,$page);
             }
         }
     }
@@ -110,29 +108,41 @@ class Shopify_orders extends \Application\Component\Common\IFacade
      * @param int $shop_id
      * @param array $arr
      */
-    public function add_order($shop_id = 0,$arr = []){
-
+    public function add_order($shop_id = 0,$arr = [],$status){
+        $count = 0;
         foreach($arr as $v){
-            $order_info = [];
-            $order_info['shopify_o_id'] = $v['id'];
-            $order_info['shop_id'] = $shop_id;
-            $order_info['total_price_usd'] = $v['total_price_usd'];
-            $order_info['created_at'] = $v['created_at'];
-            $order_info['updated_at'] = $v['updated_at'];
-            $order_info['total_weight'] = $v['total_weight'];
-            $order_info['financial_status'] = $v['financial_status'];
-            $order_id = $this->order_data->add($order_info);
-            if($order_id){
-                foreach($v['line_items'] as $item){
-                    $order_goods_info = [];
-                    $order_goods_info['product_id'] = $item['product_id'];
-                    $order_goods_info['sku_id'] = $item['sku'];
-                    $order_goods_info['o_id'] = $order_id;
-                    $order_goods_info['quantity'] = $item['quantity'];
-                    $this->order_goods_data->store($order_goods_info,true);
+            if($v['financial_status'] == 'paid'){
+                $order_info = [];
+                $order_info['shopify_o_id'] = $v['id'];
+                $order_info['shop_id'] = $shop_id;
+                $order_info['total_price_usd'] = $v['total_price_usd'];
+                $order_info['created_at'] = $v['created_at'];
+                $order_info['updated_at'] = $v['updated_at'];
+                $order_info['total_weight'] = $v['total_weight'];
+                $order_info['financial_status'] = $v['financial_status'];
+                if($status == 0){
+                    $order_info['datetime'] = substr($v['created_at'],0,strpos($v['created_at'], 'T'));
+                }else{
+                    $order_info['datetime'] = substr($v['updated_at'],0,strpos($v['updated_at'], 'T'));
+                }
+                $order_id = $this->order_data->add($order_info);
+
+                if($order_id){
+                    foreach($v['line_items'] as $item){
+                        $order_goods_info = [];
+                        $order_goods_info['product_id'] = $item['product_id'];
+                        $order_goods_info['sku_id'] = $item['sku'];
+                        $order_goods_info['shopify_o_id'] = $v['id'];
+                        $order_goods_info['quantity'] = $item['quantity'];
+                        $order_goods_info['shop_id'] = $shop_id;
+                        $order_goods_info['datetime'] = $order_info['datetime'];
+                        $this->order_goods_data->store($order_goods_info,true);
+                    }
+                    $count++;
                 }
             }
         }
+        return $count;
     }
 
 
