@@ -55,9 +55,10 @@ class Goods_data extends \Application\Component\Common\IData{
             $info = $query->result_array();
 
             foreach($info as $k=>$v){
-                $sku_list = $this->db->query('select code,norms,price,weight,status,code from goods_sku where spu_id= '.$v['id'])->result_array();
+                $sku_list = $this->db->query('select code,norms,alias,price,weight,status,code from goods_sku where spu_id= '.$v['id'])->result_array();
                 $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
                 $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
+                $info[$k]['alias'] = implode('<br/>',array_column($sku_list,'alias'));
                 $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
                 $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));
             }
@@ -172,6 +173,7 @@ class Goods_data extends \Application\Component\Common\IData{
            /* if(!$this->update($info['id'],$apply_info)){
                 $this->set_error('(修改)同步失败，请稍后重试');return false;
             }*/
+           $info['id'] = 'set';
         }else{ //新增
             $apply_info['addtime'] = $time;
             $info['id'] = $this->store($apply_info);

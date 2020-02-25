@@ -71,6 +71,55 @@ class Goods_sku_data extends \Application\Component\Common\IData{
             $this->set_error('请上传产品图片');return false;
         }
 
+        $alias = $input['alias'];
+        $sku = $input['code'];
+
+        $alias_name = explode(',',$alias);
+
+        if(in_array($sku,$alias_name)){
+            $this->set_error('sku编码与sku别名重复');return false;
+        }
+
+        //判断sku编码是否已存在
+        $sql = "select code from goods_sku where id <> $id";
+        $code = $this->db->query ( $sql )->result_array ();
+        $codes = array_column($code , 'code' );
+        if(in_array($sku,$codes)){
+            $this->set_error('sku编码已被使用');return false;
+        }
+        //判断sku编码是否与已存在的sku别名同名
+        $sql = "select group_concat(alias) from goods_sku_apply ";
+        $re = $this->db->query ( $sql )->result_array ();
+        $re = $re[0]['group_concat(alias)'];
+        $ress = explode(",",$re);
+        if(in_array($sku,$ress)){
+            $this->set_error('sku编码与已存在的sku别名同名');return false;
+        }
+
+        if(!empty($alias)){
+            $alias = explode(',',$alias);
+            //判断别名是否已存在
+            $sql = "select group_concat(alias) from goods_sku where id <> $id";
+            $re = $this->db->query ( $sql )->result_array ();
+            $re = $re[0]['group_concat(alias)'];
+            $ress = explode(",",$re);
+
+            foreach($alias as $v){
+                if(in_array($v,$ress)){
+                    $this->set_error('sku别名已被使用');return false;
+                }
+            }
+            //判断别名是否与已存在的sku编码同名
+            $sql = "select code from goods_sku";
+            $code = $this->db->query ( $sql )->result_array ();
+            $codes = array_column($code , 'code' );
+            foreach($alias as $v){
+                if(in_array($v,$codes)){
+                    $this->set_error('sku别名与已存在的sku编码同名');return false;
+                }
+            }
+        }
+
         $input = array_filter($input);
 
         $input['status'] = $input['status'] || is_numeric($input['status'])?$input['status'] : 0; //修改审核状态为未审核

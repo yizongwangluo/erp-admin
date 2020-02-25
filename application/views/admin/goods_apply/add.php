@@ -245,6 +245,7 @@
                 ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                 ,cols: [[
                     {field:'id', width:80, title: 'ID' }
+                    ,{field:'alias', title: '别名' }
                     ,{field:'norms',  title: '规格',minWidth:100}
                     ,{field:'img',  title: '图片', templet: function(res){
                         return '<a href="'+res.img+'" target="_blank"><img width="50px" src="'+res.img+'"></a>'

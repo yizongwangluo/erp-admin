@@ -16,6 +16,13 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">别名：</label>
+                    <div class="layui-inline">
+                        <input type="text" name="alias" value="" class="layui-input">
+                    </div>
+                    <em>多个别名以 , 隔开</em>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">规格：</label>
                     <div class="layui-inline">
                         <input type="text" name="norms" value="" class="layui-input">
@@ -77,13 +84,13 @@
                         <input class="type" type="radio" value="1" name="type" title="组合sku" lay-filter="type">
                     </div>
                 </div>-->
-                <div class="layui-inline">
-                    <label for="" class="layui-form-label">测试sku</label>
-                    <div class="layui-inline">
-                        <input class="is_real" type="radio" checked value="0" name="is_real" title="否" lay-filter="is_real">
-                        <input class="is_real" type="radio" value="1" name="is_real" title="是" lay-filter="is_real">
-                    </div>
-                </div>
+<!--                <div class="layui-inline">-->
+<!--                    <label for="" class="layui-form-label">测试sku</label>-->
+<!--                    <div class="layui-inline">-->
+<!--                        <input class="is_real" type="radio" checked value="0" name="is_real" title="否" lay-filter="is_real">-->
+<!--                        <input class="is_real" type="radio" value="1" name="is_real" title="是" lay-filter="is_real">-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
             <div class="layui-form-item" id="save_from">
                 <div class="layui-input-block">

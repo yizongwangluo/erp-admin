@@ -207,6 +207,12 @@
                 </select>
             </div>
         </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">驳回原因：</label>
+                <div class="layui-inline">
+                    <input name="disallowance"  <?php if($info['status'] == 3){?> value="<?=$info['disallowance']?>" <?php }else {?> value=""<?php } ?> type="text" class="layui-input">
+                </div>
+            </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">SKU列表：</label>
@@ -250,6 +256,7 @@
                     {field:'id', width:80, title: 'ID' }
                     ,{field:'norms',  title: '规格',minWidth:100}
                     ,{field:'code',  title: 'SKU编码'}
+                    ,{field:'alias',  title: '别名'}
                     ,{field:'img',  title: '图片', templet: function(res){
                         return '<a href="'+res.img+'" target="_blank"><img width="50px" src="'+res.img+'"></a>'
                     }}

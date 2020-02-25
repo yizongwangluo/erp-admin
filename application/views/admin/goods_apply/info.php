@@ -203,6 +203,14 @@
           <table class="layui-hide" id="test" lay-filter="test" ></table>
         </div>
     </div>
+        <?php if($info['status'] == 3 && !empty($info['disallowance'])){ ?>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="color: red">驳回原因：</label>
+            <div class="layui-inline">
+                <input name="disallowance" value="<?= $info['disallowance'] ?>" type="text" class="layui-input" style="border: none;padding: 0;color: red;">
+            </div>
+        </div>
+        <?php } ?>
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" type="button" onclick="javascript:history.back(-1);">返回</button>
@@ -236,6 +244,7 @@
                 ,cols: [[
                     {field:'id', width:80, title: 'ID' }
                     ,{field:'code',  title: 'SKU编码'}
+                    ,{field:'alias', title: '别名' }
                     ,{field:'norms',  title: '规格',minWidth:100}
                     ,{field:'img',  title: '图片', templet: function(res){
                         return '<a href="'+res.img+'" target="_blank"><img width="50px" src="'+res.img+'"></a>'

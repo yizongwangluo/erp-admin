@@ -8,6 +8,13 @@
         <div class="layui-field-box">
             <div class="layui-form-item">
                 <div class="layui-inline">
+                    <label class="layui-form-label">别名：</label>
+                    <div class="layui-inline">
+                        <input type="text" name="alias" value="" class="layui-input" id="alias">
+                    </div>
+                    <em>多个别名以 , 隔开</em>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">规格：</label>
                     <div class="layui-inline">
                         <input type="text" name="norms" value="" class="layui-input">
@@ -69,13 +76,13 @@
                         <input class="type" type="radio" value="1" name="type" title="组合sku" lay-filter="type">
                     </div>
                 </div>-->
-                <div class="layui-inline">
-                    <label for="" class="layui-form-label">测试sku</label>
-                    <div class="layui-inline">
-                        <input class="is_real" type="radio" value="0" name="is_real" title="否" lay-filter="is_real">
-                        <input class="is_real" type="radio" value="1" name="is_real" title="是" lay-filter="is_real">
-                    </div>
-                </div>
+<!--                <div class="layui-inline">-->
+<!--                    <label for="" class="layui-form-label">测试sku</label>-->
+<!--                    <div class="layui-inline">-->
+<!--                        <input class="is_real" type="radio" value="0" name="is_real" title="否" lay-filter="is_real">-->
+<!--                        <input class="is_real" type="radio" value="1" name="is_real" title="是" lay-filter="is_real">-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
@@ -86,7 +93,6 @@
     </form>
 
     <script>
-
         var data = window.parent;
 
         if(<?=input('type')?1:0?> && data.sku_edit_id){ //渲染页面
@@ -119,6 +125,14 @@
                 values[input[x].name] = input[x].value;
             }
 
+            if(!values.norms){
+                layer.msg('请填写规格/颜色', {time: 2000, icon: 5});return;
+            }
+
+            if(!values.img){
+                layer.msg('请上传产品图片', {time: 2000, icon: 5});return;
+            }
+
             if(<?=input('type')?1:0?> && data.sku_edit_id){ //修改
                 values['id'] = data.sku_edit_id;
                 $.each(data.data_sku,function(i,item){
@@ -138,5 +152,38 @@
             parent.layer.close(index); //再执行关闭
 
         }
+
+        // 使用 id 拿到用户名文本框，当它失去焦点（blur函数的作用）的时候触发该函数
+        $('#alias').blur(function () {
+            // 获取到文本框中的值
+            var alias = $(this).val();
+            // 开始使用 ajax
+            $.ajax({
+                // 设置提交方式为post
+                type: "POST",
+                // 将数据提交给url中指定的php文件
+                url: "/admin/goods_apply/alias",
+                // 提交的数据内容，以json的形式
+                data: {"alias": alias},
+                // 成功的回调函数，其中的data就是后端返回回来的数据
+                success: function (data) {
+                    // 转化为json形式
+                    var data_json = $.parseJSON(data);
+                    // 后端的返回数据
+                    if (data_json['flag'] == false) {
+                        alert(data_json['msg']);
+                    }
+                    else if (data_json['msg'] == 1) {
+                        layer.msg('sku别名已被使用', {time: 2000, icon: 5});
+                        $('#alias').val("");
+                    }
+                    else if (data_json['msg'] == 2) {
+                        layer.msg('存在同名sku编码', {time: 2000, icon: 5});
+                        $('#alias').val("");
+                    }
+                }
+            });
+        });
+
     </script>
 <?php $this->load->view ( 'admin/common/footer' ) ?>

@@ -88,27 +88,35 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 			}
 		}
 
-		if($id){ //修改
+		if($input['status']==3){//驳回时，填写驳回原因
+            if(empty($input['disallowance'])){
+                $this->output->ajax_return(AJAX_RETURN_FAIL,'请填写驳回原因！');
+            }
+        }
 
+		if($id){ //修改
 			if(!$input['code'] && $input['status']==1){ //编码未填写
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写SPU编码');
 			}
 
 			$input['edittime'] = time();
 
-			$ret = $this->goods_apply_data->update($id,$input);
 			//查询是否有sku未填写编码
-			if($this->goods_sku_apply_data->get_no_code($id) && $input['status']==1){
+            $is_code = $this->goods_sku_apply_data->get_no_code($id);
+			if( $is_code && $input['status']==1){
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写相关SKU编码');
 			}
+
 			//修改sku状态
 			$sku_app_ret = $this->goods_sku_apply_data->edit_status($id,['status'=>$input['status'],'is_real'=>0]);
-
+            $ret = $this->goods_apply_data->update($id,$input);
 			if($sku_app_ret && $ret && $input['status']==1){//同步到主表中
 
 				$c = $this->goods_distribution_facade->synchronization($id);
 
 				if(!$c){ //失败
+                    $stt = array('status' => 2);
+                    $this->goods_apply_data->update($id,$stt);
 					$this->output->ajax_return(AJAX_RETURN_FAIL,$this->goods_distribution_facade->get_error());
 				}
 			}
@@ -135,9 +143,17 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		$id = $sku_info['id'];
 		unset($sku_info['id']);
 
+		$alias = $sku_info['alias'];
+
 		if($id){ //修改
+            if(!empty($alias)){
+                $this->goods_apply_data->edit_alias($alias,$id);
+            }
 			$ret = $this->goods_sku_apply_data->update($id,$sku_info);
 		}else{ //添加
+		    if(!empty($alias)){
+                $this->goods_apply_data->edit_alias($alias,$id = '');
+            }
 			$ret = $this->goods_sku_apply_data->store($sku_info);
 		}
 
@@ -230,8 +246,22 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		}
 
 		$id = $input['id'];
-
 		unset($input['id']);
+
+		$alias = $input['alias'];
+		$sku = $input['code'];
+
+        $alias_name = explode(',',$alias);
+
+		if(in_array($sku,$alias_name)){
+            $this->output->ajax_return(AJAX_RETURN_FAIL,'sku编码与sku别名重复');
+        }
+
+        $this->goods_apply_data->isset_code($sku);
+
+        if(!empty($alias)){
+            $this->goods_apply_data->edit_alias($alias,$id);
+        }
 
 		$ret =  $this->goods_sku_apply_data->update($id,$input);
 
@@ -287,5 +317,10 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 			$this->output->ajax_return(AJAX_RETURN_FAIL,$this->goods_apply_data->get_error());
 		}
 	}
+
+	//判断别名
+    public function alias(){
+        $this->goods_apply_data->isset_alias();
+    }
 
 }

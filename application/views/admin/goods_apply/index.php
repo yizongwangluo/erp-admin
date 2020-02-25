@@ -43,6 +43,7 @@
                     <td class="img">产品图片</td>
                     <td>产品名</td>
                     <td>SKU</td>
+                    <td>SKU别名</td>
                     <td>规格</td>
                     <td>采购价（元）</td>
                     <td>重量（克）</td>
@@ -57,10 +58,11 @@
                       <td class="img"><a href="<?=base_url($v['img'])?>" target="_blank"><img src="<?=base_url($v['img'])?>"></a></td>
                       <td><?=$v['name']?></td>
                       <td><?=$v['sku_code']?></td>
+                      <td><?=$v['alias']?></td>
                       <td><?=$v['norms']?></td>
                       <td><?=$v['price']?></td>
                       <td><?=$v['weight']?></td>
-                      <td style="color: <?=$v['status']==2?'red':'';?>"><?=$this->enum_field->get_values ( 'is_status' )[$v['status']]?></td>
+                      <td style="color: <?php if($v['status']==3){echo "red";}elseif($v['status']==2){echo "#1890ff";}?>"><?=$this->enum_field->get_values ( 'is_status' )[$v['status']]?></td>
                       <td>
                           <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods_apply/info/{$v['id']}"); ?>">查看</a>
                           <button style="display: <?=$v['status']!=1?'none':'';?>;" data-url="<?php echo base_url ( 'admin/goods/synchronization' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到主表</button>

@@ -41,6 +41,7 @@
                     <td class="img">产品图片</td>
                     <td>产品名</td>
                     <td>SKU</td>
+                    <td>SKU别名</td>
                     <td>规格</td>
                     <td>采购价（元）</td>
                     <td>重量（克）</td>
@@ -55,6 +56,7 @@
                       <td class="img"><a href="<?=base_url($v['img'])?>" target="_blank"><img src="<?=base_url($v['img'])?>"></a></td>
                       <td><?=$v['name']?></td>
                       <td><?=$v['sku_code']?></td>
+                      <td><?=$v['alias']?></td>
                       <td><?=$v['norms']?></td>
                       <td><?=$v['price']?></td>
                       <td><?=$v['weight']?></td>
