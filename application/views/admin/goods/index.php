@@ -35,11 +35,10 @@
                     <td class="img">产品图片</td>
                     <td>产品名</td>
                     <td>SKU</td>
-                    <td>SKU别名</td>
                     <td>规格</td>
                     <td>采购价（元）</td>
                     <td>重量（克）</td>
-<!--                    <td>同步（通途）</td>-->
+                    <td>同步（通途）</td>
                     <td>操作</td>
                 </tr>
                 </thead>
@@ -50,15 +49,14 @@
                       <td class="img"><a href="<?=base_url($v['img'])?>" target="_blank"><img src="<?=base_url($v['img'])?>"></a></td>
                       <td><?=$v['name']?></td>
                       <td><?=$v['sku_code']?></td>
-                      <td><?=$v['alias']?></td>
                       <td><?=$v['norms']?></td>
                       <td><?=$v['price']?></td>
                       <td><?=$v['weight']?></td>
-<!--                      <td style="color: --><?//=$v['is_tongtu']!=1?'red':'';?><!--">--><?//=$v['is_tongtu']?'已同步':'未同步'?><!--</td>-->
+                      <td style="color: <?=$v['is_tongtu']!=1?'red':'';?>"><?=$v['is_tongtu']?'已同步':'未同步'?></td>
                       <td>
                           <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods/info/{$v['id']}"); ?>">查看</a>
                           <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods/edit/{$v['id']}"); ?>">编辑</a>
-<!--                          <button data-url="--><?php //echo base_url ( 'admin/goods/add_sku_tongtu' ) ?><!--" data-id="--><?//= $v['id'] ?><!--" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到通途</button>-->
+                          <button data-url="<?php echo base_url ( 'admin/goods/add_sku_tongtu' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到通途</button>
                          <!-- <button style="display: <?/*=$v['status']==1?'none':'';*/?>;" data-url="<?php /*echo base_url ( 'admin/goods/delete' ) */?>" data-id="<?/*= $v['id'] */?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>-->
                       </td>
                   </tr>
