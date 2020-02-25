@@ -11,6 +11,10 @@ class Operate_data extends \Application\Component\Common\IData
     public function __construct ()
     {
         parent::__construct ();
+        $this->load->model ( 'data/shop_data' );
+        $this->load->model ( 'orders/shopify_orders' );
+        $this->load->model ( 'operate/getoperate_operate' );
+        $this->load->model ( 'operate/synchronize_operate' );
 
     }
 
@@ -210,4 +214,88 @@ FROM
         }
         return $data;
     }
+
+    //动态获取今天和昨天的运营数据
+    public function get_moving()
+    {
+        $today = date("Y-m-d");
+        $yesterday = date("Y-m-d",strtotime("-1 day"));
+        $mv['today'] = $this->get_operate_data($today);
+        $mv['yesd'] = $this->get_operate_data($yesterday);
+    }
+
+    //动态获取某天的运营数据
+    public function get_operate_data($time)
+    {
+        $shop_list = $this->shop_data->lists();
+
+        //没有店铺时 跳出程序
+        if(empty($shop_list)){
+            return false;
+        }
+
+        $min_time = $time.'T00:00:00';
+        $mix_time = $time.'T23:59:59';
+
+        foreach($shop_list as $k=>$value){
+            $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
+//            echo $url;
+            $this->get_order_page($value,$url,$time,$min_time,$mix_time);
+        }
+    }
+
+    public function get_order_page($arr = [],$url = '',$time = '',$min_time = '',$mix_time = '',$page = 1)
+    {
+        $shop_id = $arr['id'];
+        $order_json = $this->curl_get_https($url);
+        $order_list = json_decode($order_json,true);
+        $order_cout = count($order_list['orders']);
+
+        if($order_list){
+            if($order_cout>0){ //有订单时
+                foreach($order_list as $v){
+                    $j = 1;
+                    foreach($v as $k=>$val){
+                        $date = substr($val['updated_at'],0,strpos($val['updated_at'], 'T'));
+                        if($val['financial_status'] == 'paid' && $date == $time){
+                            $orders[$j]['shopify_o_id'] = $val['id'];
+                            $orders[$j]['total_price_usd'] = $val['total_price_usd'];
+                            $orders[$j]['total_weight'] = $val['total_weight'];
+                        }
+//                        $a = 1;
+//                        foreach($val['line_items'] as $i=>$item){
+//                            $orders[$j]['item'][$a]['product_id'] = $item['product_id'];
+//                            $orders[$j]['item'][$a]['sku_id'] = $item['sku'];
+//                            $orders[$j]['item'][$a]['quantity'] = $item['quantity'];
+//                            $orders[$j]['item'][$a]['shopify_o_id'] = $val['id'];
+//                            $a++;
+//                        }
+                        $j++;
+                    }
+                }
+            }
+            $next_link = $this->shopify_orders->get_header($url,$arr['shop_api_key'],$arr['shop_api_pwd']); //下页链接
+
+            if($next_link){
+                $page++;
+                $this->get_order_page($arr,$next_link,$time,$min_time,$mix_time,$page);
+            }
+        }
+    }
+
+    function curl_get_https($url){
+//	return $url;
+        $curl = curl_init(); // 启动一个CURL会话
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // 跳过证书检查
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);  // 从证书中检查SSL加密算法是否存在
+        $tmpInfo = curl_exec($curl);     //返回api的json对象
+        //关闭URL请求
+        curl_close($curl);
+        return $tmpInfo;
+    }
 }
+
+
