@@ -251,6 +251,10 @@ FROM
         $domain = preg_replace("/^http(s)?:\/\//", '', $domain);
         $backstage = trim($in['backstage']);
         $backstage = preg_replace("/^http(s)?:\/\//", '', $backstage);
+        if(substr($backstage,-1) != '/'){
+            $backstage = $backstage."/";
+        };
+
         $data = array(
             'domain' => $domain,
             'backstage' => $backstage,
