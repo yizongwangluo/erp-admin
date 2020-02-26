@@ -67,4 +67,12 @@ class Crontab extends \MY_Controller
 		$this->income_data->timing_lists();
 		$this->salary_operate->set_salary_list();
 	}
+
+	/**
+     * 每半小时都执行一次的计划任务
+     */
+	public function run_every_half_hour ()
+    {
+        $this->shopify_orders->sync_order();
+    }
 }

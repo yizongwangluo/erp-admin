@@ -23,7 +23,7 @@ class Shopify_orders extends \Application\Component\Common\IFacade
             return false;
         }
 
-        $time = date('Y-m-d',strtotime("-2 day"));
+        $time = date('Y-m-d',strtotime("-1 day"));
         $min_time = $time.'T00:00:00';
         $mix_time = $time.'T23:59:59';
 
@@ -34,6 +34,24 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         }
     }
 
+    public function sync_order(){
+        $shop_list = $this->shop_data->lists();
+
+        //没有店铺时 跳出程序
+        if(empty($shop_list)){
+            return false;
+        }
+
+        $time = date('Y-m-d',time());
+        $min_time = date('Y-m-d\TH:i:s', strtotime("-30 minute"));
+        $mix_time = date('Y-m-d\TH:i:s', time());
+
+        foreach($shop_list as $k=>$value){
+            $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
+            $status = 1;
+            $this->get_order_page( $status,$value,$url,$time,$min_time,$mix_time);
+        }
+    }
 
     public function index_bak(){
 
