@@ -226,5 +226,65 @@ class Synchronize_operate extends \Application\Component\Common\IData
             $this->set_error('清除salary表数据失败！');
         }
     }
+
+    //更新时间段内每日运营数据
+    public function up_operate($input)
+    {
+        $start_time = $input['start_time'];
+        $end_time = $input['end_time'];
+        $shop_id = $input['shop'];
+
+        if(!$shop_id){
+            $this->set_error('请选择需要同步的店铺！');
+            return false;
+        }
+        if(!$start_time){
+            $this->set_error('请输入开始时间！');
+            return false;
+        }
+        if(!$end_time){
+            $this->set_error('请输入结束时间！');
+            return false;
+        }
+        $yesterday = date("Y-m-d",strtotime("-1 day"));
+        if($start_time >= $yesterday || $end_time >= $yesterday){
+            $this->set_error('开始时间/结束时间必须小于昨天！');
+            return false;
+        }
+        if($start_time != '' && $end_time != ''){
+            //结束时间与开始时间的时间差
+            $time_stamp_diff = strtotime($end_time) - strtotime($start_time);
+            if($time_stamp_diff < 0){
+                $this->set_error('开始时间必须小于或等于结束时间！');
+                return false;
+            }
+            if($time_stamp_diff > (30*24*60*60)){
+                $this->set_error('最大可同步时间为31天！');
+                return false;
+            }
+        }
+
+        //获取时间段内日期
+        $dates = $this->getDateFromRange($start_time,$end_time);
+        //获取选择店铺信息
+        $shop = $this->db->query ("select * from shop where id = $shop_id;" )->row_array ();
+        if(!$shop){
+            $this->set_error('更新失败：店铺不存在！');
+            return false;
+        }
+
+        //更新每日运营数据
+        foreach($dates as $k=>$time) {
+            $this->getoperate_operate->get_data($shop_id,$time);
+            if($this->db->affected_rows()<=0){ //添加失败
+                $this->set_error('更新每日运营数据失败！');
+                return false;
+            }
+        }
+
+        return true;
+
+
+    }
 }
 

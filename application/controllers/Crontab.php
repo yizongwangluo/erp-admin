@@ -46,9 +46,9 @@ class Crontab extends \MY_Controller
 	 */
 	public function run_every_day ()
 	{
-		$this->shopify_orders->index(); //定时获取shopify订单
+//		$this->shopify_orders->index(); //定时获取shopify订单
 
-		$this->getoperate_operate->get_datas(); //定时生成昨日运营数据
+		$this->getoperate_operate->get_datas(); //定时生成前日运营数据
 
 	}
 
@@ -60,7 +60,7 @@ class Crontab extends \MY_Controller
 	}
 
 	/**
-	 * 每月1号都执行的计划任务
+	 * 每月2号都执行的计划任务
 	 */
 	public function run_every_month ()
 	{

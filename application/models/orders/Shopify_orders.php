@@ -43,8 +43,10 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         }
 
         $time = date('Y-m-d',time());
-        $min_time = date('Y-m-d\TH:i:s', strtotime("-30 minute"));
-        $mix_time = date('Y-m-d\TH:i:s', time());
+//        $min_time = date('Y-m-d\TH:i:s', strtotime("-30 minute"))."-08:00";
+//        $mix_time = date('Y-m-d\TH:i:s', time())."-08:00";
+        $min_time = date('Y-m-d\TH:i:s', strtotime("-510 minute"));
+        $mix_time = date('Y-m-d\TH:i:s', strtotime("-480 minute"));
 
         foreach($shop_list as $k=>$value){
             $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';

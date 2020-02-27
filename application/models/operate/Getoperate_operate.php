@@ -53,7 +53,8 @@ class Getoperate_operate extends \Application\Component\Common\IData
                     'operate_remark' => '缺少提成规则！',
                     'insert_time' => date('Y-m-d h:i:s', time())
                 );
-            }else{
+            }
+            else{
                 //获取店铺前天的总营业额,付款订单数,付款订单id (状态为已支付)
                 $sql = "SELECT SUM(total_price_usd) AS turnover,count(shopify_o_id) AS paid_orders,GROUP_CONCAT(shopify_o_id) AS orders FROM `order` WHERE  shop_id = $shop_id AND datetime = '$date' AND financial_status = 'paid'";
                 $data =$this->db->query ( $sql )->row_array ();
@@ -61,17 +62,23 @@ class Getoperate_operate extends \Application\Component\Common\IData
                 $data['paid_orders'] = empty($data['paid_orders']) ? '0' : $data['paid_orders'];//付款订单数
                 $orders = $data['orders'];
                 //根据付款订单id,获取对应的sku_总成本,商品总重量
-                if(!empty($orders)){
-                    $sql_o = "SELECT sum(a.quantity*b.weight) as total_weight,sum(a.quantity*b.price) as sku_total_cost FROM order_goods a LEFT JOIN goods_sku b on a.sku_id = b.code WHERE shop_id = $shop_id AND shopify_o_id in ( $orders )";
-                    $goods = $this->db->query ( $sql_o )->row_array ();
-                    //所有SKU成本
-                    $data['sku_total_cost'] = empty($goods['sku_total_cost']) ? '0' : $goods['sku_total_cost'];
-                    //商品总重量
-                    $data['total_weight'] = empty($goods['total_weight']) ? '0' : $goods['total_weight'];
-                }else{
-                    $data['sku_total_cost'] = '0';
-                    $data['total_weight'] = '0';
-                }
+//                if(!empty($orders)){
+//                    $sql_o = "SELECT sum(a.quantity*b.weight) as total_weight,sum(a.quantity*b.price) as sku_total_cost FROM order_goods a LEFT JOIN goods_sku b on a.sku_id = b.code WHERE shop_id = $shop_id AND shopify_o_id in ( $orders )";
+//                    $goods = $this->db->query ( $sql_o )->row_array ();
+//                    //所有SKU成本
+//                    $data['sku_total_cost'] = empty($goods['sku_total_cost']) ? '0' : $goods['sku_total_cost'];
+//                    //商品总重量
+//                    $data['total_weight'] = empty($goods['total_weight']) ? '0' : $goods['total_weight'];
+//                }else{
+//                    $data['sku_total_cost'] = '0';
+//                    $data['total_weight'] = '0';
+//                }
+                //获取对应的sku_总成本,商品总重量,sku是否存在标识
+                $cost = $this->get_cost($shop_id,$date);
+                $data['sku_total_cost'] = $cost['sku_total_cost'];
+                $data['total_weight'] = $cost['total_weight'];
+                $isset_sku = $cost['isset_sku'];
+//                echo $data['sku_total_cost']."<br>".$data['total_weight']."<br>".$isset_sku;exit;
 
                 //客单价 = 营业额/付款订单数
                 $data['unit_price'] = bcdiv($data['turnover'],$data['paid_orders'],2);
@@ -92,23 +99,45 @@ class Getoperate_operate extends \Application\Component\Common\IData
                 $product_total_cost = $data['sku_total_cost']+bcmul($data['paid_orders'],$register_cost,2)+bcmul($data['total_weight'],$freight,2);
                 $product_total_cost = empty($product_total_cost) ? '0' : $product_total_cost;
                 //写入数据库的数据
-                $data = array(
-                    'datetime' => $date,
-                    'shop_id' => $shop_id,
-                    'user_id' => $user_id,
-                    'paid_orders' => $data['paid_orders'],
-                    'turnover' => $data['turnover'],
-                    'total_weight' => $data['total_weight'],
-                    'sku_total_cost' => $data['sku_total_cost'],
-                    'unit_price' => $data['unit_price'],
-                    'formalities_cost' => $formalities_cost,
-                    'register_cost' => $register_cost,
-                    'product_total_cost' => $product_total_cost,
-                    'exchange_rate' => $exchange_rate,
-                    'freight' => $freight,
-                    'service_charge' => $service_charge,
-                    'insert_time' => date('Y-m-d h:i:s', time())
-                );
+                if($isset_sku == 1){
+                    $data = array(
+                        'datetime' => $date,
+                        'shop_id' => $shop_id,
+                        'user_id' => $user_id,
+                        'paid_orders' => '0',
+                        'turnover' => '0',
+                        'total_weight' => '0',
+                        'sku_total_cost' => '0',
+                        'unit_price' => '0',
+                        'formalities_cost' => '0',
+                        'register_cost' => $register_cost,
+                        'product_total_cost' => '0',
+                        'exchange_rate' => $exchange_rate,
+                        'freight' => $freight,
+                        'service_charge' => $service_charge,
+                        'operate_remark' => '缺少sku信息！',
+                        'insert_time' => date('Y-m-d h:i:s', time())
+                    );
+                }else{
+                    $data = array(
+                        'datetime' => $date,
+                        'shop_id' => $shop_id,
+                        'user_id' => $user_id,
+                        'paid_orders' => $data['paid_orders'],
+                        'turnover' => $data['turnover'],
+                        'total_weight' => $data['total_weight'],
+                        'sku_total_cost' => $data['sku_total_cost'],
+                        'unit_price' => $data['unit_price'],
+                        'formalities_cost' => $formalities_cost,
+                        'register_cost' => $register_cost,
+                        'product_total_cost' => $product_total_cost,
+                        'exchange_rate' => $exchange_rate,
+                        'freight' => $freight,
+                        'service_charge' => $service_charge,
+                        'insert_time' => date('Y-m-d h:i:s', time())
+                    );
+                }
+
             }
 
             //将数据存入数据库
@@ -129,15 +158,21 @@ class Getoperate_operate extends \Application\Component\Common\IData
             $data['paid_orders'] = empty($data['paid_orders']) ? '0' : $data['paid_orders'];//付款订单数
             $orders = $data['orders'];
             //根据付款订单id,获取对应的sku_总成本,商品总重量
-            if(!empty($orders)){
-                $sql_o = "SELECT sum(a.quantity*b.weight) as total_weight,sum(a.quantity*b.price) as sku_total_cost FROM order_goods a LEFT JOIN goods_sku b on a.sku_id = b.code WHERE shop_id = $shop_id AND shopify_o_id in ( $orders )";
-                $goods = $this->db->query ( $sql_o )->row_array ();
-                $data['sku_total_cost'] = empty($goods['sku_total_cost']) ? '0' : $goods['sku_total_cost'];//所有SKU成本
-                $data['total_weight'] = empty($goods['total_weight']) ? '0' : $goods['total_weight'];//商品总重量
-            }else{
-                $data['sku_total_cost'] = '0';
-                $data['total_weight'] = '0';
-            }
+//            if(!empty($orders)){
+//                $sql_o = "SELECT sum(a.quantity*b.weight) as total_weight,sum(a.quantity*b.price) as sku_total_cost FROM order_goods a LEFT JOIN goods_sku b on a.sku_id = b.code WHERE shop_id = $shop_id AND shopify_o_id in ( $orders )";
+//                $goods = $this->db->query ( $sql_o )->row_array ();
+//                $data['sku_total_cost'] = empty($goods['sku_total_cost']) ? '0' : $goods['sku_total_cost'];//所有SKU成本
+//                $data['total_weight'] = empty($goods['total_weight']) ? '0' : $goods['total_weight'];//商品总重量
+//            }else{
+//                $data['sku_total_cost'] = '0';
+//                $data['total_weight'] = '0';
+//            }
+
+            $cost = $this->get_cost($shop_id,$date);
+            $data['sku_total_cost'] = $cost['sku_total_cost'];
+            $data['total_weight'] = $cost['total_weight'];
+            $isset_sku = $cost['isset_sku'];
+
             //客单价 = 营业额/付款订单数
             $data['unit_price'] = bcdiv($data['turnover'],$data['paid_orders'],2);
             $data['unit_price'] = empty($data['unit_price']) ? '0' : $data['unit_price'];
@@ -204,30 +239,57 @@ class Getoperate_operate extends \Application\Component\Common\IData
                         $review_status = 1;
                     }
                     //需要修改的数据
-                    $data = array(
-                        'paid_orders' => $data['paid_orders'],
-                        'turnover' => $data['turnover'],
-                        'total_weight' => $data['total_weight'],
-                        'sku_total_cost' => $data['sku_total_cost'],
-                        'unit_price' => $data['unit_price'],
-                        'formalities_cost' => $formalities_cost,
-                        'product_total_cost' => $product_total_cost,
-                        'ad_cost' => $ad_cost,
-                        'review_status' => $review_status,
-                        'review_time' => null,
-                        'reviewer' => null,
-                        'ROI' => $ROI,
-                        'unit_ad_cost' => $unit_ad_cost,
-                        'gross_profit' => $gross_profit,
-                        'gross_profit_rmb' => $gross_profit_rmb,
-                        'gross_profit_rate' => $gross_profit_rate,
-                        'operate_remark' => null,
-                        'service_charge' => $service_charge,
-                        'register_cost' => $register_cost,
-                        'freight' => $freight,
-                        'exchange_rate' => $exchange_rate,
-                        'insert_time' => date('Y-m-d h:i:s', time())
-                    );
+                    if($isset_sku == 1){
+                        $data = array(
+                            'paid_orders' => '0',
+                            'turnover' => '0',
+                            'total_weight' => '0',
+                            'sku_total_cost' => '0',
+                            'unit_price' => '0',
+                            'formalities_cost' => '0',
+                            'register_cost' => $register_cost,
+                            'product_total_cost' => '0',
+                            'ad_cost' =>  null,
+                            'review_status' => '0',
+                            'review_time' => null,
+                            'reviewer' => null,
+                            'ROI' => null,
+                            'unit_ad_cost' => null,
+                            'gross_profit' => null,
+                            'gross_profit_rmb' => null,
+                            'gross_profit_rate' => null,
+                            'exchange_rate' => $exchange_rate,
+                            'freight' => $freight,
+                            'service_charge' => $service_charge,
+                            'operate_remark' => '缺少sku信息！',
+                            'insert_time' => date('Y-m-d h:i:s', time())
+                        );
+                    }else{
+                        $data = array(
+                            'paid_orders' => $data['paid_orders'],
+                            'turnover' => $data['turnover'],
+                            'total_weight' => $data['total_weight'],
+                            'sku_total_cost' => $data['sku_total_cost'],
+                            'unit_price' => $data['unit_price'],
+                            'formalities_cost' => $formalities_cost,
+                            'product_total_cost' => $product_total_cost,
+                            'ad_cost' => $ad_cost,
+                            'review_status' => $review_status,
+                            'review_time' => null,
+                            'reviewer' => null,
+                            'ROI' => $ROI,
+                            'unit_ad_cost' => $unit_ad_cost,
+                            'gross_profit' => $gross_profit,
+                            'gross_profit_rmb' => $gross_profit_rmb,
+                            'gross_profit_rate' => $gross_profit_rate,
+                            'operate_remark' => null,
+                            'service_charge' => $service_charge,
+                            'register_cost' => $register_cost,
+                            'freight' => $freight,
+                            'exchange_rate' => $exchange_rate,
+                            'insert_time' => date('Y-m-d h:i:s', time())
+                        );
+                    }
                 }
                 //更新数据到数据库
                 $this->operate_data->update($operate['id'],$data);
@@ -263,23 +325,44 @@ class Getoperate_operate extends \Application\Component\Common\IData
                     $product_total_cost = $data['sku_total_cost']+bcmul($data['paid_orders'],$register_cost,2)+bcmul($data['total_weight'],$freight,2);
                     $product_total_cost = empty($product_total_cost) ? '0' : $product_total_cost;
                     //写入数据库的数据
-                    $data = array(
-                        'datetime' => $date,
-                        'shop_id' => $shop_id,
-                        'user_id' => $user_id,
-                        'paid_orders' => $data['paid_orders'],
-                        'turnover' => $data['turnover'],
-                        'total_weight' => $data['total_weight'],
-                        'sku_total_cost' => $data['sku_total_cost'],
-                        'unit_price' => $data['unit_price'],
-                        'formalities_cost' => $formalities_cost,
-                        'register_cost' => $register_cost,
-                        'product_total_cost' => $product_total_cost,
-                        'exchange_rate' => $exchange_rate,
-                        'freight' => $freight,
-                        'service_charge' => $service_charge,
-                        'insert_time' => date('Y-m-d h:i:s', time())
-                    );
+                    if($isset_sku == 1){
+                        $data = array(
+                            'datetime' => $date,
+                            'shop_id' => $shop_id,
+                            'user_id' => $user_id,
+                            'paid_orders' => '0',
+                            'turnover' => '0',
+                            'total_weight' => '0',
+                            'sku_total_cost' => '0',
+                            'unit_price' => '0',
+                            'formalities_cost' => '0',
+                            'register_cost' => $register_cost,
+                            'product_total_cost' => '0',
+                            'exchange_rate' => $exchange_rate,
+                            'freight' => $freight,
+                            'service_charge' => $service_charge,
+                            'operate_remark' => '缺少sku信息！',
+                            'insert_time' => date('Y-m-d h:i:s', time())
+                        );
+                    }else{
+                        $data = array(
+                            'datetime' => $date,
+                            'shop_id' => $shop_id,
+                            'user_id' => $user_id,
+                            'paid_orders' => $data['paid_orders'],
+                            'turnover' => $data['turnover'],
+                            'total_weight' => $data['total_weight'],
+                            'sku_total_cost' => $data['sku_total_cost'],
+                            'unit_price' => $data['unit_price'],
+                            'formalities_cost' => $formalities_cost,
+                            'register_cost' => $register_cost,
+                            'product_total_cost' => $product_total_cost,
+                            'exchange_rate' => $exchange_rate,
+                            'freight' => $freight,
+                            'service_charge' => $service_charge,
+                            'insert_time' => date('Y-m-d h:i:s', time())
+                        );
+                    }
                 }
                 //将数据存入数据库
                 $this->operate_data->store($data);
@@ -338,6 +421,107 @@ class Getoperate_operate extends \Application\Component\Common\IData
             );
         }
         return $fees;
+    }
+
+    //获取某个店铺某天的sku_总成本,商品总重量,是否存在sku标识(0存在,1不存在)
+    public function get_cost($shop_id,$date){
+        $sql = "select sku_id,quantity from order_goods WHERE shop_id = $shop_id AND datetime = '$date'";
+//        echo $sql;exit;
+        $costs = $this->db->query ( $sql )->result_array ();
+        if($costs){
+            $cost['isset_sku'] = 0;
+            foreach($costs as $v){
+                if($v['sku_id']){
+                    if(strpos($v['sku_id'],'+') !== false){
+                        $total_price = 0;
+                        $total_weight = 0;
+                        $skus = explode('+',$v['sku_id']);
+                        foreach($skus as $sku){
+                            if(strpos($sku,'*') !== false) {
+                                $num = substr($sku,strpos($sku, '*')+1);
+                                $sku = substr($sku,0,strpos($sku, '*'));
+                                $detail = $this->get_detail($sku);
+                                if($detail){
+                                    $price = $detail['price']*$num*$v['quantity'];
+                                    $weight = $detail['weight']*$num*$v['quantity'];
+                                }else{
+                                    $cost['sku_total_cost'] = '0';
+                                    $cost['total_weight'] = '0';
+                                    $cost['isset_sku'] = 1;
+                                    break;
+                                }
+                            }else{
+                                $detail = $this->get_detail($sku);
+                                if($detail){
+                                    $price = $detail['price']*$v['quantity'];
+                                    $weight = $detail['weight']*$v['quantity'];
+                                }else{
+                                    $cost['sku_total_cost'] = '0';
+                                    $cost['total_weight'] = '0';
+                                    $cost['isset_sku'] = 1;
+                                    break;
+                                }
+                            }
+                            $total_price += $price;
+                            $total_weight += $weight;
+                        }
+                    }else{
+                        if(strpos($v['sku_id'],'*') !== false) {
+                            $num = substr($v['sku_id'],strpos($v['sku_id'], '*')+1);
+                            $sku = substr($v['sku_id'],0,strpos($v['sku_id'], '*'));
+                            $detail = $this->get_detail($sku);
+                            if($detail){
+                                $total_price = $detail['price']*$num*$v['quantity'];
+                                $total_weight = $detail['weight']*$num*$v['quantity'];
+                            }else{
+                                $cost['sku_total_cost'] = '0';
+                                $cost['total_weight'] = '0';
+                                $cost['isset_sku'] = 1;
+                                break;
+                            }
+                        }else{
+                            $detail = $this->get_detail($v['sku_id']);
+                            if($detail){
+                                $total_price = $detail['price']*$v['quantity'];
+                                $total_weight = $detail['weight']*$v['quantity'];
+                            }else{
+                                $cost['sku_total_cost'] = '0';
+                                $cost['total_weight'] = '0';
+                                $cost['isset_sku'] = 1;
+                                break;
+                            }
+                        }
+                    }
+                }else{
+                    $cost['sku_total_cost'] = '0';
+                    $cost['total_weight'] = '0';
+                    $cost['isset_sku'] = 1;
+                    break;
+                }
+                $cost['sku_total_cost'] += $total_price;
+                $cost['total_weight'] += $total_weight;
+                if($cost['isset_sku'] == 1){
+                    $cost['sku_total_cost'] = '0';
+                    $cost['total_weight'] = '0';
+                }
+            }
+        }else{
+            $cost['sku_total_cost'] = '0';
+            $cost['total_weight'] = '0';
+            $cost['isset_sku'] = 0;
+        }
+        return $cost;
+    }
+
+    //获取某个产品的单价和重量
+    public function get_detail($sku){
+        $sql = "select code,price,weight from goods_sku where code = '$sku'";
+        $detail = $this->db->query ( $sql )->row_array ();
+        if(!$detail){
+            $sql = "select alias,price,weight from goods_sku where alias = '$sku'";
+            $detail = $this->db->query ( $sql )->row_array ();
+        }
+        return $detail;
     }
 }
 
