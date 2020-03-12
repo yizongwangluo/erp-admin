@@ -194,4 +194,13 @@ class Goods_sku_data extends \Application\Component\Common\IData{
         return $this->db->affected_rows();
     }
 
+    /**
+     * 根据商品Id查询sku
+     * @param int $spu_id
+     * @return array
+     */
+    public function get_list_spuid($spu_id = 0){
+        return $this->lists(['spu_id'=>$spu_id,'is_real'=>0]);
+    }
+
 }

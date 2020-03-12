@@ -288,4 +288,5 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			}
 		}
 	}
+
 }

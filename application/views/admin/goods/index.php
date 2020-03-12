@@ -4,6 +4,10 @@
     .img{
         /*width: 10%;word-wrap:break-word;word-break:break-all;*/
     }
+    #daochu{
+        cursor:pointer;
+        border: 1px solid silver
+    }
 </style>
 <div class="layui-tab admin-layui-tab layui-tab-brief">
     <ul class="layui-tab-title">
@@ -31,6 +35,7 @@
             <table class="layui-table">
               <thead>
                 <tr>
+                    <td><input type="checkbox" id="all"><i class="layui-icon layui-icon-print" id="daochu" title="导出"></td>
                     <td>ID</td>
                     <td class="img">产品图片</td>
                     <td>产品名</td>
@@ -46,6 +51,7 @@
                 <tbody>
                 <?php foreach ($data as $v): ?>
                   <tr>
+                      <td><input type="checkbox" class="id" name="ids" value="<?= $v['id'] ?>"/></td>
                       <td><?=$v['id']?></td>
                       <td class="img"><a href="<?=base_url($v['img'])?>" target="_blank"><img src="<?=base_url($v['img'])?>"></a></td>
                       <td><?=$v['name']?></td>
@@ -70,5 +76,36 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    //全选操作
+    $('#all').click(function(){
+        if($(this).is(':checked')){ //全选
+            $('.id').prop('checked',true);
+        }else{ //取消全选
+            $('.id').prop('checked',false);
+        }
+    })
+    //全选操作end
+
+
+    $('#daochu').click(function(){
+        var text="";
+        $("input[name=ids]").each(function() {
+            if ($(this).is(':checked')) {
+                text += ","+$(this).val();
+            }
+        });
+
+        if(text){
+//            window.location.replace("http://www.jb51.net");
+            window.location.href = "/admin/export_excel/daochu?ids="+text;
+        }else{
+            layer.msg('请选择商品！', {time: 2000, icon: 5});
+        }
+    })
+
+</script>
 
 <?php $this->load->view ( 'admin/common/footer' ) ?>
