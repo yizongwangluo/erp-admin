@@ -343,8 +343,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 							'采购员'
 		];
 
-		$i=1;
+		$i=0;
 		foreach($spu_list as $k=>$v){
+			$i++;
 			$data[$i][] = $v['code'];//产品编码
 			$data[$i][] = $v['name'];//产品名称
 			$data[$i][] = '';//别名
