@@ -29,7 +29,7 @@ class Admin_facade extends \Application\Component\Common\IFacade
 	public function login ( $user_name, $user_password )
 	{
 		$admin = $this->admin_data->get_info_by_user_name ( $user_name );
-		/*if ( !$admin ) {
+		if ( !$admin ) {
 			$this->set_error ( '不存在此用户！' );
 			return false;
 		}
@@ -51,7 +51,7 @@ class Admin_facade extends \Application\Component\Common\IFacade
 		) {
 			$this->set_error ( '记录登陆信息失败' );
 			return false;
-		}*/
+		}
 
 		//添加关联用户
 		//获取当前开启的岗位

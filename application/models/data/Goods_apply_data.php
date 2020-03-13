@@ -128,7 +128,7 @@ class Goods_apply_data extends \Application\Component\Common\IData{
         $info = [];
 
         if($total){ //有数据时，查询列表
-            $sql .=  ' limit '.($page-1)*$limit.','.$limit;
+            $sql .=  ' order by id desc limit '.($page-1)*$limit.','.$limit;
             $sql_info = str_replace('{{}}',$condition['info'],$sql);
             $query = $this->db->query($sql_info);
             $info = $query->result_array();

@@ -99,8 +99,7 @@
         });
 
         if(text){
-//            window.location.replace("http://www.jb51.net");
-            window.location.href = "/admin/export_excel/daochu?ids="+text;
+            window.location.href = "/admin/goods/daochu?ids="+text;
         }else{
             layer.msg('请选择商品！', {time: 2000, icon: 5});
         }
