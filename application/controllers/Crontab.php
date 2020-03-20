@@ -74,6 +74,7 @@ class Crontab extends \MY_Controller
      */
 	public function run_every_half_hour ()
     {
-        $this->shopify_orders->sync_order();
+//        $this->shopify_orders->sync_order();
+		$this->getoperate_operate->get_datas_tmp(); //生成临时每日运营数据
     }
 }
