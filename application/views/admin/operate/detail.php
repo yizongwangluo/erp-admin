@@ -167,7 +167,8 @@
             ,cols: [[
                 {field:'id', width:80, title: '序号'}
                 ,{field:'name', title: '产品名'}
-                ,{field:'sku_id', title: 'SKU'}
+                ,{field:'code', title: 'SKU'}
+                ,{field:'alias', title: '别名'}
                 ,{field:'quantity', title: '出单产品数量'}
                 ,{field:'price', title: '采购价（¥）'}
                 ,{field:'weight', title: '产品重量（g）'}

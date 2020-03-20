@@ -176,10 +176,10 @@ FROM
         //总毛利（￥）
         $sum['gross_profit_rmb'] = floor($sum['gross_profit_rmb'] * 100) / 100;
         //总毛利率 = 总毛利/总营业额
-        $sum['gross_profit_rate'] = bcdiv($sum['gross_profit'],$sum['turnover'],9);
+        $sum['gross_profit_rate'] = $sum['gross_profit']?bcdiv($sum['gross_profit'],$sum['turnover'],9):0;
         $sum['gross_profit_rate'] = empty($sum['gross_profit_rate']) ? '0.000000000' : $sum['gross_profit_rate'];
         //总ROI = 总营业额/总广告费
-        $sum['ROI'] = bcdiv($sum['turnover'],$sum['ad_cost'],2);
+        $sum['ROI'] = $sum['turnover']?bcdiv($sum['turnover'],$sum['ad_cost'],2):0;
         $sum['ROI'] = empty($sum['ROI']) ? '0.00' : $sum['ROI'];
         return $sum;
 
@@ -192,26 +192,62 @@ FROM
         $shop_id = $operate['shop_id'];
         $date = $operate['datetime'];
         //获取该店铺该天的付款订单id (状态为已支付)
-        $sql = "SELECT GROUP_CONCAT(shopify_o_id) AS orders FROM `order` WHERE  shop_id = $shop_id AND datetime = '$date' AND financial_status = 'paid'";
-        $orders = $this->db->query ( $sql )->row_array ()['orders'];
-        if(!empty($orders)){
-            //获取该店铺该天已付订单的所有商品(商品名称,sku编码,出售总数,产品重量,产品价格)
-            $sql = "SELECT a.sku_id,sum(a.quantity) as quantity,b.weight,b.price,c.name FROM order_goods a LEFT JOIN goods_sku b ON a.sku_id = b.code LEFT JOIN goods c ON b.spu_id = c.id WHERE shop_id = $shop_id AND shopify_o_id IN ( $orders ) GROUP BY sku_id";
-            $data = $this->db->query ( $sql )->result_array ();
-            //获取产品成本明细
-            $a = 1;
-            foreach($data as $k => $v){
-                $v['id'] = $a;
-                foreach ($v as $key => $val){
-                    $data[$k]['id'] = $v['id'];
-                    $data[$k]['freight'] = $operate['freight'];
-                    $data[$k]['product_cost'] = bcadd(($v['quantity']*$v['price']),($v['quantity']*$v['weight']*$data[$k]['freight']),2);
+        $sql = "SELECT
+                b.sku_id,
+                sum(b.quantity) AS quantity
+            FROM
+                `order` a INNER JOIN
+                order_goods b
+            on
+            a.shopify_o_id = b.shopify_o_id WHERE  a.shop_id = $shop_id AND a.datetime = '$date' AND a.financial_status = 'paid' GROUP BY b.sku_id";
+        $sku_ids = $this->db->query ( $sql )->result_array ();
+        $sku_ids = array_column($sku_ids,null,'sku_id'); //把数组中sku_id变成key值
+
+        foreach($sku_ids as $k=>$v){ //拆分捆绑sku
+            $sku_tmp = explode('+',$v['sku_id']);
+            foreach($sku_tmp as $i=>$t){
+                $sku_id_tmp = explode('*',$v['sku_id']);
+                if(count($sku_id_tmp)>1){
+                    if(isset($sku_ids[$sku_id_tmp[0]])){ //存在该key
+                        $sku_ids[$sku_id_tmp[0]]['quantity'] +=  $sku_id_tmp[1]*$v['quantity'];
+                    }else{ //不存在
+                        $sku_ids[$sku_id_tmp[0]] = $sku_id_tmp[1]*$v['quantity'];
+                    }
+                    if(count($sku_id_tmp)>1){
+                        unset($sku_ids[$k]);
+                    }
                 }
-                $a ++;
+            }
+        }
+
+        $sku_ids_str = implode("','",array_column($sku_ids,'sku_id'));
+        $sku_ids_str_re = implode("|",array_column($sku_ids,'sku_id'));
+
+        if(!empty($sku_ids_str)){
+            //获取该店铺该天已付订单的所有商品(商品名称,sku编码,出售总数,产品重量,产品价格)
+            $sql = "select b.code,b.alias,a.`name`,b.price,b.weight from goods a LEFT JOIN goods_sku b on a.id=b.spu_id	where  b.code in ('".$sku_ids_str."') or b.alias REGEXP '(^|,)(".$sku_ids_str_re.")(,|$)' GROUP BY b.code";
+            $data = $this->db->query ( $sql )->result_array ();
+
+            //获取产品成本明细
+            foreach($data as $k => $v){
+                $data[$k]['id'] = $k+1;
+                $data[$k]['freight'] = (int)$operate['freight'];
+
+                $alias_code = explode(',',$v['alias']);
+                $alias_code[] = $v['code'];
+
+                foreach($alias_code as $value){
+                    if(isset($sku_ids[$value])){
+                        $data[$k]['quantity'] = $sku_ids[$value]['quantity'];
+                        $data[$k]['product_cost'] = bcadd(($sku_ids[$value]['quantity']*$v['price']),($sku_ids[$value]['quantity']*$v['weight']*$operate['freight']),2);
+                        break; // 终止循环
+                    }
+                }
             }
         }else{
             $data = array();
         }
+
         return $data;
     }
 

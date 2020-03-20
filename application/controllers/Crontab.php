@@ -48,6 +48,7 @@ class Crontab extends \MY_Controller
 	{
 //		$this->shopify_orders->index(); //定时获取shopify订单
 
+		log_message('run_every_day','每天1点都执行的计划任务'.date('Y-m-s'),true);
 		$this->getoperate_operate->get_datas(); //定时生成前日运营数据
 
 	}

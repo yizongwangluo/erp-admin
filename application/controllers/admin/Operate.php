@@ -31,7 +31,8 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
             $sort = $order_s;
         }
         $result = $this->operate_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
-        $result['page_html'] = create_page_html ( '?', $result['total'],10 );               $result['users'] = $this->operate_data->get_users($admin_id);
+        $result['page_html'] = create_page_html ( '?', $result['total'],10 );
+        $result['users'] = $this->operate_data->get_users($admin_id);
         $result['sum'] = $this->operate_data->get_sum( $sql, $condition );
         $this->load->view('',$result);
     }
