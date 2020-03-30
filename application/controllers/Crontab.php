@@ -16,6 +16,7 @@ class Crontab extends \MY_Controller
 		$this->load->model ( 'data/income_data' );
 		$this->load->model ( 'operate/salary_operate' );
 		$this->load->model ( 'operate/getoperate_operate' );
+		$this->load->model ( 'operate/getoperate_tmp_operate' );
 	}
 
 	/**
