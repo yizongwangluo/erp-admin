@@ -185,57 +185,87 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'请上传文件');
 		}
 
-		$data = $this->_excel_common($file_name,'Z');//读取excel文件
+		$data = $this->_excel_common($file_name,'AL');//读取excel文件
 
-		$goods = [];
 		$error = [];
+
+		/*foreach($data as $k=>$v){ //spu/sku分组
+			if($v['A']){
+				$goods[count($goods)] = $v;
+			}else{
+				$goods[count($goods)-1]['sku_list'][] = $v;
+			}
+		}*/
+
+
+		$spu_id = 0;
 		//整理数组
 		foreach($data as $value){
-			if(!$value['A'] ||!$value['B'] ||!$value['C'] || !is_numeric($value['E']) || !is_numeric($value['X']) || !$value['R'] || !$value['S'] ||  !$value['U'] ||  !$value['T'] || !$value['Y'] || !$value['Z']){
-				$value['AA'] = '必填项为空,或起批量、类别ID不为数字';
-				$error[] = $value;
-			}else{
+
+			if($value['A'] && $value['B']){ //判断是否是SPU
 
 				//查询spu是否存在
-				$spu_info = $this->goods_data->find(['code'=>$value['A']]);
+				if($this->goods_data->find(['code'=>$value['A']])){
+					$value['AM'] = 'SPU已存在';
+					$error[] = $value;
+				}else{
+					$goods = [];
 
-				$goods = [];
-				$goods = [
-					'code' => $value['A'],
-					'name' => $value['B'],
-					'name_en' => $value['C'],
-					'source_address' => $value['D'],//采购链接
-					'batch_quantity' => $value['E'], //起批量
-					'supplier_name' => $value['F'], //供应商名称
-					'is_battery' => $value['G']?1:0, //是否带电池 0否 1是
-					'is_imitation' => $value['H']?1:0, //是否仿冒 0否 1是
-					'is_liquid' => $value['I'],//是否液体 0否 1是
-					'is_magnetism' => $value['J'],//是否带磁 0否 1是
-					'is_powder' => $value['K'],//是否粉末 0否 1是
-					'is_goods' => $value['L'], //是否有货 0无 1有
-					'voltage' => $value['M'], //电压
-					'plug_type' => $value['N'],//插头类型
-					'is_pack' => $value['O'],//是否有独立包装 0否 1是
-					'language' => $value['P'],//支持语言(多语言用,号分隔)
-					'remarks'=>$value['Q'],
-					'category_id'=>$value['X'],//类别ID
-					'dc_name'=>$value['Y'],//类别ID
-					'dc_name_en'=>$value['Z'],//类别ID
-					'sku' => [
-						'code' => $value['R'],
-						'norms' => $value['S'],
-						'weight' => $value['T'],
-						'price' => $value['U'],
-						'size' => $value['V'],
-						'remarks' => $value['W']
-					],
-				];
+					//类别ID
+					if($value['W']){
+						$goods['category_id'] = $this->goods_category_data->get_cateid($value['X']);
+					}
 
-				$ret = $this->goods_excel_goods->add_excel($this->admin['id'],$goods);
-				if(!$ret){
-					$value['AA'] = $this->goods_excel_goods->get_error();
+					$goods = [
+							'code' => $value['A'],
+							'name' => $value['B'],
+							'name_en' => $value['C'],
+							'remarks' => $value['T'],
+							'supplier_name' => $value['U'],
+							'batch_quantity' => $value['V'],
+							'source_address' => $value['W'],
+							'dc_name' => $value['AC'],
+							'dc_name_en' => $value['AD'],
+							'img' => $value['AL'],
+							'u_id' => $this->admin['id']
+					];
+
+					$ret = $this->goods_data->add($goods);
+					$spu_id = $ret;
+					if(!$ret){
+						$spu_id = 0;
+						$value['AM'] = $this->goods_excel_goods->get_error();
+						$error[] = $value;
+					}
+				}
+
+			}elseif($value['H']){
+				if($spu_id){
+
+					$sku = [];
+
+					$sku = [
+					 'norms'=>trim($value['E'].','.$value['G'], ','),
+					 'code'=>$value['H'],
+					 'spu_id'=>$spu_id,
+					 'weight'=>$value['I'],
+					 'price'=>$value['J'],
+					 'alias'=>$value['K']
+					];
+
+					$ret = $this->goods_sku_data->add($sku);
+					if(!$ret){
+						$value['AM'] = $this->goods_sku_data->get_error();
+						$error[] = $value;
+					}
+
+				}else{
+					$value['AM'] = '没有对应的SPU数据';
 					$error[] = $value;
 				}
+			}else{
+				$value['AM'] = '数据不完整';
+				$error[] = $value;
 			}
 		}
 
@@ -380,7 +410,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$i][] = '';//包装成本(CNY)
 			$data[$i][] = '';//包装重量(g)
 			$data[$i][] = '';//包装尺寸(长*宽*高)CM
-			$data[$i][] = '';//产品首图
+			$data[$i][] = base_url($v['img']);//产品首图
 			$data[$i][] = '';//业务开发员
 			$data[$i][] = '';//采购询价员
 			$data[$i][] = '';//采购员

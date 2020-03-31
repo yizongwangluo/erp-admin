@@ -70,4 +70,19 @@ class Goods_category_data extends \Application\Component\Common\IData
         return $count>0;
     }
 
+
+    /**
+     * 添加
+     * @param string $name
+     * @return int
+     */
+    public function get_cateid($name = ''){
+
+        $id = $this->_get_info(['name'=>$name])['id'];
+        if(!$id){
+            $id = $this->store(['name'=>$name]);
+        }
+        return $id;
+    }
+
 }

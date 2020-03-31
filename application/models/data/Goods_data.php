@@ -125,9 +125,9 @@ class Goods_data extends \Application\Component\Common\IData{
         if(empty($input['name'])){
             $this->set_error('请填写产品名称');return false;
         }
-        if(empty($input['img'])){
+       /* if(empty($input['img'])){
             $this->set_error('请上传产品图片');return false;
-        }
+        }*/
 
         $input = array_filter($input);
 

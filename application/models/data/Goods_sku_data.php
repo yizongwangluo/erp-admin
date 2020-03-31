@@ -140,9 +140,9 @@ class Goods_sku_data extends \Application\Component\Common\IData{
         if(empty($input['norms'])){
             $this->set_error('请填写规格/颜色');return false;
         }
-        if(empty($input['img'])){
+      /*  if(empty($input['img'])){
             $this->set_error('请上传产品图片');return false;
-        }
+        }*/
 
         $input = array_filter($input);
 
