@@ -185,8 +185,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'请上传文件');
 		}
 
-		$data = $this->_excel_common($file_name,'AL');//读取excel文件
-
+		$data = $this->_excel_common($file_name,'AO');//读取excel文件
 		$error = [];
 
 		/*foreach($data as $k=>$v){ //spu/sku分组
@@ -206,35 +205,39 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 				//查询spu是否存在
 				if($this->goods_data->find(['code'=>$value['A']])){
-					$value['AM'] = 'SPU已存在';
+					$value['AP'] = 'SPU已存在';
 					$error[] = $value;
 				}else{
 					$goods = [];
 
 					//类别ID
 					if($value['W']){
-						$goods['category_id'] = $this->goods_category_data->get_cateid($value['X']);
+						$goods['category_id'] = $this->goods_category_data->get_cateid($value['V']);
 					}
 
 					$goods = [
 							'code' => $value['A'],
 							'name' => $value['B'],
 							'name_en' => $value['C'],
-							'remarks' => $value['T'],
-							'supplier_name' => $value['U'],
-							'batch_quantity' => $value['V'],
-							'source_address' => $value['W'],
-							'dc_name' => $value['AC'],
-							'dc_name_en' => $value['AD'],
-							'img' => $value['AL'],
-							'u_id' => $this->admin['id']
+							'volume' => $value['O'], //体积
+							'remarks' => $value['Q'], //备注
+							'supplier_name' => $value['R'], //供应商
+							'batch_quantity' => $value['S'],//最小采购
+							'source_address' => $value['T'],//采购链接
+							't_status' => $value['W'],//采购链接
+							'dc_name' => $value['AB'], //中文报关名
+							'dc_name_en' => $value['AC'], //英文报关名
+							'pack_cost' => $value['AF'],//包装成本
+							'pack_weight' => $value['AG'],//包装重量
+							'pack_volume' => $value['AH'],//体积 带包装
+							'u_id' => $this->admin['id'] //操作人
 					];
 
 					$ret = $this->goods_data->add($goods);
 					$spu_id = $ret;
 					if(!$ret){
 						$spu_id = 0;
-						$value['AM'] = $this->goods_excel_goods->get_error();
+						$value['AP'] = $this->goods_excel_goods->get_error();
 						$error[] = $value;
 					}
 				}
@@ -250,21 +253,22 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					 'spu_id'=>$spu_id,
 					 'weight'=>$value['I'],
 					 'price'=>$value['J'],
-					 'alias'=>$value['K']
+					 'alias'=>$value['K'],
+					 'source_address'=>$value['T']
 					];
 
 					$ret = $this->goods_sku_data->add($sku);
 					if(!$ret){
-						$value['AM'] = $this->goods_sku_data->get_error();
+						$value['AP'] = $this->goods_sku_data->get_error();
 						$error[] = $value;
 					}
 
 				}else{
-					$value['AM'] = '没有对应的SPU数据';
+					$value['AP'] = '没有对应的SPU数据';
 					$error[] = $value;
 				}
 			}else{
-				$value['AM'] = '数据不完整';
+				$value['AP'] = '数据不完整';
 				$error[] = $value;
 			}
 		}

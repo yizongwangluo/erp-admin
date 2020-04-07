@@ -72,6 +72,12 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">采购链接：</label>
+                    <div class="layui-inline">
+                        <input name="source_address" lay-verify="required" value="" type="text" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">备注：</label>
                     <div class="layui-inline">
                         <input name="remarks" lay-verify="required" value="" type="text" class="layui-input">
