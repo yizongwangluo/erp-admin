@@ -130,6 +130,41 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
+            <label class="layui-form-label">长宽高：</label>
+            <div class="layui-inline">
+                <input name="volume" lay-verify="required" value="<?= $info['volume'] ?>" type="text" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">长宽高（带包装）：</label>
+            <div class="layui-inline">
+                <input name="pack_volume" lay-verify="required" value="<?= $info['pack_volume'] ?>" type="text" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">状态（通途）：</label>
+            <div class="layui-inline">
+                <input name="t_status" lay-verify="required" value="<?= $info['t_status'] ?>" type="text" class="layui-input">
+            </div>
+        </div>
+        </div>
+        <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">包装成本：</label>
+            <div class="layui-inline">
+                <input name="pack_cost" lay-verify="required" value="<?= $info['pack_cost'] ?>" type="text" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">包装重量：</label>
+            <div class="layui-inline">
+                <input name="pack_weight" lay-verify="required" value="<?= $info['pack_weight'] ?>" type="text" class="layui-input">
+            </div>
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
             <label for="" class="layui-form-label">是否仿冒</label>
             <div class="layui-inline">
                 <input checked="<?=$info['is_imitation']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_imitation" title="是">
