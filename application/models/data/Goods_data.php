@@ -146,6 +146,10 @@ class Goods_data extends \Application\Component\Common\IData{
      */
     public function del($id = 0){
 
+        //删除子产品
+        $sql = "delete from goods_sku where spu_id=".$id;
+        $query = $this->db->query($sql);
+
         return $this->delete($id);
     }
 
