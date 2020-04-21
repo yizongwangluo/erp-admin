@@ -103,6 +103,11 @@ class Goods_data extends \Application\Component\Common\IData{
             $this->set_error('请上传产品图片');return false;
         }
 
+        //判断code是否重复
+        if($this->removal(['id'=>$id,'code'=>$input['code']])){
+            $this->set_error('该spu编码已存在！');return false;
+        }
+
         //$input = array_filter($input);
 
         $input['status'] = $input['status'] || is_numeric($input['status'])?$input['status'] : 0; //修改审核状态为未审核
@@ -128,6 +133,12 @@ class Goods_data extends \Application\Component\Common\IData{
        /* if(empty($input['img'])){
             $this->set_error('请上传产品图片');return false;
         }*/
+
+        //判断code是否重复
+        if($this->removal(['code'=>$input['code']])){
+            $this->set_error('该spu编码已存在！');return false;
+        }
+
 
         $input = array_filter($input);
 
@@ -202,5 +213,24 @@ class Goods_data extends \Application\Component\Common\IData{
         $spu_list = $this->db->query('select * from goods where id in ('.$ids.')')->result_array();
 
         return $spu_list;
+    }
+
+    /**
+     * 判断是否已存在该数据
+     * @param array $input
+     * @return bool
+     */
+    public function removal($input = array()){
+
+        $data = [];
+
+        $data['id !=']      = $input['id'] ? $input['id']:'';
+        $data['code']    	 = $input['code'];
+
+        $data = array_filter($data); //过滤空白数组
+
+        $count = $this->count($data);
+
+        return $count>0;
     }
 }
