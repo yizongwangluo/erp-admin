@@ -67,7 +67,7 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 
 		$id = $input['id'];
 		unset($input['id']);
-		$input['u_id'] = $this->admin['id'];
+//		$input['u_id'] = $this->admin['id'];
 
 		if(empty($input['name'])){
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写产品名称');

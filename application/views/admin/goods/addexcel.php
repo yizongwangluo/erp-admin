@@ -15,7 +15,7 @@
                 <div class="layui-inline" style="min-width: 420px"><input id="thumb_file"  name="file_name" value="" type="text" class="layui-input" /></div>
                 <div class="layui-inline"><button type="button" class="layui-btn upload-file-all"><i class="layui-icon"></i>上传文件</button></div>
             </div>
-            <em><a href="/goods_201912.xlsx">下载导入模板</a></em>
+            <em><a href="/m.xlsx">下载导入模板</a></em>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">

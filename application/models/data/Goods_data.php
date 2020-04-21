@@ -164,7 +164,7 @@ class Goods_data extends \Application\Component\Common\IData{
         //过滤参数
         unset($apply_info['id']);
         unset($apply_info['sales_volume']);
-        unset($apply_info['u_id']);
+//        unset($apply_info['u_id']);
         unset($apply_info['addtime']);
         unset($apply_info['edittime']);
         unset($apply_info['status']);
