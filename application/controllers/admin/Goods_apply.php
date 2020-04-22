@@ -263,11 +263,6 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
             $this->output->ajax_return(AJAX_RETURN_FAIL,'sku编码与sku别名重复');
         }
 
-		//查询是否存在该编码
-		if($this->goods_sku_apply_data->removal(['id'=>$id,'code'=>$input['code']])){
-			$this->output->ajax_return(AJAX_RETURN_FAIL,'该sku编码已存在！');
-		}
-
         $this->goods_apply_data->isset_code($sku);
 
         if(!empty($alias)){
