@@ -30,4 +30,23 @@ class Goods_sku_apply_data extends \Application\Component\Common\IData{
         $info = $query->row_array();
         return $info['count']?true:false;
     }
+
+    /**
+     * 判断是否已存在该数据
+     * @param array $input
+     * @return bool
+     */
+    public function removal($input = array()){
+
+        $data = [];
+
+        $data['id !=']      = $input['id'] ? $input['id']:'';
+        $data['code']    	 = $input['code'];
+
+        $data = array_filter($data); //过滤空白数组
+
+        $count = $this->count($data);
+
+        return $count>0;
+    }
 }

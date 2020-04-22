@@ -277,4 +277,24 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             $this->output->ajax_return(AJAX_RETURN_FAIL,'sku编码与已存在的sku别名同名');
         }
     }
+
+
+    /**
+     * 判断是否已存在该数据
+     * @param array $input
+     * @return bool
+     */
+    public function removal($input = array()){
+
+        $data = [];
+
+        $data['id !=']      = $input['id'] ? $input['id']:'';
+        $data['code']    	 = $input['code'];
+
+        $data = array_filter($data); //过滤空白数组
+
+        $count = $this->count($data);
+
+        return $count>0;
+    }
 }
