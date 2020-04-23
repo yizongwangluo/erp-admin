@@ -98,9 +98,9 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写SPU编码');
 			}
 
-			if( $input['status']==1 && $this->goods_apply_data->removal(['id'=>$id,'code'=>$input['code']])){ //判断spu编码是否重复
+			/*if( $input['status']==1 && $this->goods_apply_data->removal(['id'=>$id,'code'=>$input['code']])){ //判断spu编码是否重复
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'该spu编码已存在，无法重复添加');
-			}
+			}*/
 
 			$input['edittime'] = time();
 
