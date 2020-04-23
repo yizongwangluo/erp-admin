@@ -7,6 +7,9 @@
  * Date: 2017/7/19 0019
  * Time: 9:41
  */
+
+use  Application\Component\Concrete\TongTuApi\ErpApiFactory;
+
 class Goods extends \Application\Component\Common\AdminPermissionValidateController
 {
 
@@ -127,6 +130,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		}
 
 		if(!$info['is_tongtu']){
+
+			$this->erpApi = new ErpApiFactory();
+
 			$ret = $this->erpApi->add_goods($data);
 		}else{
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'更新接口尚未接入');
