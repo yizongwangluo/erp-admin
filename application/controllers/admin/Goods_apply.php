@@ -324,9 +324,20 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		}
 	}
 
-	//判断别名
+	/**
+	 * 判断别名
+	 */
     public function alias(){
-        $this->goods_apply_data->isset_alias();
+
+		$alias = $this->input->post('alias');
+
+        $ret = $this->goods_apply_data->isset_alias($alias);
+
+		if($ret){ //成功
+			$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
+		}else{
+			$this->output->ajax_return(AJAX_RETURN_FAIL,$this->goods_apply_data->get_error());
+		}
     }
 
 }

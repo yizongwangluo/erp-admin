@@ -163,12 +163,16 @@ class Goods_apply_data extends \Application\Component\Common\IData{
         return $this->delete($id);
     }
 
-    public function isset_alias(){
-        // 拿到前端post过来的数据
-        $alias = isset($_POST["alias"]) ? $_POST["alias"] : "";
-        if ($alias == "") {
-            // 使用exit函数进行返回
-//            exit(json_encode(array("flag" => false, "msg" => "查询信息错误")));
+
+    /**
+     * 判断别名
+     * @param string $alias
+     * @return bool
+     */
+    public function isset_alias($alias = ''){
+
+        if (empty($alias)) {
+            return true;
         }
         else {
             //前端获取到的别名以，分割为数组
@@ -180,7 +184,7 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             $ress = explode(",",$re);
             foreach($alias as $v){
                 if(in_array($v,$ress)){
-                    $result = 1;
+                    $this->set_error('sku别名已被使用');return false;
                     break;
                 }
             }
@@ -190,20 +194,12 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             $codes = array_column($code , 'code' );
             foreach($alias as $v){
                 if(in_array($v,$codes)){
-                    $result = 2;
+                    $this->set_error('存在同名sku编码');return false;
                     break;
                 }
             }
 
-            if ($result == 0) {
-                exit(json_encode(array("flag" => true, "msg" => 0)));
-            }
-            else if ($result == 1){
-                exit(json_encode(array("flag" => true, "msg" => 1)));
-            }
-            else if ($result == 2){
-                exit(json_encode(array("flag" => true, "msg" => 2)));
-            }
+            return true;
         }
     }
 

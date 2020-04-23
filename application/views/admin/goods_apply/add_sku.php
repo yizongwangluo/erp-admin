@@ -157,32 +157,48 @@
         $('#alias').blur(function () {
             // 获取到文本框中的值
             var alias = $(this).val();
-            // 开始使用 ajax
-            $.ajax({
-                // 设置提交方式为post
-                type: "POST",
-                // 将数据提交给url中指定的php文件
-                url: "/admin/goods_apply/alias",
-                // 提交的数据内容，以json的形式
-                data: {"alias": alias},
-                // 成功的回调函数，其中的data就是后端返回回来的数据
-                success: function (data) {
-                    // 转化为json形式
-                    var data_json = $.parseJSON(data);
+
+            if(alias){
+
+                $.post('/admin/goods_apply/alias',{alias: alias},function(data){
                     // 后端的返回数据
-                    if (data_json['flag'] == false) {
-                        alert(data_json['msg']);
-                    }
-                    else if (data_json['msg'] == 1) {
-                        layer.msg('sku别名已被使用', {time: 2000, icon: 5});
+                    if (data.status == 1) {
+//                        alert(data.msg);
+                    }else{
+                        layer.msg(data.msg, {time: 2000, icon: 5});
                         $('#alias').val("");
                     }
-                    else if (data_json['msg'] == 2) {
-                        layer.msg('存在同名sku编码', {time: 2000, icon: 5});
-                        $('#alias').val("");
+                },'json');
+
+
+            // 开始使用 ajax
+               /* $.ajax({
+                    // 设置提交方式为post
+                    type: "POST",
+                    // 将数据提交给url中指定的php文件
+                    url: "/admin/goods_apply/alias",
+                    // 提交的数据内容，以json的形式
+                    data: {alias: alias},
+                    // 成功的回调函数，其中的data就是后端返回回来的数据
+                    success: function (data) {
+                        // 转化为json形式
+                        var data_json = $.parseJSON(data);
+                        // 后端的返回数据
+                        if (data_json['flag'] == false) {
+                            alert(data_json['msg']);
+                        }
+                        else if (data_json['msg'] == 1) {
+                            layer.msg('sku别名已被使用', {time: 2000, icon: 5});
+                            $('#alias').val("");
+                        }
+                        else if (data_json['msg'] == 2) {
+                            layer.msg('存在同名sku编码', {time: 2000, icon: 5});
+                            $('#alias').val("");
+                        }
                     }
-                }
-            });
+                });*/
+            }
+
         });
 
     </script>
