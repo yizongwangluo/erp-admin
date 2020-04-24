@@ -27,43 +27,73 @@ class Goods_data extends \Application\Component\Common\IData{
         $condition['total'] = 'COUNT(*) as total';
         $condition['info'] = 'a.*,b.user_name';
 
-        $sql = 'select {{}} from goods a '.$table_b;
-
         if(is_numeric($where['status'])){
             $sql_where[] = ' a.status='.$where['status'];
         }
         if(is_numeric($where['category_id'])){
             $sql_where[] = ' a.category_id='.$where['category_id'];
         }
-        if($where['name']){
-            $sql_where[]=" a.name = '".$where['name']."'";
-        }
 
-        if($sql_where){
-            $sql .= ' where '.implode(' and ',$sql_where);
-        }
+        //用sku别名和编码搜索
+        if(( $where['a']=='sku_alias' || $where['a']=='sku_alias') && $where['name'] ){
 
-        $sql_total = str_replace('{{}}',$condition['total'],$sql);
-        $query = $this->db->query($sql_total);
-        $total = $query->result_array()[0]['total'];
-        $info = [];
+            $sql = 'select {{}} from goods a left JOIN  goods_sku b on a.id=b.spu_id ';
 
-        if($total){ //有数据时，查询列表
-            $sql .=  ' order by id desc limit '.($page-1)*$limit.','.$limit;
-            $sql_info = str_replace('{{}}',$condition['info'],$sql);
-            $query = $this->db->query($sql_info);
-            $info = $query->result_array();
+            if( $where['a']=='sku_code'){
+                $sql_where[]=" b.code = '".$where['name']."'";
+            }elseif($where['a']=='sku_alias'){
+                $sql_where[]=" b.alias like '%".$where['name']."%'";
+            }
 
-            foreach($info as $k=>$v){
-                $sku_list = $this->db->query('select code,norms,alias,price,weight,status,code from goods_sku where spu_id= '.$v['id'])->result_array();
-                $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
-                $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
-                $info[$k]['alias'] = implode('<br/>',array_column($sku_list,'alias'));
-                $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
-                $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));
+            if($sql_where){
+                $sql .= ' where '.implode(' and ',$sql_where);
+            }
+
+            $sql_total = str_replace('{{}}',$condition['total'],$sql);
+            $query = $this->db->query($sql_total);
+            $total = $query->result_array()[0]['total'];
+            $info = [];
+
+            if($total){ //有数据时，查询列表
+                $sql .=  ' order by a.id desc limit '.($page-1)*$limit.','.$limit;
+                $sql_info = str_replace('{{}}','a.*,b.code as sku_code,b.norms,b.alias,b.price,b.weight',$sql);
+                $query = $this->db->query($sql_info);
+                $info = $query->result_array();
+            }
+
+        }else{
+
+            $sql = 'select {{}} from goods a '.$table_b;
+
+            if($where['name']){
+                $sql_where[]=" a.name = '".$where['name']."'";
+            }
+
+            if($sql_where){
+                $sql .= ' where '.implode(' and ',$sql_where);
+            }
+
+            $sql_total = str_replace('{{}}',$condition['total'],$sql);
+            $query = $this->db->query($sql_total);
+            $total = $query->result_array()[0]['total'];
+            $info = [];
+
+            if($total){ //有数据时，查询列表
+                $sql .=  ' order by id desc limit '.($page-1)*$limit.','.$limit;
+                $sql_info = str_replace('{{}}',$condition['info'],$sql);
+                $query = $this->db->query($sql_info);
+                $info = $query->result_array();
+
+                foreach($info as $k=>$v){
+                    $sku_list = $this->db->query('select code,norms,alias,price,weight,status from goods_sku where spu_id= '.$v['id'])->result_array();
+                    $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
+                    $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
+                    $info[$k]['alias'] = implode('<br/>',array_column($sku_list,'alias'));
+                    $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
+                    $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));
+                }
             }
         }
-
         return array(
             'page_count' => $this->page->get_page_count(),
             'page_num' => $page,

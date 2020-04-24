@@ -26,8 +26,16 @@
                         </select>
                     </div>
                     <div class="layui-inline">
+                        <select name="a" lay-verify="required" lay-search>
+                            <option value="name" selected>商品名称</option>
+                            <option value="code" <?=$where['a']=='code'?'selected':'';?>>商品编码</option>
+                            <option value="sku_alias" <?=$where['a']=='sku_alias'?'selected':'';?>>别名</option>
+                            <option value="sku_code" <?=$where['a']=='sku_code'?'selected':'';?>>sku编码</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
                         <input type="text" name="name" value="<?=$where['name']?>"
-                               class="layui-input" placeholder="输入产品名"/>
+                               class="layui-input" placeholder="输入搜索条件"/>
                     </div>
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
