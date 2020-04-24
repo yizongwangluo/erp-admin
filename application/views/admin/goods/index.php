@@ -29,8 +29,8 @@
                         <select name="a" lay-verify="required" lay-search>
                             <option value="name" selected>商品名称</option>
                             <option value="code" <?=$where['a']=='code'?'selected':'';?>>商品编码</option>
-                            <option value="sku_alias" <?=$where['a']=='sku_alias'?'selected':'';?>>别名</option>
                             <option value="sku_code" <?=$where['a']=='sku_code'?'selected':'';?>>sku编码</option>
+                            <option value="sku_alias" <?=$where['a']=='sku_alias'?'selected':'';?>>sku别名</option>
                         </select>
                     </div>
                     <div class="layui-inline">

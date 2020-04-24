@@ -35,7 +35,7 @@ class Goods_data extends \Application\Component\Common\IData{
         }
 
         //用sku别名和编码搜索
-        if(( $where['a']=='sku_alias' || $where['a']=='sku_alias') && $where['name'] ){
+        if(( $where['a']=='sku_code' || $where['a']=='sku_alias') && $where['name'] ){
 
             $sql = 'select {{}} from goods a left JOIN  goods_sku b on a.id=b.spu_id ';
 
