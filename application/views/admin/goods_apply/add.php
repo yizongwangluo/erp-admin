@@ -239,9 +239,11 @@
             table.render({
                 elem: '#test'
                 ,id: 'idTest'
-                ,data:data_sku
+                ,data:[{"alias":"1","norms":"1","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":1},{"alias":"2","norms":"2","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":2},{"alias":"3","norms":"3","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":3},{"alias":"4","norms":"4","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":4},{"alias":"5","norms":"5","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":5},{"alias":"6","norms":"6","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":6},{"alias":"7","norms":"7","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":7},{"alias":"8","norms":"8","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":8},{"alias":"9","norms":"9","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":9},{"alias":"10","norms":"10","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":10},{"alias":"11","norms":"11","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":11},{"alias":"12","norms":"12","price":"0","img":"","size":"","weight":"0","cycle":"0","information":"","remarks":"","id":12}]
                 ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
                 ,defaultToolbar: []
+                ,cellMinHeight:500
+                ,limit:9999
                 ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                 ,cols: [[
                     {field:'id', width:80, title: 'ID' }
