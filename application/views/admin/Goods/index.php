@@ -4,6 +4,10 @@
     .img{
         /*width: 10%;word-wrap:break-word;word-break:break-all;*/
     }
+    #daochu{
+        cursor:pointer;
+        border: 1px solid silver
+    }
 </style>
 <div class="layui-tab admin-layui-tab layui-tab-brief">
     <ul class="layui-tab-title">
@@ -22,8 +26,16 @@
                         </select>
                     </div>
                     <div class="layui-inline">
+                        <select name="a" lay-verify="required" lay-search>
+                            <option value="name" selected>商品名称</option>
+                            <option value="code" <?=$where['a']=='code'?'selected':'';?>>商品编码</option>
+                            <option value="sku_code" <?=$where['a']=='sku_code'?'selected':'';?>>sku编码</option>
+                            <option value="sku_alias" <?=$where['a']=='sku_alias'?'selected':'';?>>sku别名</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
                         <input type="text" name="name" value="<?=$where['name']?>"
-                               class="layui-input" placeholder="输入产品名"/>
+                               class="layui-input" placeholder="输入搜索条件"/>
                     </div>
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
@@ -31,6 +43,7 @@
             <table class="layui-table">
               <thead>
                 <tr>
+                    <td><input type="checkbox" id="all"><i class="layui-icon layui-icon-print" id="daochu" title="导出"></td>
                     <td>ID</td>
                     <td class="img">产品图片</td>
                     <td>产品名</td>
@@ -46,6 +59,7 @@
                 <tbody>
                 <?php foreach ($data as $v): ?>
                   <tr>
+                      <td><input type="checkbox" class="id" name="ids" value="<?= $v['id'] ?>"/></td>
                       <td><?=$v['id']?></td>
                       <td class="img"><a href="<?=base_url($v['img'])?>" target="_blank"><img src="<?=base_url($v['img'])?>"></a></td>
                       <td><?=$v['name']?></td>
@@ -59,7 +73,7 @@
                           <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods/info/{$v['id']}"); ?>">查看</a>
                           <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods/edit/{$v['id']}"); ?>">编辑</a>
 <!--                          <button data-url="--><?php //echo base_url ( 'admin/goods/add_sku_tongtu' ) ?><!--" data-id="--><?//= $v['id'] ?><!--" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到通途</button>-->
-                         <!-- <button style="display: <?/*=$v['status']==1?'none':'';*/?>;" data-url="<?php /*echo base_url ( 'admin/goods/delete' ) */?>" data-id="<?/*= $v['id'] */?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>-->
+                          <button data-url="<?php echo base_url ( 'admin/goods/delete' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>
                       </td>
                   </tr>
                 <?php endforeach;?>
@@ -70,5 +84,35 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    //全选操作
+    $('#all').click(function(){
+        if($(this).is(':checked')){ //全选
+            $('.id').prop('checked',true);
+        }else{ //取消全选
+            $('.id').prop('checked',false);
+        }
+    })
+    //全选操作end
+
+
+    $('#daochu').click(function(){
+        var text="";
+        $("input[name=ids]").each(function() {
+            if ($(this).is(':checked')) {
+                text += ","+$(this).val();
+            }
+        });
+
+        if(text){
+            window.location.href = "/admin/goods/daochu?ids="+text;
+        }else{
+            layer.msg('请选择商品！', {time: 2000, icon: 5});
+        }
+    })
+
+</script>
 
 <?php $this->load->view ( 'admin/common/footer' ) ?>
