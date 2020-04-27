@@ -56,7 +56,7 @@ class Goods_data extends \Application\Component\Common\IData{
 
             if($total){ //有数据时，查询列表
                 $sql .=  ' order by a.id desc limit '.($page-1)*$limit.','.$limit;
-                $sql_info = str_replace('{{}}','a.*,b.code as sku_code,b.norms,b.alias,b.price,b.weight',$sql);
+                $sql_info = str_replace('{{}}','a.*,b.code as sku_code,b.norms_name,b.norms,b.norms_name1,b.norms1,b.alias,b.price,b.weight',$sql);
                 $query = $this->db->query($sql_info);
                 $info = $query->result_array();
             }
@@ -85,9 +85,12 @@ class Goods_data extends \Application\Component\Common\IData{
                 $info = $query->result_array();
 
                 foreach($info as $k=>$v){
-                    $sku_list = $this->db->query('select code,norms,alias,price,weight,status from goods_sku where spu_id= '.$v['id'])->result_array();
+                    $sku_list = $this->db->query('select code,norms_name,norms,norms_name1,norms1,alias,price,weight,status from goods_sku where spu_id= '.$v['id'])->result_array();
                     $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
+                    $info[$k]['norms_name'] = implode('<br/>',array_column($sku_list,'norms_name'));
                     $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
+                    $info[$k]['norms_name1'] = implode('<br/>',array_column($sku_list,'norms_name1'));
+                    $info[$k]['norms1'] = implode('<br/>',array_column($sku_list,'norms1'));
                     $info[$k]['alias'] = implode('<br/>',array_column($sku_list,'alias'));
                     $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
                     $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));

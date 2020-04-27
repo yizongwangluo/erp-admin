@@ -65,7 +65,7 @@ class Goods_apply_data extends \Application\Component\Common\IData{
         }
 
         if($id && count($sku_list)){ //添加spu成功，添加sku
-            $sql = 'INSERT INTO goods_sku_apply (spu_id,code,norms,img,price,size,weight,cycle,information,remarks,u_id,type,is_real,status,alias)  VALUES ';
+            $sql = 'INSERT INTO goods_sku_apply (spu_id,code,norms_name,norms,norms_name1,norms1,img,price,size,weight,cycle,information,remarks,u_id,type,is_real,status,alias)  VALUES ';
             $sql_val = [];
             foreach($sku_list as $k=>$value){
                 $code = '';
@@ -74,7 +74,7 @@ class Goods_apply_data extends \Application\Component\Common\IData{
                 if($is_real){ //测试sku
                     $code = date('YmdHis').'_'.$id.'_'.$k;
                 }
-                $sql_val[] = "({$id},'{$code}','{$value['norms']}','{$value['img']}',{$value['price']},'{$value['size']}',{$value['weight']},{$value['cycle']},'{$value['information']}','{$value['remarks']}',{$u_id},{$type},{$is_real},{$status},'{$value['alias']}')";
+                $sql_val[] = "({$id},'{$code}','{$value['norms_name']}','{$value['norms']}','{$value['norms_name1']}','{$value['norms1']}','{$value['img']}',{$value['price']},'{$value['size']}',{$value['weight']},{$value['cycle']},'{$value['information']}','{$value['remarks']}',{$u_id},{$type},{$is_real},{$status},'{$value['alias']}')";
             }
 
             $sql.=implode(',',$sql_val);
@@ -134,9 +134,12 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             $info = $query->result_array();
 
             foreach($info as $k=>$v){
-                $sku_list = $this->db->query('select code,norms,alias,price,weight,status,code from goods_sku_apply where spu_id= '.$v['id'])->result_array();
+                $sku_list = $this->db->query('select code,norms_name,norms,norms_name1,norms1,alias,price,weight,status,code from goods_sku_apply where spu_id= '.$v['id'])->result_array();
                 $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
+                $info[$k]['norms_name'] = implode('<br/>',array_column($sku_list,'norms_name'));
                 $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
+                $info[$k]['norms_name1'] = implode('<br/>',array_column($sku_list,'norms_name1'));
+                $info[$k]['norms1'] = implode('<br/>',array_column($sku_list,'norms1'));
                 $info[$k]['alias'] = implode('<br/>',array_column($sku_list,'alias'));
                 $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
                 $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));

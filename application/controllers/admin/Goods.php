@@ -254,7 +254,10 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					$sku = [];
 
 					$sku = [
-					 'norms'=>trim($value['E'].','.$value['G'], ','),
+					 'norms_name'=>$value['D'],
+					 'norms'=>$value['E'],
+					 'norms_name1'=>$value['F'],
+					 'norms1'=>$value['G'],
 					 'code'=>$value['H'],
 					 'spu_id'=>$spu_id,
 					 'weight'=>$value['I'],
@@ -432,10 +435,10 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 				$data[$i][] = '';//产品编码
 				$data[$i][] = '';//产品名称
 				$data[$i][] = '';//别名
-				$data[$i][] = '规格';//属性名1
+				$data[$i][] = $item['norms_name'];//属性名1
 				$data[$i][] = $item['norms'];//属性值1
-				$data[$i][] = '';//属性名2
-				$data[$i][] = '';//属性值2
+				$data[$i][] = $item['norms_name1'];//属性名2
+				$data[$i][] = $item['norms1'];//属性值2
 				$data[$i][] = $item['code'];//属性编号
 				$data[$i][] = $item['weight'];//产品重量
 				$data[$i][] = $item['price'];//采购单价

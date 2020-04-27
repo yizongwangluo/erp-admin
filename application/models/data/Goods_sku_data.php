@@ -120,7 +120,7 @@ class Goods_sku_data extends \Application\Component\Common\IData{
             }
         }
 
-        $input = array_filter($input);
+//        $input = array_filter($input);
 
         $input['status'] = $input['status'] || is_numeric($input['status'])?$input['status'] : 0; //修改审核状态为未审核
 
