@@ -36,7 +36,8 @@
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
             </form>
-            <table class="layui-table">
+        <div style='overflow:auto'>
+            <table class="layui-table"  style='white-space: nowrap'>
               <thead>
                 <tr>
                     <td>ID</td>
@@ -82,6 +83,7 @@
                 ?>
                 </tbody>
             </table>
+            </div>
         <div class="admin-page">
             <?php echo $page_html; ?>
         </div>

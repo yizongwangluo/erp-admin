@@ -218,10 +218,9 @@ class Goods_data extends \Application\Component\Common\IData{
         $time = time();
         $apply_info['edittime'] = $time;
         if($info){ //修改
-           /* if(!$this->update($info['id'],$apply_info)){
+            if(!$this->update($info['id'],$apply_info)){
                 $this->set_error('(修改)同步失败，请稍后重试');return false;
-            }*/
-           $info['id'] = 'set';
+            }
         }else{ //新增
             $apply_info['addtime'] = $time;
             $info['id'] = $this->store($apply_info);

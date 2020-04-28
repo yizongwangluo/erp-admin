@@ -8,6 +8,12 @@
 
 class Goods_sku_apply_data extends \Application\Component\Common\IData{
 
+
+    public function add($input = []){
+
+        return $this->store($input);
+    }
+
     /**
      * 修改
      * @param int $spu_id

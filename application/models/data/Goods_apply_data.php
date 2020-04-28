@@ -168,6 +168,14 @@ class Goods_apply_data extends \Application\Component\Common\IData{
 
 
     /**
+     * 根据spuid 获取用户ID
+     */
+    public function get_uid_in_id($id){
+        return $this->get_info($id)['u_id'];
+    }
+
+
+    /**
      * 判断别名
      * @param string $alias
      * @return bool

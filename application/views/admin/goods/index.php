@@ -40,7 +40,8 @@
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
             </form>
-            <table class="layui-table">
+        <div style='overflow:auto'>
+            <table class="layui-table"  style='white-space: nowrap'>
               <thead>
                 <tr>
                     <td><input type="checkbox" id="all"><i class="layui-icon layui-icon-print" id="daochu" title="导出"></td>
@@ -85,6 +86,7 @@
                 <?php endforeach;?>
                 </tbody>
             </table>
+            </div>
         <div class="admin-page">
             <?php echo $page_html; ?>
         </div>

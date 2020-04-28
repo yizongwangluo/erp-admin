@@ -200,7 +200,6 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 	 * 分配
 	 */
 	public function distribution(){
-
 		$input = $this->input->get();
 		$input['status'] = $input['status']?$input['status']:2;
 		$page = max(1,$input['page']);
@@ -269,7 +268,16 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
             $this->goods_apply_data->edit_alias($alias,$id);
         }
 
-		$ret =  $this->goods_sku_apply_data->update($id,$input);
+		if(!$id){
+
+			//根据spuid获取用户ID
+			$input['u_id'] = $this->goods_apply_data->get_uid_in_id($input['spu_id']);
+
+			$ret =  $this->goods_sku_apply_data->add($input);
+
+		}else{
+			$ret =  $this->goods_sku_apply_data->update($id,$input);
+		}
 
 		if($ret){ //成功
 			$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
