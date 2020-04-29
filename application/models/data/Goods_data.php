@@ -18,11 +18,11 @@ class Goods_data extends \Application\Component\Common\IData{
      */
     public function get_list($uid = 0,$where = [],$page = 1,$limit = 17){
 
-        if($where['name'] || $uid==1){ //当输入关键词的时候
+//        if($where['name'] || $uid==1){ //当输入关键词的时候
             $table_b = 'left join admin b on a.u_id=b.id ';
-        }else{
+        /*}else{
             $table_b = ' INNER JOIN (select s_u_id,s_user_name as user_name from admin_org_temp where u_id='.$uid.' GROUP BY s_u_id) b on a.u_id=b.s_u_id ';
-        }
+        }*/
 
         $condition['total'] = 'COUNT(*) as total';
         $condition['info'] = 'a.*,b.user_name';
