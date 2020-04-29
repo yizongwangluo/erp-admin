@@ -15,7 +15,7 @@
         <li><a href="<?php echo base_url ( 'admin/goods/addexcel' ) ?>">导入</a></li>
     </ul>
     <div class="layui-tab-content">
-            <form action="?" method="get">
+            <form action="?" method="get" >
                 <div class="layui-form">
                     <div class="layui-inline">
                         <select name="category_id" lay-verify="required" lay-search>
@@ -37,7 +37,8 @@
                         <input type="text" name="name" value="<?=$where['name']?>"
                                class="layui-input" placeholder="输入搜索条件"/>
                     </div>
-                    <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
+                    <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索</button>
+                    <button class="layui-btn layui-btn-normal" type="button" id="daochu_all">导出全部</button>
                 </div>
             </form>
         <div style='overflow:auto'>
@@ -104,6 +105,19 @@
         }
     })
     //全选操作end
+
+    $('#daochu_all').click(function(){
+        /*var t = $('form').serializeArray(),text = '';
+        $.each(t, function() {
+            text += this.name+'='+this.value+'&';
+        });
+        window.location.href = "/admin/goods/daochu_all?"+text;
+         */
+        var index = layer.load();
+        $(this).addClass('layui-btn-disabled').attr('disabled','');
+        window.location.href = "/admin/goods/daochu_all";
+        layer.close(index);
+    });
 
 
     $('#daochu').click(function(){

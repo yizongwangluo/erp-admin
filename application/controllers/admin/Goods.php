@@ -332,7 +332,22 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		}
 	}
 
+	/**
+	 * 导出全部
+	 */
+	public function daochu_all(){
 
+		//获取商品详情
+		$spu_list = $this->goods_data->lists();
+
+		foreach($spu_list as $k=>$v){
+			$spu_list[$k]['sku_list'] = $this->goods_sku_data->get_list_spuid($v['id']);
+		}
+
+		$data = $this->goods_excel_temp($spu_list); //导出模板
+
+		$this->_exportExcel($data,'商品列表',38);
+	}
 
 	public function daochu(){
 
@@ -345,45 +360,58 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		foreach($spu_list as $k=>$v){
 			$spu_list[$k]['sku_list'] = $this->goods_sku_data->get_list_spuid($v['id']);
 		}
+
+		$data = $this->goods_excel_temp($spu_list); //导出模板
+
+		$this->_exportExcel($data,'商品列表',38);
+	}
+
+	/**
+	 * 导出模板
+	 * @param array $spu_list
+	 * @return array
+	 */
+	private function goods_excel_temp($spu_list = []){
+
 		$data = [];
 		$data['heard'] = ['SKU',
-							'产品名称',
-							'SKU别名',
-							'属性名1',
-							'属性值1',
-							'属性名2',
-							'属性值2',
-							'SKU属性编号',
-							'产品重量(g)',
-							'采购单价',
-							'SKU属性别名',
-							'仓库名称1',
-							'库存数量1',
-							'货位1',
-							'仓库名称2',
-							'库存数量2',
-							'货位2',
-							'产品体积(长*宽*高)CM',
-							'产品特点',
-							'备注',
-							'供应商名称',
-							'最小采购量(MOQ)',
-							'采购链接',
-							'分类',
-							'品牌',
-							'特性标签',
-							'中文配货名称',
-							'英文配货名称',
-							'中文报关名',
-							'英文报关名',
-							'包装材料名称',
-							'包装成本(CNY)',
-							'包装重量(g)',
-							'包装尺寸(长*宽*高)CM',
-							'产品首图',
-							'业务开发员',
-							'采购询价员',
-							'采购员'
+				'产品名称',
+				'SKU别名',
+				'属性名1',
+				'属性值1',
+				'属性名2',
+				'属性值2',
+				'SKU属性编号',
+				'产品重量(g)',
+				'采购单价',
+				'SKU属性别名',
+				'仓库名称1',
+				'库存数量1',
+				'货位1',
+				'仓库名称2',
+				'库存数量2',
+				'货位2',
+				'产品体积(长*宽*高)CM',
+				'产品特点',
+				'备注',
+				'供应商名称',
+				'最小采购量(MOQ)',
+				'采购链接',
+				'分类',
+				'品牌',
+				'特性标签',
+				'中文配货名称',
+				'英文配货名称',
+				'中文报关名',
+				'英文报关名',
+				'包装材料名称',
+				'包装成本(CNY)',
+				'包装重量(g)',
+				'包装尺寸(长*宽*高)CM',
+				'产品首图',
+				'业务开发员',
+				'采购询价员',
+				'采购员'
 		];
 
 		$i=0;
@@ -472,8 +500,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 				$data[$i][] = '';//采购员
 			}
 		}
-
-		$this->_exportExcel($data,'商品列表',38);
+		return $data;
 	}
 
 }
