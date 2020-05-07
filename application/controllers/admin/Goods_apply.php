@@ -341,10 +341,10 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		$input = $this->input->post();
 
 		if($input['alias']){
-			if(!model('data/goods_sku_apply_data')->get_alias_only($input)){ //判断申请表
+			if(!model('data/goods_sku_apply_data')->get_only($input)){ //判断申请表
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突'); }
 
-			if(!model('data/goods_sku_data')->get_alias_only($input)){ //判断正式表
+			if(!model('data/goods_sku_data')->get_only($input)){ //判断正式表
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');}
 
 		}
