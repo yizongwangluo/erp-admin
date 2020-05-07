@@ -98,10 +98,6 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写SPU编码');
 			}
 
-			/*if( $input['status']==1 && $this->goods_apply_data->removal(['id'=>$id,'code'=>$input['code']])){ //判断spu编码是否重复
-				$this->output->ajax_return(AJAX_RETURN_FAIL,'该spu编码已存在，无法重复添加');
-			}*/
-
 			$input['edittime'] = time();
 
 			//查询是否有sku未填写编码
@@ -146,20 +142,23 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 
 		$sku_info = $this->input->post();
 
+		if($sku_info['alias']){
+
+			if(!model('data/goods_sku_apply_data')->get_only($sku_info)){ //判断申请表
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');
+			}
+
+			if(!model('data/goods_sku_data')->get_only($sku_info)){ //判断主表
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');
+			}
+		}
+
 		$id = $sku_info['id'];
 		unset($sku_info['id']);
 
-		$alias = $sku_info['alias'];
-
 		if($id){ //修改
-            if(!empty($alias)){
-                $this->goods_apply_data->edit_alias($alias,$id);
-            }
 			$ret = $this->goods_sku_apply_data->update($id,$sku_info);
 		}else{ //添加
-		    if(!empty($alias)){
-                $this->goods_apply_data->edit_alias($alias,$id = '');
-            }
 			$ret = $this->goods_sku_apply_data->store($sku_info);
 		}
 
@@ -250,9 +249,6 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写SKU编码');
 		}
 
-		$id = $input['id'];
-		unset($input['id']);
-
 		$alias = $input['alias'];
 		$sku = $input['code'];
 
@@ -262,11 +258,16 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
             $this->output->ajax_return(AJAX_RETURN_FAIL,'sku编码与sku别名重复');
         }
 
-        $this->goods_apply_data->isset_code($sku);
+		if(!model('data/goods_sku_apply_data')->get_only($input)){ //判断申请表
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');
+		}
 
-        if(!empty($alias)){
-            $this->goods_apply_data->edit_alias($alias,$id);
-        }
+		if(!model('data/goods_sku_data')->get_only($input)){ //判断主表
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');
+		}
+
+		$id = $input['id'];
+		unset($input['id']);
 
 		if(!$id){
 
@@ -337,15 +338,18 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 	 */
     public function alias(){
 
-		$alias = $this->input->post('alias');
+		$input = $this->input->post();
 
-        $ret = $this->goods_apply_data->isset_alias($alias);
+		if($input['alias']){
+			if(!model('data/goods_sku_apply_data')->get_alias_only($input)){ //判断申请表
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突'); }
 
-		if($ret){ //成功
-			$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
-		}else{
-			$this->output->ajax_return(AJAX_RETURN_FAIL,$this->goods_apply_data->get_error());
+			if(!model('data/goods_sku_data')->get_alias_only($input)){ //判断正式表
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');}
+
 		}
-    }
+		$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
+
+	}
 
 }

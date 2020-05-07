@@ -55,4 +55,43 @@ class Goods_sku_apply_data extends \Application\Component\Common\IData{
 
         return $count>0;
     }
+
+    /**
+     * 别名是否是唯一的
+     * @param array $input
+     * @param bool|false $a
+     * @return bool
+     */
+    public function get_only($input = [],$a = false){
+
+        $alias = explode(',',$input['alias']);
+
+        $where = [];
+
+        if($alias){
+            foreach($alias as $v){
+                $where[] = "FIND_IN_SET('{$v}',alias)";
+                $where[] = "code='{$v}'";
+            }
+        }
+
+        if($input['code']){
+            $where[] = "FIND_IN_SET('{$input['code']}',alias)";
+//            $where[] = "code='{$input['code']}'";
+        }
+
+        $where = implode(' or ',$where);
+
+        if($input['code'] && $a){
+            $where = "(".$where.") and code!= '{$input['code']}'";
+        }elseif($input['id']){
+            $where = "(".$where.") and id!= '{$input['id']}'";
+        }
+
+        $sql = 'select COUNT(*) as count from goods_sku_apply where '.$where;
+        $query = $this->db->query($sql);
+        $info = $query->row_array();
+        return $info['count']?false:true;
+    }
+
 }

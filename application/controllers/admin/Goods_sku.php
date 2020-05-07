@@ -39,6 +39,22 @@ class Goods_sku extends \Application\Component\Common\AdminPermissionValidateCon
 	public function save(){
 
 		$input = $this->input->post();
+
+		if($input['alias']){ //别名判断
+			if(in_array($input['code'],explode(',',$input['alias']))){
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'sku编码与sku别名重复');
+			}
+
+			if(!model('data/goods_sku_data')->get_only($input,true)){ //判断主表
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');
+			}
+
+			if(!model('data/goods_sku_apply_data')->get_only($input,true)){ //判断申请表
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');
+			}
+
+		}
+
 		$id = $input['id'];
 		unset($input['id']);
 		$input['u_id'] = $this->admin['id'];

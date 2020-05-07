@@ -8,6 +8,12 @@
 
 class Goods_apply_data extends \Application\Component\Common\IData{
 
+    public function __construct ()
+    {
+        parent::__construct ();
+        $this->load->model ( 'data/goods_sku_apply_data' );
+    }
+
     public function edit($id,$arr){
 
         $sql = "select alias from goods_sku_apply where spu_id = $id";
@@ -37,19 +43,12 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             $this->set_error('请填写产品名称');return false;
         }
 
-        $alias_name = [];
+
         foreach($sku_list as $k=>$value){
-            if(!empty($value['alias'])){
-                $exc = $this->is_alias($value['alias']);
-                if(!$exc){
-                    return false;
-                }
-                array_push($alias_name,$value['alias']);
+            //判断别名
+            if(!$this->goods_sku_apply_data->get_alias_only([$value['alias']])){
+                $this->set_error('sku别名已存在或与sku编码冲突');return false;
             }
-        }
-        //判断新增别名是否重复
-        if (count($alias_name) != count(array_unique($alias_name))) {
-            $this->set_error('新增sku别名重复,请检查！');return false;
         }
 
         //时间
@@ -214,7 +213,7 @@ class Goods_apply_data extends \Application\Component\Common\IData{
         }
     }
 
-    public function  is_alias($str = ''){
+    public function  is_alias($str = '',$a = false){
         $alias = explode(',',$str);
         //判断别名是否已存在
         $sql = "select group_concat(alias) from goods_sku_apply ";
@@ -237,52 +236,6 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             }
         }
         return true;
-    }
-
-    public function edit_alias($str = '',$id = ''){
-        $alias = explode(',',$str);
-        //判断别名是否已存在
-        if($id == ''){
-            $sql = "select group_concat(alias) from goods_sku_apply ";
-        }else{
-            $sql = "select group_concat(alias) from goods_sku_apply where id <> $id";
-        }
-        $re = $this->db->query ( $sql )->result_array ();
-        $re = $re[0]['group_concat(alias)'];
-        $ress = explode(",",$re);
-
-        foreach($alias as $v){
-            if(in_array($v,$ress)){
-                $this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已被使用');
-            }
-        }
-        //判断别名是否与已存在的sku编码同名
-        $sql = "select code from goods_sku";
-        $code = $this->db->query ( $sql )->result_array ();
-        $codes = array_column($code , 'code' );
-        foreach($alias as $v){
-            if(in_array($v,$codes)){
-                $this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名与已存在的sku编码同名');
-            }
-        }
-    }
-
-    public function isset_code($str = ''){
-        //判断sku编码是否已存在
-        $sql = "select code from goods_sku ";
-        $code = $this->db->query ( $sql )->result_array ();
-        $codes = array_column($code , 'code' );
-        if(in_array($str,$codes)){
-            $this->output->ajax_return(AJAX_RETURN_FAIL,'sku编码已被使用');
-        }
-        //判断sku编码是否与已存在的sku别名同名
-        $sql = "select group_concat(alias) from goods_sku_apply ";
-        $re = $this->db->query ( $sql )->result_array ();
-        $re = $re[0]['group_concat(alias)'];
-        $ress = explode(",",$re);
-        if(in_array($str,$ress)){
-            $this->output->ajax_return(AJAX_RETURN_FAIL,'sku编码与已存在的sku别名同名');
-        }
     }
 
 

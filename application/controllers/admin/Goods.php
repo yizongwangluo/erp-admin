@@ -30,7 +30,6 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	 * 商品列表
 	 */
 	public function index(){
-
 		$input = $this->input->get();
 		$page = max(1,$input['page']);
 		unset($input['page']);
@@ -265,6 +264,27 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					 'alias'=>$value['K'],
 					 'source_address'=>$value['T']
 					];
+
+					if($sku['alias']){ //别名判断
+						if(in_array($sku['code'],explode(',',$sku['alias']))){
+							$value['AP'] = 'sku编码与sku别名重复';
+							$error[] = $value;
+							continue;
+						}
+
+						if(!model('data/goods_sku_data')->get_only($sku,true)){ //判断主表
+							$value['AP'] = 'sku别名已存在或与sku编码冲突';
+							$error[] = $value;
+							continue;
+						}
+
+						if(!model('data/goods_sku_apply_data')->get_only($sku,true)){ //判断申请表
+							$value['AP'] = 'sku别名已存在或与sku编码冲突';
+							$error[] = $value;
+							continue;
+						}
+
+					}
 
 					$ret = $this->goods_sku_data->add($sku);
 					if(!$ret){
