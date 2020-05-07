@@ -463,10 +463,10 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$i][] = '';//分类
 			$data[$i][] = '';//品牌
 			$data[$i][] = '';//特性标签
-			$data[$i][] = '';//中文配货名称
-			$data[$i][] = '';//英文配货名称
-			$data[$i][] = $v['c_name'];//中文报关名
-			$data[$i][] = $v['c_name_en'];//英文报关名
+			$data[$i][] = $v['name'];//中文配货名称
+			$data[$i][] = $v['name_en'];//英文配货名称
+			$data[$i][] = $v['dc_name'];//中文报关名
+			$data[$i][] = $v['dc_name_en'];//英文报关名
 			$data[$i][] = '';//包装材料名称
 			$data[$i][] = '';//包装成本(CNY)
 			$data[$i][] = '';//包装重量(g)
