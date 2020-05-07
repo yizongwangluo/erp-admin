@@ -359,12 +359,14 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 		//获取商品详情
 		$spu_list = $this->goods_data->lists();
+		$category_list = $this->goods_category_data->lists();
+		$category_list = array_column($category_list,null,'id');
 
 		foreach($spu_list as $k=>$v){
 			$spu_list[$k]['sku_list'] = $this->goods_sku_data->get_list_spuid($v['id']);
 		}
 
-		$data = $this->goods_excel_temp($spu_list); //导出模板
+		$data = $this->goods_excel_temp($spu_list,$category_list); //导出模板
 
 		$this->_exportExcel($data,'商品列表',38);
 	}
@@ -376,12 +378,14 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 		//获取商品详情
 		$spu_list = $this->goods_data->get_list_inids($ids);
+		$category_list = $this->goods_category_data->lists();
+		$category_list = array_column($category_list,null,'id');
 
 		foreach($spu_list as $k=>$v){
 			$spu_list[$k]['sku_list'] = $this->goods_sku_data->get_list_spuid($v['id']);
 		}
 
-		$data = $this->goods_excel_temp($spu_list); //导出模板
+		$data = $this->goods_excel_temp($spu_list,$category_list); //导出模板
 
 		$this->_exportExcel($data,'商品列表',38);
 	}
@@ -391,7 +395,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	 * @param array $spu_list
 	 * @return array
 	 */
-	private function goods_excel_temp($spu_list = []){
+	private function goods_excel_temp($spu_list = [],$category_list = []){
 
 		$data = [];
 		$data['heard'] = ['SKU',
@@ -454,13 +458,13 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$i][] = '';//仓库名称2
 			$data[$i][] = '';//库存数量2
 			$data[$i][] = '';//货位2
-			$data[$i][] = '';//产品体积(长*宽*高)CM
+			$data[$i][] = $v['volume'];//产品体积(长*宽*高)CM
 			$data[$i][] = '';//产品特点
 			$data[$i][] = $v['remarks'];//备注
 			$data[$i][] = $v['supplier_name'];//供应商名称
-			$data[$i][] = '';//最小采购量(MOQ)
+			$data[$i][] = $v['batch_quantity'];//最小采购量(MOQ)
 			$data[$i][] = $v['source_address'];//采购链接
-			$data[$i][] = '';//分类
+			$data[$i][] = $category_list[$v['category_id']]['name'];//分类
 			$data[$i][] = '';//品牌
 			$data[$i][] = '';//特性标签
 			$data[$i][] = $v['name'];//中文配货名称
@@ -468,9 +472,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$i][] = $v['dc_name'];//中文报关名
 			$data[$i][] = $v['dc_name_en'];//英文报关名
 			$data[$i][] = '';//包装材料名称
-			$data[$i][] = '';//包装成本(CNY)
-			$data[$i][] = '';//包装重量(g)
-			$data[$i][] = '';//包装尺寸(长*宽*高)CM
+			$data[$i][] = $v['pack_cost'];//包装成本(CNY)
+			$data[$i][] = $v['pack_weight'];//包装重量(g)
+			$data[$i][] = $v['pack_volume'];//包装尺寸(长*宽*高)CM
 			$data[$i][] = base_url($v['img']);//产品首图
 			$data[$i][] = '';//业务开发员
 			$data[$i][] = '';//采购询价员
