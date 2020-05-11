@@ -46,8 +46,10 @@ class Goods_apply_data extends \Application\Component\Common\IData{
 
         foreach($sku_list as $k=>$value){
             //判断别名
-            if(!$this->goods_sku_apply_data->get_only($value)){
-                $this->set_error('sku别名已存在或与sku编码冲突');return false;
+            if($value['alias']){
+                if(!$this->goods_sku_apply_data->get_only($value)){
+                    $this->set_error('sku别名已存在或与sku编码冲突');return false;
+                }
             }
         }
 

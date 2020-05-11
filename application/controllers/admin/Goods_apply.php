@@ -258,12 +258,15 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
             $this->output->ajax_return(AJAX_RETURN_FAIL,'sku编码与sku别名重复');
         }
 
-		if(!model('data/goods_sku_apply_data')->get_only($input)){ //判断申请表
-			$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');
-		}
 
-		if(!model('data/goods_sku_data')->get_only($input)){ //判断主表
-			$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');
+		if($input['alias']){ //别名存在时判断
+			if(!model('data/goods_sku_apply_data')->get_only($input)){ //判断申请表
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');
+			}
+
+			if(!model('data/goods_sku_data')->get_only($input)){ //判断主表
+				$this->output->ajax_return(AJAX_RETURN_FAIL,'sku别名已存在或与sku编码冲突');
+			}
 		}
 
 		$id = $input['id'];
