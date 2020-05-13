@@ -49,7 +49,8 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $mix_time = date('Y-m-d\TH:i:s', strtotime("-480 minute"));
 
         foreach($shop_list as $k=>$value){
-            $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
+            $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?status=any&order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
+//            $url = 'http://www.erp.com/ceshi.json';
             $status = 1;
             $this->get_order_page( $status,$value,$url,$time,$min_time,$mix_time);
         }
@@ -71,7 +72,7 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $mix_time = str_replace(' ','T',date('Y-m-d H:i:s',$time));
 
         //拼接url 获取shopify已支付订单列表
-        $url = 'https://'.$shop_info['key'].':'.$shop_info['password'].'@'.$shop_info['shop_url'].'/admin/api/2019-10/orders.json?order=updated_at&financial_status=paid&updated_at_min='.$min_time.'&updated_at_mix='.$mix_time.'&limit=250';
+        $url = 'https://'.$shop_info['key'].':'.$shop_info['password'].'@'.$shop_info['shop_url'].'/admin/api/2019-10/orders.json?financial_status=paid&status=any&order=updated_at&updated_at_min='.$min_time.'&updated_at_mix='.$mix_time.'&limit=250';
         //修改请求日志表请求时间
         $this->order_synchro_data->edit_shop_time($shop_info['id'],$time);
 
@@ -91,8 +92,6 @@ class Shopify_orders extends \Application\Component\Common\IFacade
      */
     public function get_order_page($status = '',$arr = [],$url = '',$time = '',$min_time = '',$mix_time = '',$page = 1){
 
-        log_message('get_order_page',json_encode($arr),true);
-
         //添加同步日志
         $log_id = $this->order_synchro_log_data->add_log($arr['id'],$url,$min_time,$mix_time,$page);
 
@@ -104,14 +103,14 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $order_cout = count($order_list['orders']);
         $count = 0;
         if($order_list){
+
             if($order_cout>0){ //有订单时
                 //同步订单到本地
                 $count = $this->add_order($arr['id'],$order_list['orders'],$status);
             }
 
             //修改订单同步状态
-            $this->order_synchro_log_data->edit_log($log_id,1,$count);
-//            $this->order_synchro_log_data->edit_log($log_id,1,$order_cout);
+            $this->order_synchro_log_data->edit_log($log_id,1,$order_cout,$count);
 
             $next_link = $this->get_header($url,$arr['shop_api_key'],$arr['shop_api_pwd']); //下页链接
 
@@ -127,39 +126,46 @@ class Shopify_orders extends \Application\Component\Common\IFacade
      * 保存订单
      * @param int $shop_id
      * @param array $arr
+     * @param $status
+     * @return int
      */
     public function add_order($shop_id = 0,$arr = [],$status){
         $count = 0;
+        $time = date('Y-m-d H:i:s');
         foreach($arr as $v){
-            if($v['financial_status'] == 'paid'){
-                $order_info = [];
-                $order_info['shopify_o_id'] = $v['id'];
-                $order_info['shop_id'] = $shop_id;
-                $order_info['total_price_usd'] = $v['total_price_usd'];
-                $order_info['created_at'] = $v['created_at'];
-                $order_info['updated_at'] = $v['updated_at'];
-                $order_info['total_weight'] = $v['total_weight'];
-                $order_info['financial_status'] = $v['financial_status'];
-                if($status == 0){
-                    $order_info['datetime'] = substr($v['created_at'],0,strpos($v['created_at'], 'T'));
-                }else{
-                    $order_info['datetime'] = substr($v['updated_at'],0,strpos($v['updated_at'], 'T'));
-                }
-                $order_id = $this->order_data->add($order_info);
+            $order_info = [];
+            $order_info['shopify_o_id'] = $v['id'];
+            $order_info['shop_id'] = $shop_id;
+            $order_info['total_price_usd'] = $v['total_price_usd'];
+            $order_info['created_at'] = $v['created_at'];
+            $order_info['updated_at'] = $v['updated_at'];
+            $order_info['total_weight'] = $v['total_weight'];
+            $order_info['financial_status'] = $v['financial_status'];
+            $order_info['addtime'] = $time; //新增时间
+            $order_info['tracking_number'] = $v['fulfillments'][0]['tracking_number'];
+            if($status == 0){
+                $order_info['datetime'] = substr($v['created_at'],0,strpos($v['created_at'], 'T'));
+            }else{
+                $order_info['datetime'] = substr($v['updated_at'],0,strpos($v['updated_at'], 'T'));
+            }
+            $order_id = $this->order_data->save($order_info);
 
-                if($order_id){
-                    foreach($v['line_items'] as $item){
-                        $order_goods_info = [];
-                        $order_goods_info['product_id'] = $item['product_id'];
-                        $order_goods_info['sku_id'] = $item['sku'];
-                        $order_goods_info['shopify_o_id'] = $v['id'];
-                        $order_goods_info['quantity'] = $item['quantity'];
-                        $order_goods_info['shop_id'] = $shop_id;
-                        $order_goods_info['datetime'] = $order_info['datetime'];
-                        $this->order_goods_data->store($order_goods_info,true);
-                    }
-                    $count++;
+            if($order_id){
+                foreach($v['line_items'] as $item){
+                    $order_goods_info = [];
+                    $order_goods_info['o_id'] = $order_id;
+                    $order_goods_info['product_id'] = $item['product_id'];
+                    $order_goods_info['sku_id'] = $item['sku'];
+                    $order_goods_info['shopify_o_id'] = $v['id'];
+                    $order_goods_info['quantity'] = $item['quantity'];
+                    $order_goods_info['shop_id'] = $shop_id;
+                    $order_goods_info['datetime'] = $order_info['datetime'];
+                    $order_goods_info['shopify_goods_id'] = $item['id'];
+                    $order_goods_info['addtime'] = $time;
+
+                    $this->order_goods_data->store($order_goods_info,true);
                 }
+                $count++;
             }
         }
         return $count;

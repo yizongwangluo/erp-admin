@@ -19,6 +19,7 @@
             </select>
         </div>
         <button class="layui-btn layui-btn-danger btn-search" type="button" onclick="save_form()">同步订单</button>
+    <em style="color: red">* 只同步付款状态为已支付的订单</em>
 </form>
 <br>
 <br>

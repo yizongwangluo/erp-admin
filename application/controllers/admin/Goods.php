@@ -318,7 +318,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	 */
 	public function error_log(){
 
-		$list = $this->excel_error_log_data->get_field_by_where(['id','name','datetime','u_id'],[],true);
+		$list = $this->excel_error_log_data->get_field_by_where(['id','name','datetime','u_id'],['type'=>1],true);
 
 		$this->load->view ( '', ['list'=>$list] );
 	}

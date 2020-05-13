@@ -240,6 +240,7 @@
                 ,url:'/admin/goods_sku_apply/sku_list/<?=$info['id']?>'
                 ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
                 ,defaultToolbar: []
+//                ,limit:Number.MAX_VALUE
                 ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                 ,cols: [[
                     {field:'id', width:80, title: 'ID' }

@@ -12,7 +12,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">SKU编码：</label>
                     <div class="layui-inline">
-                        <input type="text" name="code" value="" class="layui-input" disabled>
+                        <input type="text" name="code" value="" class="layui-input" readonly style="background: #e0e0e0;" >
                     </div>
                 </div>
                 <div class="layui-inline">
