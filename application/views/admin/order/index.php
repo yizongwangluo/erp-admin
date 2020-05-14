@@ -24,6 +24,9 @@
                             <?php   } ?>
                         </select>
                     </div>
+                    <div class="layui-inline">
+                        <input class="layui-input date-time" name="datetime" placeholder="时间" value="<?php echo input('datetime'); ?>">
+                    </div>
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索</button>
                 </div>
             </form>
@@ -72,5 +75,17 @@
         </div>
     </div>
 </div>
-
+<script>
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+        //同时绑定多个
+        lay('.date-time').each(function () {
+            laydate.render({
+                elem: this
+                ,type: 'date'
+                , trigger: 'click'
+            });
+        });
+    });
+</script>
 <?php $this->load->view ( 'admin/common/footer' ) ?>
