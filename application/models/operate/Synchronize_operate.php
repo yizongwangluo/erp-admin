@@ -61,6 +61,7 @@ class Synchronize_operate extends \Application\Component\Common\IData
 
         //获取时间段内日期
         $dates = $this->getDateFromRange($start_time,$end_time);
+
         //获取选择店铺信息
         $shop = $this->db->query ("select * from shop where id = $shop_id;" )->row_array ();
         if(!$shop){
@@ -68,18 +69,11 @@ class Synchronize_operate extends \Application\Component\Common\IData
             return false;
         }
 
-        //清除时间段内数据
-//        $this->del_data($shop_id,$start_time,$end_time);
-//        echo $start_time."～".$end_time."订单数据已清除\n";
-
         //同步订单
-        $this->created_save($shop,$dates);//时间段内创建当天并付款的订单
-
-//        $this->updated_save($shop,$dates);//补存时间段内更新日期未存入的付款订单（已存入不做处理，只新增未存的）
-
+        $this->created_save($shop,$start_time,$end_time);//时间段内创建当天并付款的订单
 
         //更新每日运营数据
-        foreach($dates as $k=>$time) {
+       /* foreach($dates as $k=>$time) {
             $this->getoperate_operate->get_data($shop_id,$time);
             if($this->db->affected_rows()<=0){ //添加失败
                 $this->set_error('更新每日运营数据失败！');
@@ -88,12 +82,10 @@ class Synchronize_operate extends \Application\Component\Common\IData
         }
 
         //更新受影响的income表和salary表
-        $this->up_money($start_time,$end_time);
-
+        $this->up_money($start_time,$end_time);*/
 
         //同步提示
         $this->set_error('同步成功！');
-
     }
 
 
@@ -117,16 +109,13 @@ class Synchronize_operate extends \Application\Component\Common\IData
     }
 
     //根据创建时间同步该店铺某时间段内的订单
-    public function created_save($shop, $dates)
+    public function created_save($shop,$start_time,$end_time)
     {
-        foreach($dates as $k=>$time){
-            $min_time = $time.'T00:00:00';
-            $mix_time = $time.'T23:59:59';
-            $url = 'https://'.$shop['shop_api_key'].':'.$shop['shop_api_pwd'].'@'.$shop['backstage'].'api/2020-01/orders.json?order=created_at&created_at_min='.$min_time.'&created_at_max='.$mix_time.'&limit=250';
-            $status = 0;
-            $this->shopify_orders->get_order_page($status,$shop,$url,$time,$min_time,$mix_time);
-//            echo $time."订单数据已同步\n";
-        }
+        $min_time = $start_time.'T00:00:00';
+        $mix_time = $end_time.'T23:59:59';
+        $url = 'https://'.$shop['shop_api_key'].':'.$shop['shop_api_pwd'].'@'.$shop['backstage'].'api/2020-01/orders.json?financial_status=paid&status=any&order=created_at&created_at_min='.$min_time.'&created_at_max='.$mix_time.'&limit=250';
+        $status = 0;
+        $this->shopify_orders->get_order_page($status,$shop,$url,$start_time,$min_time,$mix_time);
     }
 
     //根据更新时间同步该店铺某时间段内的订单
@@ -282,6 +271,9 @@ class Synchronize_operate extends \Application\Component\Common\IData
             }
         }
 
+
+        //更新受影响的income表和salary表
+        $this->up_money($start_time,$end_time);
         return true;
 
 

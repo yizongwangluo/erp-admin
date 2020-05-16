@@ -229,6 +229,11 @@
     </div>
 </form>
     <div class="px">
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button type="button" class="layui-btn layui-btn-sm" lay-event="add" ><i class="layui-icon">&#xe654;</i></button>
+            </div>
+        </script>
         <script type="text/html" id="barDemo">
             <a class="layui-btn layui-btn-xs"  lay-event="edit" >编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -250,11 +255,15 @@
                 elem: '#test'
                 ,id: 'idTest'
                 ,url:'/admin/goods_sku_apply/sku_list/<?=$info['id']?>'
+                ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
                 ,defaultToolbar: []
-                ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                ,width: 1200 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                 ,cols: [[
-                    {field:'id', width:80, title: 'ID' }
-                    ,{field:'norms',  title: '规格',minWidth:100}
+                    {field:'id', title: 'ID' }
+                    ,{field:'norms_name',  title: '规格名1'}
+                    ,{field:'norms',  title: '规格值1'}
+                    ,{field:'norms_name1',  title: '规格名2'}
+                    ,{field:'norms1',  title: '规格值2'}
                     ,{field:'code',  title: 'SKU编码'}
                     ,{field:'alias',  title: '别名'}
                     ,{field:'img',  title: '图片', templet: function(res){
@@ -270,6 +279,23 @@
                     ,{field:'right', title:'操作', toolbar: '#barDemo',minWidth:150}
                 ]]
             });
+        });
+
+        table.on('toolbar(test)', function(obj){
+            switch(obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 2,
+                        title: '添加SKU',
+                        area: ['500px','500px'],
+                        shadeClose: true, //点击遮罩关闭
+                        maxmin: true,
+                        content: '/admin/goods_apply/edit_sku_distribution',
+                        success: function(layero, index){
+                            layer.getChildFrame('body', index).find('input[name="spu_id"]').val(<?=$info['id']?>);
+                        }
+                    });
+            }
         });
 
         //监听行工具事件

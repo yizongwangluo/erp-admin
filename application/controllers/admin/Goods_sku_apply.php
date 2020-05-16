@@ -55,11 +55,11 @@ class Goods_sku_apply extends \Application\Component\Common\AdminPermissionValid
 		$input = $this->input->post();
 		$id = $input['id'];
 		unset($input['id']);
-		$input['u_id'] = $this->admin['id'];
 
 		if($id){ //修改
 			$ret = $this->goods_sku_data->edit($id,$input);
 		}else{ //新增
+			$input['u_id'] = $this->admin['id'];
 			$ret = $this->goods_sku_data->add($input);
 		}
 

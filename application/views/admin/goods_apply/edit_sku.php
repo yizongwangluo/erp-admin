@@ -17,9 +17,27 @@
                     <em>多个别名以 , 隔开</em>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">规格：</label>
-                    <div class="layui-inline">
+                    <label class="layui-form-label">规格名1：</label>
+                    <div class="layui-inline" style="width: 100px;">
+                        <input type="text" name="norms_name" value="" class="layui-input" >
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">规格值1：</label>
+                    <div class="layui-inline" style="width: 100px;">
                         <input type="text" name="norms" value="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">规格名2：</label>
+                    <div class="layui-inline" style="width: 100px;">
+                        <input type="text" name="norms_name1" value="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">规格值2：</label>
+                    <div class="layui-inline" style="width: 100px;">
+                        <input type="text" name="norms1" value="" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -105,9 +123,12 @@
             for(x in data){
                 values[data[x].name] = data[x].value;
             }
+            if(!values.norms_name){
+                layer.msg('规格名1必填', {time: 2000, icon: 5});return;
+            }
 
             if(!values.norms){
-                layer.msg('请填写规格/颜色', {time: 2000, icon: 5});return;
+                layer.msg('规格值1必填', {time: 2000, icon: 5});return;
             }
 
             if(!values.img){

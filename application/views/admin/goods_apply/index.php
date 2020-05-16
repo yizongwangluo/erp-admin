@@ -36,7 +36,8 @@
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
             </form>
-            <table class="layui-table">
+        <div style='overflow:auto'>
+            <table class="layui-table"  style='white-space: nowrap'>
               <thead>
                 <tr>
                     <td>ID</td>
@@ -44,7 +45,10 @@
                     <td>产品名</td>
                     <td>SKU</td>
                     <td>SKU别名</td>
-                    <td>规格</td>
+                    <td>规格名1</td>
+                    <td>规格值1</td>
+                    <td>规格名2</td>
+                    <td>规格值2</td>
                     <td>采购价（元）</td>
                     <td>重量（克）</td>
                     <td>状态</td>
@@ -59,7 +63,10 @@
                       <td><?=$v['name']?></td>
                       <td><?=$v['sku_code']?></td>
                       <td><?=$v['alias']?></td>
+                      <td><?=$v['norms_name']?></td>
                       <td><?=$v['norms']?></td>
+                      <td><?=$v['norms_name1']?></td>
+                      <td><?=$v['norms1']?></td>
                       <td><?=$v['price']?></td>
                       <td><?=$v['weight']?></td>
                       <td style="color: <?php if($v['status']==3){echo "red";}elseif($v['status']==2){echo "#1890ff";}?>"><?=$this->enum_field->get_values ( 'is_status' )[$v['status']]?></td>
@@ -76,6 +83,7 @@
                 ?>
                 </tbody>
             </table>
+            </div>
         <div class="admin-page">
             <?php echo $page_html; ?>
         </div>

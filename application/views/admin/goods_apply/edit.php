@@ -240,11 +240,15 @@
                 ,url:'/admin/goods_sku_apply/sku_list/<?=$info['id']?>'
                 ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
                 ,defaultToolbar: []
+//                ,limit:Number.MAX_VALUE
                 ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                 ,cols: [[
                     {field:'id', width:80, title: 'ID' }
                     ,{field:'alias', title: '别名' }
-                    ,{field:'norms',  title: '规格',minWidth:100}
+                    ,{field:'norms_name',  title: '规格名1',minWidth:30}
+                    ,{field:'norms',  title: '规格值1',minWidth:30}
+                    ,{field:'norms_name1',  title: '规格名1',minWidth:30}
+                    ,{field:'norms1',  title: '规格值1',minWidth:30}
                     ,{field:'img',  title: '图片', templet: function(res){
                         return '<a href="'+res.img+'" target="_blank"><img width="50px" src="'+res.img+'"></a>'
                     }}

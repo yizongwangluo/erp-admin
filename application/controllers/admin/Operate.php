@@ -105,6 +105,7 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
         $data['info'] = $this->operate_data->get_info ( $id );
         $user_id = $data['info']['user_id'];
         $shop_id = $data['info']['shop_id'];
+        $data['freight'] = $this->order_data->get_freight_sum($data['info']);
         $data['user'] = $this->my_data->get_user ( $user_id );
         $data['domain'] = $this->my_data->get_domain ( $shop_id );
         $this->load->view ( '' , $data );

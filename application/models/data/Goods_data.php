@@ -18,16 +18,14 @@ class Goods_data extends \Application\Component\Common\IData{
      */
     public function get_list($uid = 0,$where = [],$page = 1,$limit = 17){
 
-        if($where['name'] || $uid==1){ //当输入关键词的时候
+//        if($where['name'] || $uid==1){ //当输入关键词的时候
             $table_b = 'left join admin b on a.u_id=b.id ';
-        }else{
+        /*}else{
             $table_b = ' INNER JOIN (select s_u_id,s_user_name as user_name from admin_org_temp where u_id='.$uid.' GROUP BY s_u_id) b on a.u_id=b.s_u_id ';
-        }
+        }*/
 
         $condition['total'] = 'COUNT(*) as total';
         $condition['info'] = 'a.*,b.user_name';
-
-        $sql = 'select {{}} from goods a '.$table_b;
 
         if(is_numeric($where['status'])){
             $sql_where[] = ' a.status='.$where['status'];
@@ -35,35 +33,70 @@ class Goods_data extends \Application\Component\Common\IData{
         if(is_numeric($where['category_id'])){
             $sql_where[] = ' a.category_id='.$where['category_id'];
         }
-        if($where['name']){
-            $sql_where[]=" a.name = '".$where['name']."'";
-        }
 
-        if($sql_where){
-            $sql .= ' where '.implode(' and ',$sql_where);
-        }
+        //用sku别名和编码搜索
+        if(( $where['a']=='sku_code' || $where['a']=='sku_alias') && $where['name'] ){
 
-        $sql_total = str_replace('{{}}',$condition['total'],$sql);
-        $query = $this->db->query($sql_total);
-        $total = $query->result_array()[0]['total'];
-        $info = [];
+            $sql = 'select {{}} from goods a left JOIN  goods_sku b on a.id=b.spu_id ';
 
-        if($total){ //有数据时，查询列表
-            $sql .=  ' order by id desc limit '.($page-1)*$limit.','.$limit;
-            $sql_info = str_replace('{{}}',$condition['info'],$sql);
-            $query = $this->db->query($sql_info);
-            $info = $query->result_array();
+            if( $where['a']=='sku_code'){
+                $sql_where[]=" b.code = '".$where['name']."'";
+            }elseif($where['a']=='sku_alias'){
+                $sql_where[]=" b.alias like '%".$where['name']."%'";
+            }
 
-            foreach($info as $k=>$v){
-                $sku_list = $this->db->query('select code,norms,alias,price,weight,status,code from goods_sku where spu_id= '.$v['id'])->result_array();
-                $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
-                $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
-                $info[$k]['alias'] = implode('<br/>',array_column($sku_list,'alias'));
-                $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
-                $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));
+            if($sql_where){
+                $sql .= ' where '.implode(' and ',$sql_where);
+            }
+
+            $sql_total = str_replace('{{}}',$condition['total'],$sql);
+            $query = $this->db->query($sql_total);
+            $total = $query->result_array()[0]['total'];
+            $info = [];
+
+            if($total){ //有数据时，查询列表
+                $sql .=  ' order by a.id desc limit '.($page-1)*$limit.','.$limit;
+                $sql_info = str_replace('{{}}','a.*,b.code as sku_code,b.norms_name,b.norms,b.norms_name1,b.norms1,b.alias,b.price,b.weight',$sql);
+                $query = $this->db->query($sql_info);
+                $info = $query->result_array();
+            }
+
+        }else{
+
+            $sql = 'select {{}} from goods a '.$table_b;
+
+            if($where['name']){
+                $sql_where[]=" a.name = '".$where['name']."'";
+            }
+
+            if($sql_where){
+                $sql .= ' where '.implode(' and ',$sql_where);
+            }
+
+            $sql_total = str_replace('{{}}',$condition['total'],$sql);
+            $query = $this->db->query($sql_total);
+            $total = $query->result_array()[0]['total'];
+            $info = [];
+
+            if($total){ //有数据时，查询列表
+                $sql .=  ' order by id desc limit '.($page-1)*$limit.','.$limit;
+                $sql_info = str_replace('{{}}',$condition['info'],$sql);
+                $query = $this->db->query($sql_info);
+                $info = $query->result_array();
+
+                foreach($info as $k=>$v){
+                    $sku_list = $this->db->query('select code,norms_name,norms,norms_name1,norms1,alias,price,weight,status from goods_sku where spu_id= '.$v['id'])->result_array();
+                    $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
+                    $info[$k]['norms_name'] = implode('<br/>',array_column($sku_list,'norms_name'));
+                    $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
+                    $info[$k]['norms_name1'] = implode('<br/>',array_column($sku_list,'norms_name1'));
+                    $info[$k]['norms1'] = implode('<br/>',array_column($sku_list,'norms1'));
+                    $info[$k]['alias'] = implode('<br/>',array_column($sku_list,'alias'));
+                    $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
+                    $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));
+                }
             }
         }
-
         return array(
             'page_count' => $this->page->get_page_count(),
             'page_num' => $page,
@@ -103,6 +136,11 @@ class Goods_data extends \Application\Component\Common\IData{
             $this->set_error('请上传产品图片');return false;
         }
 
+        //判断code是否重复
+        if($this->removal(['id'=>$id,'code'=>$input['code']])){
+            $this->set_error('该spu编码已存在！');return false;
+        }
+
         //$input = array_filter($input);
 
         $input['status'] = $input['status'] || is_numeric($input['status'])?$input['status'] : 0; //修改审核状态为未审核
@@ -129,6 +167,12 @@ class Goods_data extends \Application\Component\Common\IData{
             $this->set_error('请上传产品图片');return false;
         }*/
 
+        //判断code是否重复
+        if($this->removal(['code'=>$input['code']])){
+            $this->set_error('该spu编码已存在！');return false;
+        }
+
+
         $input = array_filter($input);
 
         //时间
@@ -146,6 +190,10 @@ class Goods_data extends \Application\Component\Common\IData{
      */
     public function del($id = 0){
 
+        //删除子产品
+        $sql = "delete from goods_sku where spu_id=".$id;
+        $query = $this->db->query($sql);
+
         return $this->delete($id);
     }
 
@@ -160,7 +208,7 @@ class Goods_data extends \Application\Component\Common\IData{
         //过滤参数
         unset($apply_info['id']);
         unset($apply_info['sales_volume']);
-        unset($apply_info['u_id']);
+//        unset($apply_info['u_id']);
         unset($apply_info['addtime']);
         unset($apply_info['edittime']);
         unset($apply_info['status']);
@@ -170,10 +218,9 @@ class Goods_data extends \Application\Component\Common\IData{
         $time = time();
         $apply_info['edittime'] = $time;
         if($info){ //修改
-           /* if(!$this->update($info['id'],$apply_info)){
+            if(!$this->update($info['id'],$apply_info)){
                 $this->set_error('(修改)同步失败，请稍后重试');return false;
-            }*/
-           $info['id'] = 'set';
+            }
         }else{ //新增
             $apply_info['addtime'] = $time;
             $info['id'] = $this->store($apply_info);
@@ -198,5 +245,24 @@ class Goods_data extends \Application\Component\Common\IData{
         $spu_list = $this->db->query('select * from goods where id in ('.$ids.')')->result_array();
 
         return $spu_list;
+    }
+
+    /**
+     * 判断是否已存在该数据
+     * @param array $input
+     * @return bool
+     */
+    public function removal($input = array()){
+
+        $data = [];
+
+        $data['id !=']      = $input['id'] ? $input['id']:'';
+        $data['code']    	 = $input['code'];
+
+        $data = array_filter($data); //过滤空白数组
+
+        $count = $this->count($data);
+
+        return $count>0;
     }
 }

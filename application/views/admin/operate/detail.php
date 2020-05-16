@@ -49,6 +49,14 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">总运费（$）：</label>
+                    <div class="layui-inline">
+                        <div class="detail">
+                            <?= $freight ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">广告费（$）：</label>
                     <div class="layui-inline">
                         <div class="detail">
@@ -56,11 +64,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="layui-inline">
+                <!--<div class="layui-inline">
                     <label class="layui-form-label">手续费点数：</label>
                     <div class="layui-inline">
                         <div class="detail">
-                            <?= $info['service_charge']*0.01 ?>
+                            <?/*= $info['service_charge']*0.01 */?>
                         </div>
                     </div>
                 </div>
@@ -68,12 +76,12 @@
                     <label class="layui-form-label">手续费（$）：</label>
                     <div class="layui-inline">
                         <div class="detail">
-                            <?= $info['formalities_cost'] ?>
+                            <?/*= $info['formalities_cost'] */?>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item">-->
                 <div class="layui-inline">
                     <label class="layui-form-label">产品总成本（¥）：</label>
                     <div class="layui-inline">
@@ -90,14 +98,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="layui-inline">
+               <!-- <div class="layui-inline">
                     <label class="layui-form-label">挂号费（¥）：</label>
                     <div class="layui-inline">
                         <div class="detail">
-                            <?= $info['register_cost'] ?>
+                            <?/*= $info['register_cost'] */?>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
             <div style="margin: 0 10px">
                 <table class="layui-hide" id="product_list"></table>
@@ -163,16 +171,23 @@
         table.render({
             elem: '#product_list'
             ,url:'/admin/operate/product_list/<?=$info['id']?>'
-            ,cellMinWidth: 80 //
+            ,cellMinWidth: 80
+//            ,limit:Number.MAX_VALUE
             ,cols: [[
-                {field:'id', width:80, title: '序号'}
-                ,{field:'name', title: '产品名'}
+//                {field:'id', width:80, title: '序号'},
+                {field:'name', title: '产品名'}
                 ,{field:'code', title: 'SKU'}
                 ,{field:'alias', title: '别名'}
                 ,{field:'quantity', title: '出单产品数量'}
-                ,{field:'price', title: '采购价（¥）'}
-                ,{field:'weight', title: '产品重量（g）'}
-                ,{field:'freight', title: '每克价格（¥）'}
+                ,{field:'price', title: '采购价（¥）', templet: function(res){
+                    if(res.price){
+                        return res.price;
+                    }else{
+                        return '<a style="color: red">未匹配到对应的sku</a>'
+                    }
+                }}
+                /*,{field:'weight', title: '产品重量（g）'}
+                ,{field:'freight', title: '每克价格（¥）'}*/
                 ,{field:'product_cost', title: '产品成本（¥）'}
             ]]
         });

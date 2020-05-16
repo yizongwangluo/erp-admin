@@ -269,12 +269,15 @@
                 ,id: 'idTest'
                 ,url:'/admin/goods_sku/sku_list/<?=$info['id']?>'
                 ,defaultToolbar: []
-                ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                ,cellMinWidth: 50 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                 ,cols: [[
                     {field:'id', width:80, title: 'ID' }
                     ,{field:'code',  title: 'SKU编码'}
                     ,{field:'alias',  title: '别名'}
-                    ,{field:'norms',  title: '规格',minWidth:100}
+                    ,{field:'norms_name',  title: '规格名1'}
+                    ,{field:'norms',  title: '规格值1'}
+                    ,{field:'norms_name1',  title: '规格名1'}
+                    ,{field:'norms1',  title: '规格值1'}
                     ,{field:'img',  title: '图片', templet: function(res){
                         return '<a href="'+res.img+'" target="_blank"><img width="50px" src="'+res.img+'"></a>'
                     }}

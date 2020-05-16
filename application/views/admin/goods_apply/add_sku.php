@@ -15,9 +15,27 @@
                     <em>多个别名以 , 隔开</em>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">规格：</label>
-                    <div class="layui-inline">
+                    <label class="layui-form-label">规格名1：</label>
+                    <div class="layui-inline" style="width: 100px;">
+                        <input type="text" name="norms_name" value="" class="layui-input" >
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">规格值1：</label>
+                    <div class="layui-inline" style="width: 100px;">
                         <input type="text" name="norms" value="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">规格名2：</label>
+                    <div class="layui-inline" style="width: 100px;">
+                        <input type="text" name="norms_name1" value="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">规格值2：</label>
+                    <div class="layui-inline" style="width: 100px;">
+                        <input type="text" name="norms1" value="" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -119,71 +137,71 @@
 
             var input = $('#add_sku').serializeArray();
 
-            var values = {},norms = {};
+            var values = {},norms = {},aliasarr = [],dataass =[];
             var x;
             for(x in input){
                 values[input[x].name] = input[x].value;
             }
 
+            if(!values.norms_name){
+                layer.msg('规格名1必填', {time: 2000, icon: 5});return;
+            }
+
             if(!values.norms){
-                layer.msg('请填写规格/颜色', {time: 2000, icon: 5});return;
+                layer.msg('规格值1必填', {time: 2000, icon: 5});return;
             }
 
             if(!values.img){
                 layer.msg('请上传产品图片', {time: 2000, icon: 5});return;
             }
 
-            if(<?=input('type')?1:0?> && data.sku_edit_id){ //修改
-                values['id'] = data.sku_edit_id;
-                $.each(data.data_sku,function(i,item){
-                    if(data.sku_edit_id==item.id){
-                        data.data_sku[i] = values;
+            //别名判断
+            if(values.alias){
+
+                data.data_sku.forEach(function( val, index ) {
+                    if(val.alias && val.id!=data.sku_edit_id){
+                        aliasarr = aliasarr.concat(val.alias.split(','));
                     }
-                })
-            }else{ //添加
-                data.sku_id++;
-                values['id'] = data.sku_id;
-                data.data_sku.push(values);
-            }
+                });
 
-            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                if(aliasarr.length>0){
+                    var alias_tmp = values.alias.split(',');
+                    var ar = aliasarr.filter(function(n) {
+                        return alias_tmp.indexOf(n) != -1
+                    });
 
-            data.table.reload('idTest',{data:data.data_sku}); //重载 table
-            parent.layer.close(index); //再执行关闭
-
-        }
-
-        // 使用 id 拿到用户名文本框，当它失去焦点（blur函数的作用）的时候触发该函数
-        $('#alias').blur(function () {
-            // 获取到文本框中的值
-            var alias = $(this).val();
-            // 开始使用 ajax
-            $.ajax({
-                // 设置提交方式为post
-                type: "POST",
-                // 将数据提交给url中指定的php文件
-                url: "/admin/goods_apply/alias",
-                // 提交的数据内容，以json的形式
-                data: {"alias": alias},
-                // 成功的回调函数，其中的data就是后端返回回来的数据
-                success: function (data) {
-                    // 转化为json形式
-                    var data_json = $.parseJSON(data);
-                    // 后端的返回数据
-                    if (data_json['flag'] == false) {
-                        alert(data_json['msg']);
-                    }
-                    else if (data_json['msg'] == 1) {
-                        layer.msg('sku别名已被使用', {time: 2000, icon: 5});
-                        $('#alias').val("");
-                    }
-                    else if (data_json['msg'] == 2) {
-                        layer.msg('存在同名sku编码', {time: 2000, icon: 5});
-                        $('#alias').val("");
+                    if(ar.length>0){
+                        layer.msg('别名重复！', {time: 2000, icon: 5});return;
                     }
                 }
-            });
-        });
+            }
+
+            $.post('/admin/goods_apply/alias',{alias: values.alias},function(obj){
+                if (obj.status != 1) {
+                    layer.msg(obj.msg, {time: 2000, icon: 5});return;
+                }else{
+
+                    if(<?=input('type')?1:0?> && data.sku_edit_id){ //修改
+                        values['id'] = data.sku_edit_id;
+                        $.each(data.data_sku,function(i,item){
+                            if(data.sku_edit_id==item.id){
+                                data.data_sku[i] = values;
+                            }
+                        })
+                    }else{ //添加
+                        data.sku_id++;
+                        values['id'] = data.sku_id;
+                        data.data_sku.push(values);
+                    }
+
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+                    data.table.reload('idTest',{data:data.data_sku}); //重载 table
+                    parent.layer.close(index); //再执行关闭
+
+                }
+            },'json');
+        }
 
     </script>
 <?php $this->load->view ( 'admin/common/footer' ) ?>

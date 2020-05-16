@@ -34,7 +34,8 @@
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
             </form>
-            <table class="layui-table">
+        <div style='overflow:auto'>
+            <table class="layui-table"  style='white-space: nowrap'>
               <thead>
                 <tr>
                     <td>ID</td>
@@ -42,11 +43,14 @@
                     <td>产品名</td>
                     <td>SKU</td>
                     <td>SKU别名</td>
-                    <td>规格</td>
+                    <td>规格名1</td>
+                    <td>规格值1</td>
+                    <td>规格名2</td>
+                    <td>规格值2</td>
                     <td>采购价（元）</td>
                     <td>重量（克）</td>
                     <td>状态</td>
-                    <td>操作</td>
+                    <td>操wa作</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -57,13 +61,16 @@
                       <td><?=$v['name']?></td>
                       <td><?=$v['sku_code']?></td>
                       <td><?=$v['alias']?></td>
+                      <td><?=$v['norms_name']?></td>
                       <td><?=$v['norms']?></td>
+                      <td><?=$v['norms_name1']?></td>
+                      <td><?=$v['norms1']?></td>
                       <td><?=$v['price']?></td>
                       <td><?=$v['weight']?></td>
                       <td style="color: <?=$v['status']==2?'red':'';?>"><?=$this->enum_field->get_values ( 'is_status' )[$v['status']]?></td>
                       <td>
                           <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods_apply/info/{$v['id']}"); ?>">查看</a>
-                          <a style="display: <?=$v['status']==1?'none':'';?>;" class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods_apply/edit_distribution/{$v['id']}"); ?>">编辑</a>
+                          <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods_apply/edit_distribution/{$v['id']}"); ?>">编辑</a>
                           <button style="display: <?=$v['status']==1?'none':'';?>;" data-url="<?php echo base_url ( 'admin/goods_apply/delete' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>
                           <button style="display: <?=$v['status']!=1?'none':'';?>;" data-url="<?php echo base_url ( 'admin/goods/synchronization' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到主表</button>
                       </td>
@@ -74,6 +81,7 @@
                 ?>
                 </tbody>
             </table>
+            </div>
         <div class="admin-page">
             <?php echo $page_html; ?>
         </div>

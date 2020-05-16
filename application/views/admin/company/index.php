@@ -9,6 +9,12 @@
         <div class="layui-tab-item layui-show">
             <form action="?" method="get">
     <div class="layui-form">
+        <div class="layui-inline">
+            <select name="a" lay-verify="required" >
+                <option value="0" selected>企业主体</option>
+                <option value="1" <?=$this->input->get ( 'a' )?'selected':'';?>>企业账号</option>
+            </select>
+        </div>
         <div class="layui-inline  col-xs-2">
             <input type="text" name="search" value="<?php echo $this->input->get ( 'search' ); ?>"
                    class="layui-input" placeholder="请输入查询关键词"/>

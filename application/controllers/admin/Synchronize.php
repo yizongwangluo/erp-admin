@@ -27,13 +27,12 @@ class Synchronize extends \Application\Component\Common\AdminPermissionValidateC
     {
         if ( IS_POST ) {
             $input = $this->input->post();
+//            $input = $this->input->get();
 
             if ( !$this->synchronize_operate->sync ( $input ) ) {
                 $this->output->ajax_return ( AJAX_RETURN_FAIL, $this->synchronize_operate->get_error () );
             }
             $this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
-        } else {
-            $this->load->view ( '' );
         }
     }
 
@@ -46,8 +45,6 @@ class Synchronize extends \Application\Component\Common\AdminPermissionValidateC
                 $this->output->ajax_return ( AJAX_RETURN_FAIL, $this->synchronize_operate->get_error () );
             }
             $this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
-        } else {
-            $this->load->view ( '' );
         }
     }
 }

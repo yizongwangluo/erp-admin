@@ -7,6 +7,9 @@
  * Date: 2017/7/19 0019
  * Time: 9:41
  */
+
+use  Application\Component\Concrete\TongTuApi\ErpApiFactory;
+
 class Goods extends \Application\Component\Common\AdminPermissionValidateController
 {
 
@@ -27,7 +30,6 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	 * 商品列表
 	 */
 	public function index(){
-
 		$input = $this->input->get();
 		$page = max(1,$input['page']);
 		unset($input['page']);
@@ -127,6 +129,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		}
 
 		if(!$info['is_tongtu']){
+
+			$this->erpApi = new ErpApiFactory();
+
 			$ret = $this->erpApi->add_goods($data);
 		}else{
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'更新接口尚未接入');
@@ -248,7 +253,10 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					$sku = [];
 
 					$sku = [
-					 'norms'=>trim($value['E'].','.$value['G'], ','),
+					 'norms_name'=>$value['D'],
+					 'norms'=>$value['E'],
+					 'norms_name1'=>$value['F'],
+					 'norms1'=>$value['G'],
 					 'code'=>$value['H'],
 					 'spu_id'=>$spu_id,
 					 'weight'=>$value['I'],
@@ -256,6 +264,27 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					 'alias'=>$value['K'],
 					 'source_address'=>$value['T']
 					];
+
+					if($sku['alias']){ //别名判断
+						if(in_array($sku['code'],explode(',',$sku['alias']))){
+							$value['AP'] = 'sku编码与sku别名重复';
+							$error[] = $value;
+							continue;
+						}
+
+						if(!model('data/goods_sku_data')->get_only($sku,true)){ //判断主表
+							$value['AP'] = 'sku别名已存在或与sku编码冲突';
+							$error[] = $value;
+							continue;
+						}
+
+						if(!model('data/goods_sku_apply_data')->get_only($sku,true)){ //判断申请表
+							$value['AP'] = 'sku别名已存在或与sku编码冲突';
+							$error[] = $value;
+							continue;
+						}
+
+					}
 
 					$ret = $this->goods_sku_data->add($sku);
 					if(!$ret){
@@ -289,7 +318,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	 */
 	public function error_log(){
 
-		$list = $this->excel_error_log_data->get_field_by_where(['id','name','datetime','u_id'],[],true);
+		$list = $this->excel_error_log_data->get_field_by_where(['id','name','datetime','u_id'],['type'=>1],true);
 
 		$this->load->view ( '', ['list'=>$list] );
 	}
@@ -323,7 +352,24 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		}
 	}
 
+	/**
+	 * 导出全部
+	 */
+	public function daochu_all(){
 
+		//获取商品详情
+		$spu_list = $this->goods_data->lists();
+		$category_list = $this->goods_category_data->lists();
+		$category_list = array_column($category_list,null,'id');
+
+		foreach($spu_list as $k=>$v){
+			$spu_list[$k]['sku_list'] = $this->goods_sku_data->get_list_spuid($v['id']);
+		}
+
+		$data = $this->goods_excel_temp($spu_list,$category_list); //导出模板
+
+		$this->_exportExcel($data,'商品列表',38);
+	}
 
 	public function daochu(){
 
@@ -332,49 +378,64 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 		//获取商品详情
 		$spu_list = $this->goods_data->get_list_inids($ids);
+		$category_list = $this->goods_category_data->lists();
+		$category_list = array_column($category_list,null,'id');
 
 		foreach($spu_list as $k=>$v){
 			$spu_list[$k]['sku_list'] = $this->goods_sku_data->get_list_spuid($v['id']);
 		}
+
+		$data = $this->goods_excel_temp($spu_list,$category_list); //导出模板
+
+		$this->_exportExcel($data,'商品列表',38);
+	}
+
+	/**
+	 * 导出模板
+	 * @param array $spu_list
+	 * @return array
+	 */
+	private function goods_excel_temp($spu_list = [],$category_list = []){
+
 		$data = [];
 		$data['heard'] = ['SKU',
-							'产品名称',
-							'SKU别名',
-							'属性名1',
-							'属性值1',
-							'属性名2',
-							'属性值2',
-							'SKU属性编号',
-							'产品重量(g)',
-							'采购单价',
-							'SKU属性别名',
-							'仓库名称1',
-							'库存数量1',
-							'货位1',
-							'仓库名称2',
-							'库存数量2',
-							'货位2',
-							'产品体积(长*宽*高)CM',
-							'产品特点',
-							'备注',
-							'供应商名称',
-							'最小采购量(MOQ)',
-							'采购链接',
-							'分类',
-							'品牌',
-							'特性标签',
-							'中文配货名称',
-							'英文配货名称',
-							'中文报关名',
-							'英文报关名',
-							'包装材料名称',
-							'包装成本(CNY)',
-							'包装重量(g)',
-							'包装尺寸(长*宽*高)CM',
-							'产品首图',
-							'业务开发员',
-							'采购询价员',
-							'采购员'
+				'产品名称',
+				'SKU别名',
+				'属性名1',
+				'属性值1',
+				'属性名2',
+				'属性值2',
+				'SKU属性编号',
+				'产品重量(g)',
+				'采购单价',
+				'SKU属性别名',
+				'仓库名称1',
+				'库存数量1',
+				'货位1',
+				'仓库名称2',
+				'库存数量2',
+				'货位2',
+				'产品体积(长*宽*高)CM',
+				'产品特点',
+				'备注',
+				'供应商名称',
+				'最小采购量(MOQ)',
+				'采购链接',
+				'分类',
+				'品牌',
+				'特性标签',
+				'中文配货名称',
+				'英文配货名称',
+				'中文报关名',
+				'英文报关名',
+				'包装材料名称',
+				'包装成本(CNY)',
+				'包装重量(g)',
+				'包装尺寸(长*宽*高)CM',
+				'产品首图',
+				'业务开发员',
+				'采购询价员',
+				'采购员'
 		];
 
 		$i=0;
@@ -397,23 +458,23 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$i][] = '';//仓库名称2
 			$data[$i][] = '';//库存数量2
 			$data[$i][] = '';//货位2
-			$data[$i][] = '';//产品体积(长*宽*高)CM
+			$data[$i][] = $v['volume'];//产品体积(长*宽*高)CM
 			$data[$i][] = '';//产品特点
 			$data[$i][] = $v['remarks'];//备注
 			$data[$i][] = $v['supplier_name'];//供应商名称
-			$data[$i][] = '';//最小采购量(MOQ)
+			$data[$i][] = $v['batch_quantity'];//最小采购量(MOQ)
 			$data[$i][] = $v['source_address'];//采购链接
-			$data[$i][] = '';//分类
+			$data[$i][] = $category_list[$v['category_id']]['name'];//分类
 			$data[$i][] = '';//品牌
 			$data[$i][] = '';//特性标签
-			$data[$i][] = '';//中文配货名称
-			$data[$i][] = '';//英文配货名称
-			$data[$i][] = $v['c_name'];//中文报关名
-			$data[$i][] = $v['c_name_en'];//英文报关名
+			$data[$i][] = $v['name'];//中文配货名称
+			$data[$i][] = $v['name_en'];//英文配货名称
+			$data[$i][] = $v['dc_name'];//中文报关名
+			$data[$i][] = $v['dc_name_en'];//英文报关名
 			$data[$i][] = '';//包装材料名称
-			$data[$i][] = '';//包装成本(CNY)
-			$data[$i][] = '';//包装重量(g)
-			$data[$i][] = '';//包装尺寸(长*宽*高)CM
+			$data[$i][] = $v['pack_cost'];//包装成本(CNY)
+			$data[$i][] = $v['pack_weight'];//包装重量(g)
+			$data[$i][] = $v['pack_volume'];//包装尺寸(长*宽*高)CM
 			$data[$i][] = base_url($v['img']);//产品首图
 			$data[$i][] = '';//业务开发员
 			$data[$i][] = '';//采购询价员
@@ -426,10 +487,10 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 				$data[$i][] = '';//产品编码
 				$data[$i][] = '';//产品名称
 				$data[$i][] = '';//别名
-				$data[$i][] = '规格';//属性名1
+				$data[$i][] = $item['norms_name'];//属性名1
 				$data[$i][] = $item['norms'];//属性值1
-				$data[$i][] = '';//属性名2
-				$data[$i][] = '';//属性值2
+				$data[$i][] = $item['norms_name1'];//属性名2
+				$data[$i][] = $item['norms1'];//属性值2
 				$data[$i][] = $item['code'];//属性编号
 				$data[$i][] = $item['weight'];//产品重量
 				$data[$i][] = $item['price'];//采购单价
@@ -463,8 +524,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 				$data[$i][] = '';//采购员
 			}
 		}
-
-		$this->_exportExcel($data,'商品列表',38);
+		return $data;
 	}
 
 }

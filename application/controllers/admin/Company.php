@@ -21,7 +21,16 @@ class Company extends \Application\Component\Common\AdminPermissionValidateContr
         $admin_id = $this->admin['id'];
         $sql = $this->company_data->index($admin_id);
         $page = max ( 1, $this->input->get ( 'page' ) );
-        $condition = $this->parse_query_lists ($this->input->get ());
+
+        $input = $this->input->get ();
+
+        if($input['a']){
+            $ids = model ( 'data/companyaccount_data' )->get_field_by_where('company_id',['company_account_id'=>$input['search']],true);
+            $input['search'] = $ids ? implode(',',array_column($ids,'company_id')):0;
+        }
+
+        $condition = $this->parse_query_lists ($input);
+
         $order_t = $this->input->get ( 'title' );
         $order_s = $this->input->get ( 'sort' );
         if(isset($order_t)){
@@ -42,7 +51,12 @@ class Company extends \Application\Component\Common\AdminPermissionValidateContr
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where agent like '%{$search}%' or company_name like '%{$search}%' or company_remark like '%{$search}%' or domain like '%{$search}%' or user_name like '%{$search}%'";
+
+            if($input['a']){
+                $condition[] = " where id in ($search)";
+            }else{
+                $condition[] = " where agent like '%{$search}%' or company_name like '%{$search}%' or company_remark like '%{$search}%' or domain like '%{$search}%' or user_name like '%{$search}%'";
+            }
         }
         if (empty($condition)){
             return array ();
