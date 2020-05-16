@@ -10,7 +10,6 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
 {
     public function __construct ()
     {
-
         parent::__construct ();
         $this->load->model ( 'data/operate_tmp_data' );
     }
@@ -51,8 +50,11 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
                 $data['org_id'] = $this->db->query ( "select org_id from admin where id = {$data['user_id']}" )->row_array ()['org_id'];
 
                 //根据部门id获取相应的提成规则的手续费(百分比),汇率
-                $sql = "select service_charge,exchange_rate from royalty_rules where o_id in ({$data['org_id']}) and type = 1";
-                $fees = $this->db->query ( $sql )->row_array ();
+                $fees = [];
+                if($data['org_id']){
+                    $sql = "select service_charge,exchange_rate from royalty_rules where o_id in ({$data['org_id']}) and type = 1";
+                    $fees = $this->db->query ( $sql )->row_array ();
+                }
                 if(empty($fees)){
                     $data['operate_remark']  = '缺少提成规则';
                 }
