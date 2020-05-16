@@ -100,8 +100,8 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
                             'datetime' => $date,
                             'shop_id' => $data['shop_id'],
                             'user_id' => $data['user_id'],
-                            'paid_orders' => '0',
-                            'turnover' => '0',
+                            'paid_orders' => $data['paid_orders'],
+                            'turnover' => $data['turnover'],
                             'total_weight' => '0',
                             'sku_total_cost' => '0',
                             'unit_price' => '0',
@@ -139,7 +139,7 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
                 }
 
                 //将数据存入数据库
-                $this->operate_tmp_data->store($data);
+                $this->operate_tmp_data->store($data,true);
             }
         }
     }
@@ -187,8 +187,8 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
                         'datetime' => $date,
                         'shop_id' => $shop_id,
                         'user_id' => $operate['user_id'],
-                        'paid_orders' => '0',
-                        'turnover' => '0',
+                        'paid_orders' => $data['paid_orders'],
+                        'turnover' => $data['turnover'],
                         'total_weight' => '0',
                         'sku_total_cost' => '0',
                         'unit_price' => '0',
@@ -239,8 +239,8 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
                     //需要修改的数据
                     if($isset_sku == 1){
                         $data = array(
-                            'paid_orders' => '0',
-                            'turnover' => '0',
+                            'paid_orders' => $data['paid_orders'],
+                            'turnover' => $data['turnover'],
                             'total_weight' => '0',
                             'sku_total_cost' => '0',
                             'unit_price' => '0',
@@ -303,8 +303,8 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
                         'datetime' => $date,
                         'shop_id' => $shop_id,
                         'user_id' => $user_id,
-                        'paid_orders' => '0',
-                        'turnover' => '0',
+                        'paid_orders' => $data['paid_orders'],
+                        'turnover' => $data['turnover'],
                         'total_weight' => '0',
                         'sku_total_cost' => $data['sku_total_cost'],
                         'unit_price' => '0',
@@ -321,8 +321,8 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
                             'datetime' => $date,
                             'shop_id' => $shop_id,
                             'user_id' => $user_id,
-                            'paid_orders' => '0',
-                            'turnover' => '0',
+                            'paid_orders' => $data['paid_orders'],
+                            'turnover' =>$data['turnover'],
                             'total_weight' => '0',
                             'sku_total_cost' => $data['sku_total_cost'],
                             'unit_price' => '0',
