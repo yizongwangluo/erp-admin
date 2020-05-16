@@ -49,6 +49,15 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
                 //根据user_id获取部门id
                 $data['org_id'] = $this->db->query ( "select org_id from admin where id = {$data['user_id']}" )->row_array ()['org_id'];
 
+                //获取店铺前天的总营业额,付款订单数,付款订单id,运费 (状态为已支付)
+                $sql = "SELECT SUM(total_price_usd) AS turnover,count(shopify_o_id) AS paid_orders,
+                            SUM(freight) AS freight_sum FROM `order` WHERE
+                           shop_id = {$data['shop_id']} AND datetime = '$date' AND financial_status = 'paid'";
+                $orderSum =$this->db->query ( $sql )->row_array ();
+                $data['turnover'] = max(0,$orderSum['turnover']);//店铺总营业额
+                $data['paid_orders'] = max(0,$orderSum['paid_orders']);//付款订单数
+                $data['freight_sum'] = max(0,$orderSum['freight_sum']);//总运费
+
                 //根据部门id获取相应的提成规则的手续费(百分比),汇率
                 $fees = [];
                 if($data['org_id']){
@@ -56,17 +65,27 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
                     $fees = $this->db->query ( $sql )->row_array ();
                 }
                 if(empty($fees)){
-                    $data['operate_remark']  = '缺少提成规则';
+                    $data = array(
+                        'datetime' => $date,
+                        'shop_id' => $data['shop_id'],
+                        'user_id' => $data['user_id'],
+                        'paid_orders' => $data['paid_orders'],
+                        'turnover' => $data['turnover'],
+                        'total_weight' => '0',
+                        'sku_total_cost' => '0',
+                        'unit_price' => '0',
+                        'formalities_cost' => '0',
+                        'register_cost' => 0,
+                        'product_total_cost' => '0',
+                        'exchange_rate' => 0,
+                        'freight_sum' => $data['freight_sum'],
+                        'freight' => 0,
+                        'service_charge' => 0,
+                        'operate_remark' => '缺少提成规则！',
+                        'insert_time' => date('Y-m-d h:i:s', time())
+                    );
                 }
                 else{
-                    //获取店铺前天的总营业额,付款订单数,付款订单id,运费 (状态为已支付)
-                    $sql = "SELECT SUM(total_price_usd) AS turnover,count(shopify_o_id) AS paid_orders,
-                            SUM(freight) AS freight_sum FROM `order` WHERE
-                           shop_id = {$data['shop_id']} AND datetime = '$date' AND financial_status = 'paid'";
-                    $orderSum =$this->db->query ( $sql )->row_array ();
-                    $data['turnover'] = max(0,$orderSum['turnover']);//店铺总营业额
-                    $data['paid_orders'] = max(0,$orderSum['paid_orders']);//付款订单数
-                    $data['freight_sum'] = max(0,$orderSum['freight_sum']);//总运费
 
                     //获取对应的sku_总成本,商品总重量,sku是否存在标识
                     $cost = $this->get_cost($data['shop_id'],$date);
@@ -160,7 +179,6 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
 
             //根据付款订单id,获取对应的sku_总成本
             $cost = $this->get_cost($shop_id,$date);
-            print_r($cost);exit;
 
             $data['sku_total_cost'] = max(0,$cost['sku_total_cost']); //SKU总成本
             $data['product_total_cost'] = $data['sku_total_cost']+$data['freight_sum'];//产品总成本
