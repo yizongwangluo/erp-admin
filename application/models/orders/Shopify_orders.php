@@ -28,12 +28,19 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $mix_time = $time.'T23:59:59';
 
         foreach($shop_list as $k=>$value){
-            $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
-            $status = 1;
-            $this->get_order_page( $status,$value,$url,$time,$min_time,$mix_time);
+            if($value['shop_api_key'] && $value['shop_api_pwd'] && $value['backstage']){
+                $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
+//                $url = 'http://www.erp.com/ceshi.json';
+                $status = 1;
+                $this->get_order_page( $status,$value,$url,$time,$min_time,$mix_time);
+            }
         }
     }
 
+    /**
+     * 同步shopify订单
+     * @return bool
+     */
     public function sync_order(){
         $shop_list = $this->shop_data->lists();
 
@@ -49,35 +56,13 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $mix_time = date('Y-m-d\TH:i:s', strtotime("-480 minute"));
 
         foreach($shop_list as $k=>$value){
-            $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?status=any&order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
-//            $url = 'http://www.erp.com/ceshi.json';
-            $status = 1;
-            $this->get_order_page( $status,$value,$url,$time,$min_time,$mix_time);
+            if($value['shop_api_key'] && $value['shop_api_pwd'] && $value['backstage']){
+                $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?status=any&order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
+//                $url = 'http://www.erp.com/ceshi.json';
+                $status = 1;
+                $this->get_order_page( $status,$value,$url,$time,$min_time,$mix_time);
+            }
         }
-    }
-
-    public function index_bak(){
-
-        $shop_info = $this->order_synchro_data->get_shop_one();
-
-        $this->shop_info = $shop_info;
-
-        //没有店铺时 跳出程序
-        if(empty($shop_info)){
-            return false;
-        }
-
-        $time = time();
-        $min_time = $shop_info['new_time']?str_replace(' ','T',date('Y-m-d H:i:s',$shop_info['new_time'])):'';
-        $mix_time = str_replace(' ','T',date('Y-m-d H:i:s',$time));
-
-        //拼接url 获取shopify已支付订单列表
-        $url = 'https://'.$shop_info['key'].':'.$shop_info['password'].'@'.$shop_info['shop_url'].'/admin/api/2019-10/orders.json?financial_status=paid&status=any&order=updated_at&updated_at_min='.$min_time.'&updated_at_mix='.$mix_time.'&limit=250';
-        //修改请求日志表请求时间
-        $this->order_synchro_data->edit_shop_time($shop_info['id'],$time);
-
-        $this->get_order_page($url);
-
     }
 
     /**
@@ -96,17 +81,19 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $log_id = $this->order_synchro_log_data->add_log($arr['id'],$url,$min_time,$mix_time,$page);
 
         $order_json = curl_get_https($url);
-
-        log_message('curl_get_https','log_id='.$log_id.'|||'.$order_json,true);
-
         $order_list = json_decode($order_json,true);
+
+        if(isset($order_list['errors'])){ //接口报错
+            $this->order_synchro_log_data->edit_log($log_id,2,0,0,$order_list['errors']);
+            return false;
+        }
+
         $order_cout = count($order_list['orders']);
         $count = 0;
         if($order_list){
-
             if($order_cout>0){ //有订单时
                 //同步订单到本地
-                $count = $this->add_order($arr['id'],$order_list['orders'],$status);
+                $count = $this->add_order($arr,$order_list['orders'],$status);
             }
 
             //修改订单同步状态
@@ -124,23 +111,25 @@ class Shopify_orders extends \Application\Component\Common\IFacade
 
     /**
      * 保存订单
-     * @param int $shop_id
-     * @param array $arr
+     * @param array $shopinfo 店铺信息
+     * @param array $orderlist 订单列表
      * @param $status
      * @return int
      */
-    public function add_order($shop_id = 0,$arr = [],$status){
+    public function add_order($shopinfo = [],$orderlist = [],$status){
         $count = 0;
         $time = date('Y-m-d H:i:s');
-        foreach($arr as $v){
+        foreach($orderlist as $v){
             $order_info = [];
             $order_info['shopify_o_id'] = $v['id'];
-            $order_info['shop_id'] = $shop_id;
+            $order_info['shop_id'] = $shopinfo['id'];
+            $order_info['user_id'] = $shopinfo['user_id'];
             $order_info['total_price_usd'] = $v['total_price_usd'];
             $order_info['created_at'] = $v['created_at'];
             $order_info['updated_at'] = $v['updated_at'];
             $order_info['total_weight'] = $v['total_weight'];
             $order_info['financial_status'] = $v['financial_status'];
+            $order_info['gateway'] = $v['gateway'];
             $order_info['addtime'] = $time; //新增时间
             $order_info['tracking_number'] = $v['fulfillments'][0]['tracking_number'];
             if($status == 0){
@@ -158,7 +147,8 @@ class Shopify_orders extends \Application\Component\Common\IFacade
                     $order_goods_info['sku_id'] = $item['sku'];
                     $order_goods_info['shopify_o_id'] = $v['id'];
                     $order_goods_info['quantity'] = $item['quantity'];
-                    $order_goods_info['shop_id'] = $shop_id;
+                    $order_goods_info['shop_id'] = $shopinfo['id'];
+                    $order_goods_info['user_id'] = $shopinfo['user_id'];
                     $order_goods_info['datetime'] = $order_info['datetime'];
                     $order_goods_info['shopify_goods_id'] = $item['id'];
                     $order_goods_info['addtime'] = $time;
@@ -226,6 +216,13 @@ class Shopify_orders extends \Application\Component\Common\IFacade
             }
         }
         return false;
+    }
+
+    /**
+     * 获取交易号
+     */
+    public function get_transaction(){
+
     }
 
 
