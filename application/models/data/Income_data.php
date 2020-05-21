@@ -98,7 +98,11 @@ class Income_data extends \Application\Component\Common\IData
         foreach($info as $k=>$v){ //循环计算个人业绩
             if(strpos($v['org_id'],',')===false){ //单个职位（组员）
 
-                $info[$k] = array_merge($info[$k],$this->get_personal_royalty($v['u_id'],$v['org_id'],$year,$month)); //计算个人提成
+                if($v['org_id']){
+                    $info[$k] = array_merge($info[$k],$this->get_personal_royalty($v['u_id'],$v['org_id'],$year,$month)); //计算个人提成
+                }else{
+                    $info[$k]['remarks'] = '为匹配到相应职位';
+                }
 
             }else{ //多个职位（组长）
 
@@ -174,7 +178,11 @@ class Income_data extends \Application\Component\Common\IData
 
                 if(strpos($v['org_id'],',')===false){ //单个职位（组员）
 
-                    $user_list[$k] = array_merge($user_list[$k],$this->get_personal_royalty($v['u_id'],$v['org_id'],$year,$month)); //计算个人提成
+                    if($v['org_id']){
+                        $user_list[$k] = array_merge($user_list[$k],$this->get_personal_royalty($v['u_id'],$v['org_id'],$year,$month)); //计算个人提成
+                    }else{
+                        $user_list[$k]['remarks'] = '未匹配到相应职位';
+                    }
 
                 }else{ //多个职位（组长）
 

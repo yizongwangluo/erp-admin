@@ -77,10 +77,10 @@ FROM
         $ROI = bcdiv($operate['turnover'],$in['ad_cost'],2);//ROI=营业额/广告费
         $ROI = empty($ROI) ? '0' : $ROI;
         //每单广告成本=广告费/付款订单数
-        $unit_ad_cost = $in['ad_cost'] && $operate['paid_orders']?bcdiv($in['ad_cost'],$operate['paid_orders'],2):0;
+        $unit_ad_cost = bcdiv($in['ad_cost'],$operate['paid_orders'],2);
         $unit_ad_cost = empty($unit_ad_cost) ? '0' : $unit_ad_cost;
         //产品总成本转换为美元
-        $product_total_cost_usd = bcdiv($operate['product_total_cost'],$operate['exchange_rate'],2);
+        $product_total_cost_usd = $operate['product_total_cost'] && $operate['exchange_rate']? bcdiv($operate['product_total_cost'],$operate['exchange_rate'],2):0;
         $product_total_cost_usd = empty($product_total_cost_usd) ? '0' : $product_total_cost_usd;
         //毛利=营业额-广告费-手续费-产品总成本(美元)
         $gross_profit = $operate['turnover']-$in['ad_cost']-$operate['formalities_cost']-$product_total_cost_usd;
@@ -88,7 +88,7 @@ FROM
         $gross_profit_rmb = bcmul($gross_profit,$operate['exchange_rate'],2);
         $gross_profit_rmb = empty($gross_profit_rmb) ? '0' : $gross_profit_rmb;
         //毛利率=毛利/营业额
-        $gross_profit_rate = $gross_profit>0 && $operate['turnover']>0 ? bcdiv($gross_profit,$operate['turnover'],9):0;
+        $gross_profit_rate = bcdiv($gross_profit,$operate['turnover'],9);
         $gross_profit_rate = empty($gross_profit_rate) ? '0' : $gross_profit_rate;
         $in['review_status'] ? $in['review_status'] = $in['review_status'] : $in['review_status'] = 1;
         //写入数据库的数据
@@ -148,7 +148,7 @@ FROM
         $users = $this->db->query ( $sql )->result_array ();
         return $users;
     }
-    
+
     public function get_sum( $sql, $condition )
     {
         $sql_sum = $sql.$condition[0];
@@ -176,14 +176,14 @@ FROM
         //总毛利（￥）
         $sum['gross_profit_rmb'] = floor($sum['gross_profit_rmb'] * 100) / 100;
         //总毛利率 = 总毛利/总营业额
-        $sum['gross_profit_rate'] = $sum['gross_profit'] && $sum['turnover']?bcdiv($sum['gross_profit'],$sum['turnover'],9):0;
+        $sum['gross_profit_rate'] = $sum['gross_profit'] && $sum['turnover'] ?bcdiv($sum['gross_profit'],$sum['turnover'],9):0;
         $sum['gross_profit_rate'] = empty($sum['gross_profit_rate']) ? '0.000000000' : $sum['gross_profit_rate'];
         //总ROI = 总营业额/总广告费
-        $sum['ROI'] = $sum['turnover']?bcdiv($sum['turnover'],$sum['ad_cost'],2):0;
+        $sum['ROI'] = $sum['turnover'] && $sum['ad_cost']?bcdiv($sum['turnover'],$sum['ad_cost'],2):0;
         $sum['ROI'] = empty($sum['ROI']) ? '0.00' : $sum['ROI'];
         return $sum;
 
-}
+    }
 
     public function get_product_list( $id )
     {
@@ -201,54 +201,27 @@ FROM
             on
             a.shopify_o_id = b.shopify_o_id WHERE  a.shop_id = $shop_id AND a.datetime = '$date' AND a.financial_status = 'paid' GROUP BY b.sku_id";
         $sku_ids = $this->db->query ( $sql )->result_array ();
-        $sku_ids = array_column($sku_ids,null,'sku_id'); //把数组中sku_id变成key值
 
-        foreach($sku_ids as $k=>$v){ //拆分捆绑sku
-            $sku_tmp = explode('+',$v['sku_id']);
-            foreach($sku_tmp as $i=>$t){
-                $sku_id_tmp = explode('*',$v['sku_id']);
-                if(count($sku_id_tmp)>1){
-                    if(isset($sku_ids[$sku_id_tmp[0]])){ //存在该key
-                        $sku_ids[$sku_id_tmp[0]]['quantity'] +=  $sku_id_tmp[1]*$v['quantity'];
-                    }else{ //不存在
-                        $sku_ids[$sku_id_tmp[0]] = $sku_id_tmp[1]*$v['quantity'];
-                    }
-                    if(count($sku_id_tmp)>1){
-                        unset($sku_ids[$k]);
-                    }
-                }
+        $sku_order_sum = model('data/order_goods_data')->split_sku_comm($sku_ids);
+
+
+        $list = []; //初始化数组
+
+        foreach($sku_order_sum as $k=>$v){
+
+            $sql = "select b.code,b.alias,a.`name`,b.price,b.weight from goods a LEFT JOIN goods_sku b on a.id=b.spu_id	where  b.code in ('".$k."') or b.alias REGEXP '(^|,)(".$k.")(,|$)' GROUP BY b.code";
+            $data = $this->db->query ( $sql )->row_array ();
+
+            if($data){
+                $data['quantity'] = $v['quantity'];
+                $data['product_cost'] = $data['price']*$v['quantity'];
+            }else{
+                $data['code'] = $k;
             }
+            $list[]  = $data;
         }
 
-        $sku_ids_str = implode("','",array_column($sku_ids,'sku_id'));
-        $sku_ids_str_re = implode("|",array_column($sku_ids,'sku_id'));
-
-        if(!empty($sku_ids_str)){
-            //获取该店铺该天已付订单的所有商品(商品名称,sku编码,出售总数,产品重量,产品价格)
-            $sql = "select b.code,b.alias,a.`name`,b.price,b.weight from goods a LEFT JOIN goods_sku b on a.id=b.spu_id	where  b.code in ('".$sku_ids_str."') or b.alias REGEXP '(^|,)(".$sku_ids_str_re.")(,|$)' GROUP BY b.code";
-            $data = $this->db->query ( $sql )->result_array ();
-
-            //获取产品成本明细
-            foreach($data as $k => $v){
-                $data[$k]['id'] = $k+1;
-                $data[$k]['freight'] = (int)$operate['freight'];
-
-                $alias_code = explode(',',$v['alias']);
-                $alias_code[] = $v['code'];
-
-                foreach($alias_code as $value){
-                    if(isset($sku_ids[$value])){
-                        $data[$k]['quantity'] = $sku_ids[$value]['quantity'];
-                        $data[$k]['product_cost'] = bcadd(($sku_ids[$value]['quantity']*$v['price']),($sku_ids[$value]['quantity']*$v['weight']*$operate['freight']),2);
-                        break; // 终止循环
-                    }
-                }
-            }
-        }else{
-            $data = array();
-        }
-
-        return $data;
+        return $list;
     }
 
     //动态获取今天和昨天的运营数据
