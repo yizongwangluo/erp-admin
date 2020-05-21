@@ -141,6 +141,12 @@
                             <input type="text" name="code" value="<?=$info['code']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">开关</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="status" <?=$info['status']==1?'checked':''?>  lay-skin="switch" value="1" lay-text="开启|关闭">
+                        </div>
+                    </div>
                 </div>
                 <div class="layui-form-item" style="text-align: center;width: 50%;">
                     <div class="layui-inline">

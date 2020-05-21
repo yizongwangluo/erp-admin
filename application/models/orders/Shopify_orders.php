@@ -16,7 +16,7 @@ class Shopify_orders extends \Application\Component\Common\IFacade
 
     public function index(){
 
-        $shop_list = $this->shop_data->lists();
+        $shop_list = $this->shop_data->lists(['status'=>1]);//状态为开启的店铺
 
         //没有店铺时 跳出程序
         if(empty($shop_list)){
@@ -28,6 +28,11 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $mix_time = $time.'T23:59:59';
 
         foreach($shop_list as $k=>$value){
+
+            foreach($value as $i=>$item){ //去除文字空格
+                $value[$i] = trim($item);
+            }
+
             if($value['shop_api_key'] && $value['shop_api_pwd'] && $value['backstage']){
                 $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
 //                $url = 'http://www.erp.com/ceshi.json';
@@ -42,7 +47,8 @@ class Shopify_orders extends \Application\Component\Common\IFacade
      * @return bool
      */
     public function sync_order(){
-        $shop_list = $this->shop_data->lists();
+
+        $shop_list = $this->shop_data->lists(['status'=>1]);//状态为开启的店铺
 
         //没有店铺时 跳出程序
         if(empty($shop_list)){
@@ -56,6 +62,11 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         $mix_time = date('Y-m-d\TH:i:s', strtotime("-480 minute"));
 
         foreach($shop_list as $k=>$value){
+
+            foreach($value as $i=>$item){ //去除文字空格
+                $value[$i] = trim($item);
+            }
+
             if($value['shop_api_key'] && $value['shop_api_pwd'] && $value['backstage']){
                 $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?status=any&order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
 //                $url = 'http://www.erp.com/ceshi.json';
