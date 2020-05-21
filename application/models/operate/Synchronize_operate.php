@@ -69,6 +69,14 @@ class Synchronize_operate extends \Application\Component\Common\IData
             return false;
         }
 
+        foreach($shop as $i=>$item){ //去除文字空格
+            $shop[$i] = trim($item);
+        }
+
+        if(empty($shop['shop_api_key']) || empty($shop['shop_api_pwd']) || empty($shop['backstage'])){
+            $this->set_error('该店铺信息不完整，请检查后再试！');return false;
+        }
+
         //同步订单
         $this->created_save($shop,$start_time,$end_time);//时间段内创建当天并付款的订单
 
