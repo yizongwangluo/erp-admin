@@ -272,9 +272,9 @@ class Synchronize_operate extends \Application\Component\Common\IData
 
         //更新每日运营数据
         foreach($dates as $k=>$time) {
-            $this->getoperate_operate->get_data($shop_id,$time);
-            if($this->db->affected_rows()<=0){ //添加失败
-                $this->set_error('更新每日运营数据失败！');
+            $ret = $this->getoperate_operate->get_data($shop_id,$time);
+            if($ret){ //添加失败
+                $this->set_error($ret);
                 return false;
             }
         }

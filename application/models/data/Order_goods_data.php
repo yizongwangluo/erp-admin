@@ -29,6 +29,9 @@ class Order_goods_data extends \Application\Component\Common\IData{
 
                 $sku_list[$sku_id_tmp[0]]['sku_id'] =  $sku_id_tmp[0];
                 $sku_list[$sku_id_tmp[0]]['quantity'] +=  max(1,$sku_id_tmp[1])*$v['quantity'];
+                if(isset($v['countfreight'])){
+                    $sku_list[$sku_id_tmp[0]]['countfreight'] +=  max(1,$sku_id_tmp[1])*$v['countfreight'];
+                }
             }
         }
         return $sku_list;

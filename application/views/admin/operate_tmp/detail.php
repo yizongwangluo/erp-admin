@@ -57,6 +57,14 @@
                     </div>
                 </div>
                 <div class="layui-inline">
+                    <label class="layui-form-label">每克运费（¥）：</label>
+                    <div class="layui-inline">
+                        <div class="detail">
+                            <?= $info['freight'] ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">手续费点数：</label>
                     <div class="layui-inline">
                         <div class="detail">
@@ -171,7 +179,6 @@
                 ,{field:'quantity', title: '出单产品数量'}
                 ,{field:'price', title: '采购价（¥）'}
                 ,{field:'weight', title: '产品重量（g）'}
-                ,{field:'freight', title: '每克价格（¥）'}
                 ,{field:'product_cost', title: '产品成本（¥）'}
             ]]
         });

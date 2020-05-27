@@ -75,7 +75,6 @@ FROM
         $operate = $this->db->query ( "SELECT * FROM operate_tmp where id = $id" )->row_array ();
         //上传广告费后,计算相应数据
         $ROI = bcdiv($operate['turnover'],$in['ad_cost'],2);//ROI=营业额/广告费
-        $ROI = empty($ROI) ? '0' : $ROI;
         //每单广告成本=广告费/付款订单数
         $unit_ad_cost = bcdiv($in['ad_cost'],$operate['paid_orders'],2);
         $unit_ad_cost = empty($unit_ad_cost) ? '0' : $unit_ad_cost;
@@ -203,7 +202,6 @@ FROM
         $sku_ids = $this->db->query ( $sql )->result_array ();
 
         $sku_order_sum = model('data/order_goods_data')->split_sku_comm($sku_ids);
-
 
         $list = []; //初始化数组
 

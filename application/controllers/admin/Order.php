@@ -82,6 +82,8 @@ class Order extends \Application\Component\Common\AdminPermissionValidateControl
 		$data = $this->_excel_common($file_name,'C');//读取excel文件
 		$error = [];
 
+		$date_list = [];
+
 		foreach($data as $k=>$v){
 
 			$input = [];
@@ -93,7 +95,16 @@ class Order extends \Application\Component\Common\AdminPermissionValidateControl
 			if($ret==false){
 				$v['C'] = $this->order_data->get_error();
 				$error[] = $v;
+			}else{
+				$date_list[] = $ret;//获取店铺ID 和时间
 			}
+		}
+
+		$date_list = array_unique($date_list);//去重
+		//循环刷新运营数据
+		foreach($date_list as $v){
+			$info = explode('|',$v);
+			model ( 'operate/getoperate_operate' )->get_data($info[1],$info[0]);
 		}
 
 		if(count($error)){

@@ -73,7 +73,6 @@
                 </span>
                             <br>总（<?=$sum['formalities_cost']?>）
                         </td>
-                        <td>快递费(¥)</td>
                         <td>产品总成本(¥)
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=product_total_cost&sort=asc&user=<?php echo $this->input->get ( 'user' ); ?>&search=<?php echo $this->input->get ( 'search' ); ?>&start_time=<?php echo $this->input->get ( 'start_time' ); ?>&end_time=<?php echo $this->input->get ( 'end_time' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
@@ -114,7 +113,6 @@
                                     <td style="color: red">数据未上传</td>
                                 <?php }else{echo "<td>".$v['ad_cost']."</td>";} ?>
                                 <td><?=$v['formalities_cost']?></td>
-                                <td><?=$v['freight_sum']?></td>
                                 <td><?=$v['product_total_cost']?></td>
                                 <?php if($v['gross_profit'] == null){ ?>
                                     <td style="color: red">数据未上传</td>

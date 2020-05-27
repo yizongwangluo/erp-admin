@@ -54,7 +54,7 @@ class Order_data extends \Application\Component\Common\IData{
             $this->set_error('运费同步失败，请稍后再试');return false;
         }
 
-        return true;
+        return $info['datetime'].'|'.$info['shop_id'];
     }
 
 

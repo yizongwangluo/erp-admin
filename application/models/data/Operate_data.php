@@ -77,7 +77,7 @@ FROM
         $ROI = bcdiv($operate['turnover'],$in['ad_cost'],2);//ROI=营业额/广告费
         $ROI = empty($ROI) ? '0' : $ROI;
         //每单广告成本=广告费/付款订单数
-        $unit_ad_cost = bcdiv($in['ad_cost'],$operate['paid_orders'],2);
+        $unit_ad_cost = $in['ad_cost'] && $operate['paid_orders']?bcdiv($in['ad_cost'],$operate['paid_orders'],2):0;
         $unit_ad_cost = empty($unit_ad_cost) ? '0' : $unit_ad_cost;
         //产品总成本转换为美元
         $product_total_cost_usd = $operate['product_total_cost'] && $operate['exchange_rate']? bcdiv($operate['product_total_cost'],$operate['exchange_rate'],2):0;
@@ -88,7 +88,7 @@ FROM
         $gross_profit_rmb = bcmul($gross_profit,$operate['exchange_rate'],2);
         $gross_profit_rmb = empty($gross_profit_rmb) ? '0' : $gross_profit_rmb;
         //毛利率=毛利/营业额
-        $gross_profit_rate = bcdiv($gross_profit,$operate['turnover'],9);
+        $gross_profit_rate = $gross_profit && (float)$operate['turnover']?bcdiv($gross_profit,$operate['turnover'],9):0;
         $gross_profit_rate = empty($gross_profit_rate) ? '0' : $gross_profit_rate;
         $in['review_status'] ? $in['review_status'] = $in['review_status'] : $in['review_status'] = 1;
         //写入数据库的数据
