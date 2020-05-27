@@ -132,22 +132,22 @@
         <div class="layui-inline">
             <label for="" class="layui-form-label">是否仿冒</label>
             <div class="layui-inline">
-                <input checked="<?=$info['is_imitation']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_imitation" title="是">
-                <input checked="<?=$info['is_imitation']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_imitation" title="否">
+                <input <?=$info['is_imitation']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_imitation" title="是">
+                <input <?=$info['is_imitation']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_imitation" title="否">
             </div>
         </div>
         <div class="layui-inline">
             <label for="" class="layui-form-label">是否带电池</label>
             <div class="layui-inline">
-                <input checked="<?=$info['is_battery']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_battery" title="是">
-                <input checked="<?=$info['is_battery']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_battery" title="否">
+                <input <?=$info['is_battery']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_battery" title="是">
+                <input <?=$info['is_battery']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_battery" title="否">
             </div>
         </div>
         <div class="layui-inline">
             <label for="" class="layui-form-label">*是否侵权</label>
             <div class="layui-inline">
-                <input checked="<?=$info['is_tort']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_tort" title="是">
-                <input checked="<?=$info['is_tort']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_tort" title="否">
+                <input <?=$info['is_tort']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_tort" title="是">
+                <input <?=$info['is_tort']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_tort" title="否">
             </div>
         </div>
     </div>
@@ -155,22 +155,22 @@
         <div class="layui-inline">
             <label for="" class="layui-form-label">是否带磁</label>
             <div class="layui-inline">
-                <input checked="<?=$info['is_magnetism']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_magnetism" title="是">
-                <input checked="<?=$info['is_magnetism']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_magnetism" title="否">
+                <input <?=$info['is_magnetism']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_magnetism" title="是">
+                <input <?=$info['is_magnetism']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_magnetism" title="否">
             </div>
         </div>
         <div class="layui-inline">
             <label for="" class="layui-form-label">是否液体</label>
             <div class="layui-inline">
-                <input checked="<?=$info['is_liquid']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_liquid" title="是">
-                <input checked="<?=$info['is_liquid']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_liquid" title="否">
+                <input <?=$info['is_liquid']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_liquid" title="是">
+                <input <?=$info['is_liquid']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_liquid" title="否">
             </div>
         </div>
         <div class="layui-inline">
             <label for="" class="layui-form-label">*是否粉末</label>
             <div class="layui-inline">
-                <input checked="<?=$info['is_powder']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_powder" title="是">
-                <input checked="<?=$info['is_powder']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_powder" title="否">
+                <input <?=$info['is_powder']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_powder" title="是">
+                <input <?=$info['is_powder']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_powder" title="否">
             </div>
         </div>
     </div>
@@ -178,22 +178,22 @@
         <div class="layui-inline">
             <label for="" class="layui-form-label">是否定制</label>
             <div class="layui-inline">
-                <input checked="<?=$info['is_customized']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_customized" title="是">
-                <input checked="<?=$info['is_customized']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_customized" title="否">
+                <input <?=$info['is_customized']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_customized" title="是">
+                <input <?=$info['is_customized']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_customized" title="否">
             </div>
         </div>
         <div class="layui-inline">
             <label for="" class="layui-form-label">是否有独立包装</label>
             <div class="layui-inline">
-                <input checked="<?=$info['is_pack']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_pack" title="是">
-                <input checked="<?=$info['is_pack']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_pack" title="否">
+                <input <?=$info['is_pack']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_pack" title="是">
+                <input <?=$info['is_pack']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_pack" title="否">
             </div>
         </div>
         <div class="layui-inline">
             <label for="" class="layui-form-label">*是否有货</label>
             <div class="layui-inline">
-                <input checked="<?=$info['is_goods']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_goods" title="是">
-                <input checked="<?=$info['is_goods']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_goods" title="否">
+                <input <?=$info['is_goods']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_goods" title="是">
+                <input <?=$info['is_goods']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_goods" title="否">
             </div>
         </div>
     </div>
