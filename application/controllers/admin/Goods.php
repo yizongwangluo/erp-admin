@@ -183,6 +183,8 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	 * 导入保存
 	 */
 	public function addexcel_save(){
+		set_time_limit(0); //取消超时时间
+		ini_set('memory_limit','2048M');
 
 		//读取excel
 		$file_name = input('file_name');
@@ -190,7 +192,8 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'请上传文件');
 		}
 
-		$data = $this->_excel_common($file_name,'AO');//读取excel文件
+		$data = $this->_excel_common($file_name,'AT');//读取excel文件
+
 		$error = [];
 
 		/*foreach($data as $k=>$v){ //spu/sku分组
@@ -210,7 +213,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 				//查询spu是否存在
 				if($this->goods_data->find(['code'=>$value['A']])){
-					$value['AP'] = 'SPU已存在';
+					$value['AU'] = 'SPU已存在';
 					$error[] = $value;
 				}else{
 					$goods = [];
@@ -224,17 +227,18 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 							'code' => $value['A'],
 							'name' => $value['B'],
 							'name_en' => $value['C'],
-							'volume' => $value['O'], //体积
-							'remarks' => $value['Q'], //备注
-							'supplier_name' => $value['R'], //供应商
-							'batch_quantity' => $value['S'],//最小采购
-							'source_address' => $value['T'],//采购链接
-							't_status' => $value['W'],//采购链接
-							'dc_name' => $value['AB'], //中文报关名
-							'dc_name_en' => $value['AC'], //英文报关名
-							'pack_cost' => $value['AF'],//包装成本
-							'pack_weight' => $value['AG'],//包装重量
-							'pack_volume' => $value['AH'],//体积 带包装
+							'volume' => $value['T'], //体积
+							'remarks' => $value['V'], //备注
+							'supplier_name' => $value['W'], //供应商
+							'batch_quantity' => $value['X'],//最小采购
+							'source_address' => $value['Y'],//采购链接
+							'purchase_remarks'=>$value['Z'],//采购备注
+							't_status' => $value['AB'],//状态
+							'dc_name' => $value['AG'], //中文报关名
+							'dc_name_en' => $value['AH'], //英文报关名
+							'pack_cost' => $value['AK'],//包装成本
+							'pack_weight' => $value['AL'],//包装重量
+							'pack_volume' => $value['AM'],//体积 带包装
 							'u_id' => $this->admin['id'] //操作人
 					];
 
@@ -242,63 +246,60 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					$spu_id = $ret;
 					if(!$ret){
 						$spu_id = 0;
-						$value['AP'] = $this->goods_excel_goods->get_error();
+						$value['AU'] = $this->goods_excel_goods->get_error();
 						$error[] = $value;
 					}
 				}
 
-			}elseif($value['H']){
+			}elseif($value['J']){ //判断是否是sku
 				if($spu_id){
-
-					$sku = [];
-
 					$sku = [
-					 'norms_name'=>$value['D'],
-					 'norms'=>$value['E'],
-					 'norms_name1'=>$value['F'],
-					 'norms1'=>$value['G'],
-					 'code'=>$value['H'],
+					 'norms_name'=>$value['D'], //属性名1
+					 'norms'=>$value['E'],//属性值1
+					 'norms_name1'=>$value['F'],//属性名2
+					 'norms1'=>$value['G'],//属性值2
+					 'norms_name2'=>$value['H'],//属性名3
+					 'norms2'=>$value['I'],//属性值3
+					 'code'=>$value['J'], //SKU属性编号
 					 'spu_id'=>$spu_id,
-					 'weight'=>$value['I'],
-					 'price'=>$value['J'],
-					 'alias'=>$value['K'],
-					 'source_address'=>$value['T']
+					 'weight'=>$value['K'],//产品重量
+					 'price'=>$value['L'],
+					 'alias'=>$value['M'],
+					 'source_address'=>$value['Y'],//采购链接
+					 'purchase_remarks'=>$value['Z']//采购备注
 					];
 
 					if($sku['alias']){ //别名判断
 						if(in_array($sku['code'],explode(',',$sku['alias']))){
-							$value['AP'] = 'sku编码与sku别名重复';
+							$value['AU'] = 'sku编码与sku别名重复';
 							$error[] = $value;
 							continue;
 						}
 
 						if(!model('data/goods_sku_data')->get_only($sku,true)){ //判断主表
-							$value['AP'] = 'sku别名已存在或与sku编码冲突';
+							$value['AU'] = 'sku别名已存在或与sku编码冲突';
 							$error[] = $value;
 							continue;
 						}
 
-						if(!model('data/goods_sku_apply_data')->get_only($sku,true)){ //判断申请表
+						/*if(!model('data/goods_sku_apply_data')->get_only($sku,true)){ //判断申请表
 							$value['AP'] = 'sku别名已存在或与sku编码冲突';
 							$error[] = $value;
 							continue;
-						}
+						}*/
 
 					}
 
 					$ret = $this->goods_sku_data->add($sku);
 					if(!$ret){
-						$value['AP'] = $this->goods_sku_data->get_error();
+						$value['AU'] = $this->goods_sku_data->get_error();
 						$error[] = $value;
 					}
 
 				}else{
-					$value['AP'] = '没有对应的SPU数据';
+					$value['AU'] = '没有对应的SPU数据';
 					$error[] = $value;
 				}
-			}else{
-				$value['AP'] = '数据不完整';
-				$error[] = $value;
 			}
 		}
 
