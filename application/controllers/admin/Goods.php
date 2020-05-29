@@ -203,13 +203,6 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 			if($value['A'] && $value['B']){ //判断是否是SPU
 
-				//查询spu是否存在
-				if($this->goods_data->find(['code'=>$value['A']])){
-					$value['AU'] = 'SPU已存在';
-					$error[] = $value;
-				}else{
-					$goods = [];
-
 					//类别ID
 					if($value['W']){
 						$goods['category_id'] = $this->goods_category_data->get_cateid($value['V']);
@@ -234,14 +227,13 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 							'u_id' => $this->admin['id'] //操作人
 					];
 
-					$ret = $this->goods_data->add($goods);
+					$ret = $this->goods_data->excelSave($goods);
 					$spu_id = $ret;
 					if(!$ret){
 						$spu_id = 0;
 						$value['AU'] = $this->goods_excel_goods->get_error();
 						$error[] = $value;
 					}
-				}
 
 			}elseif($value['J']){ //判断是否是sku
 				if($spu_id){
@@ -261,28 +253,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					 'purchase_remarks'=>$value['Z']//采购备注
 					];
 
-					if($sku['alias']){ //别名判断
-						if(in_array($sku['code'],explode(',',$sku['alias']))){
-							$value['AU'] = 'sku编码与sku别名重复';
-							$error[] = $value;
-							continue;
-						}
-
-						if(!model('data/goods_sku_data')->get_only($sku,true)){ //判断主表
-							$value['AU'] = 'sku别名已存在或与sku编码冲突';
-							$error[] = $value;
-							continue;
-						}
-
-//						if(!model('data/goods_sku_apply_data')->get_only($sku,true)){ //判断申请表
-//							$value['AP'] = 'sku别名已存在或与sku编码冲突';
-//							$error[] = $value;
-//							continue;
-//						}
-
-					}
-
-					$ret = $this->goods_sku_data->add($sku);
+					$ret = $this->goods_sku_data->excelSave($sku);
 					if(!$ret){
 						$value['AU'] = $this->goods_sku_data->get_error();
 						$error[] = $value;

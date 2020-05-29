@@ -172,7 +172,6 @@ class Goods_data extends \Application\Component\Common\IData{
             $this->set_error('该spu编码已存在！');return false;
         }
 
-
         $input = array_filter($input);
 
         //时间
@@ -181,6 +180,36 @@ class Goods_data extends \Application\Component\Common\IData{
         $arr['edittime'] = $time;
 
         return $this->store($input);
+    }
+
+
+    /**
+     * 导入
+     * @param array $input
+     * @return bool|int
+     */
+    public function excelSave($input = []){
+
+        if(empty($input['code'])){
+            $this->set_error('请填写SPU编码');return false;
+        }
+        if(empty($input['name'])){
+            $this->set_error('请填写产品名称');return false;
+        }
+
+        //判断code是否重复
+        $info = $this->find(['code'=>$input['code']]);
+        $input = array_filter($input);
+        $time = time();
+        $arr['edittime'] = $time;
+
+        if($info){ //修改
+            $this->update($info['id'],$input);
+            return $info['id'];
+        }else{ //新增
+            $arr['addtime'] = $time;//时间
+            return $this->store($input);
+        }
     }
 
     /**

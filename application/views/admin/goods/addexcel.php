@@ -12,7 +12,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">excel文件：</label>
             <div class="layui-inline">
-                <div class="layui-inline" style="min-width: 420px"><input id="thumb_file"  name="file_name" value="" type="text" class="layui-input" /></div>
+
+                <div class="layui-inline" style="min-width: 420px"><em style="color: red">* 注：一次最多只能导入4000条</em><input id="thumb_file"  name="file_name" value="" type="text" class="layui-input" /></div>
                 <div class="layui-inline"><button type="button" class="layui-btn upload-file-all"><i class="layui-icon"></i>上传文件</button></div>
             </div>
             <em><a href="/m.xlsx">下载导入模板</a></em>

@@ -100,6 +100,38 @@ class Goods_sku_data extends \Application\Component\Common\IData{
         return $this->store($input);
     }
 
+
+    /**
+     * 导入
+     * @param array $input
+     * @return bool|int
+     */
+    public function excelSave($input = []){
+
+        if(empty($input['code'])){
+            $this->set_error('请填写SKU编码');return false;
+        }
+        if(empty($input['norms'])){
+            $this->set_error('请填写规格/颜色');return false;
+        }
+
+        //获取sku信息
+        $info = $this->find(['code'=>$input['code']]);
+
+        $input = array_filter($input);
+
+        if($info){ //修改
+            $this->update($info['id'],$input);
+
+            return $info['id'];
+        }else{ //新增
+
+            return $this->store($input);
+        }
+    }
+
+
+
     /**
      * 删除
      * @param int $id
