@@ -183,6 +183,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	 * 导入保存
 	 */
 	public function addexcel_save(){
+
 		set_time_limit(0); //取消超时时间
 		ini_set('memory_limit','2048M');
 
@@ -195,15 +196,6 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		$data = $this->_excel_common($file_name,'AT');//读取excel文件
 
 		$error = [];
-
-		/*foreach($data as $k=>$v){ //spu/sku分组
-			if($v['A']){
-				$goods[count($goods)] = $v;
-			}else{
-				$goods[count($goods)-1]['sku_list'][] = $v;
-			}
-		}*/
-
 
 		$spu_id = 0;
 		//整理数组
@@ -282,11 +274,11 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 							continue;
 						}
 
-						/*if(!model('data/goods_sku_apply_data')->get_only($sku,true)){ //判断申请表
-							$value['AP'] = 'sku别名已存在或与sku编码冲突';
-							$error[] = $value;
-							continue;
-						}*/
+//						if(!model('data/goods_sku_apply_data')->get_only($sku,true)){ //判断申请表
+//							$value['AP'] = 'sku别名已存在或与sku编码冲突';
+//							$error[] = $value;
+//							continue;
+//						}
 
 					}
 
@@ -305,9 +297,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 		if(count($error)){
 			//写入文件
-			log_message('addexcel_save',json_encode($error),true);
+			$err_name = $this->_localExcel($error,'error',46);
 			//保存到数据库
-			$this->excel_error_log_data->store(['name'=>'导入失败','datetime'=>date('Y-m-d H:i:s'),'content'=>json_encode($error),'u_id'=>$this->admin['id']]);
+			$this->excel_error_log_data->store(['name'=>'导入失败','datetime'=>date('Y-m-d H:i:s'),'content'=>$err_name,'u_id'=>$this->admin['id']]);
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'导入失败，请下载失败日志');
 		}
 
@@ -319,20 +311,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	 */
 	public function error_log(){
 
-		$list = $this->excel_error_log_data->get_field_by_where(['id','name','datetime','u_id'],['type'=>1],true);
+		$list = $this->excel_error_log_data->lists(['type'=>1],true);
 
 		$this->load->view ( '', ['list'=>$list] );
-	}
-
-
-	public function error_dow($id = 0){
-
-		$info = $this->excel_error_log_data->get_info($id);
-
-		$data = json_decode($info['content']);
-
-		$this->_exportExcel($data,$info['name'].$info['datetime'],28);
-
 	}
 
 	/**

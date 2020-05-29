@@ -206,7 +206,7 @@ class MY_Controller extends CI_Controller
 		$objActSheet->getStyle("A1:".$border_end)->getBorders()->getAllBorders()->setBorderStyle(\PHPExcel_Style_Border::BORDER_THIN); // 设置边框
 
 
-		$fileName = iconv("utf-8", "gb2312", $fileName);
+//		$fileName = iconv("utf-8", "gb2312", $fileName);
 
 		//重命名表
 		//$objPHPExcel->getActiveSheet()->setTitle('test');
@@ -221,6 +221,64 @@ class MY_Controller extends CI_Controller
 		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$objWriter->save('php://output'); //文件通过浏览器下载
 
+	}
+	/**
+	 * 写excel保存到本地
+	 * @param $headArr
+	 * @param $data
+	 * @param string $fileName
+	 * @param int $width
+	 * @return bool
+	 * @throws PHPExcel_Exception
+	 * @throws PHPExcel_Reader_Exception
+	 */
+	public function _localExcel($data,$fileName='Excel', $width = 20){
+
+		if (empty($data) && !is_array($data)) {
+			return false;
+		}
+
+		$date = date("YmdHis");
+		$fileName .= "_{$date}.xls";
+
+		$this->load->library("PHPExcel");//ci框架中引入excel类
+		$objPHPExcel = new PHPExcel();
+
+		$objActSheet = $objPHPExcel->getActiveSheet();
+		$border_end = 'A'; // 边框结束位置初始化
+		// 写入内容
+		$column = 1;
+
+		foreach($data as $key => $rows){ //获取一行数据
+			$tem_span = "A";
+			foreach($rows as $keyName=>$value){// 写入一行数据
+				if (strlen($tem_span) > 1) {
+					$arr_span = str_split($tem_span);
+					$j = '';
+					foreach ($arr_span as $ke=>$va) {
+						$j .= chr(ord($va));
+					}
+				} else {
+					$span = ord($tem_span);
+					$j = chr($span);
+				}
+				$objActSheet->setCellValue($j.$column, $value);
+				$border_end = $j.$column;
+				$tem_span++;
+			}
+			$column++;
+		}
+
+		$objActSheet->getStyle("A1:".$border_end)->getBorders()->getAllBorders()->setBorderStyle(\PHPExcel_Style_Border::BORDER_THIN); // 设置边框
+
+		//设置活动单指数到第一个表
+		$objPHPExcel->setActiveSheetIndex(0);
+		ob_end_clean();//清除缓冲区,避免乱码
+
+		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter->save(FCPATH."upload/errorexcel/".$fileName); //文件通过浏览器下载
+
+		return $fileName;
 	}
 
 	//file_get_contents抓取https地址内容
