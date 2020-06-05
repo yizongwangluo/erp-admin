@@ -13,6 +13,7 @@ class Operate_tmp  extends \Application\Component\Common\AdminPermissionValidate
         parent::__construct ();
         $this->load->model ( 'data/operate_tmp_data' );
         $this->load->model ( 'data/my_data' );
+        $this->load->model ( 'data/admin_user_org_data' );
     }
 
     //运营数据列表
@@ -48,7 +49,15 @@ class Operate_tmp  extends \Application\Component\Common\AdminPermissionValidate
         $where_sql = "";
         $where = [];
         if (!empty($user)){
-            $where[] = " user_name = '$user'";
+            $where[] = " user_id = '$user'";
+        }
+        if(empty($user) && $input['o_id']){ //按照部门查询
+            //获取该部门下的所有用户
+            $userlist = $this->admin_user_org_data->getOrgUser($input['o_id']);
+            if($userlist){
+                $user_ids = implode(',',array_column($userlist,'id'));
+                $where[] = " user_id in (".$user_ids.") ";
+            }
         }
         if (!empty($search)){
             $where[] = " (user_name like '%{$search}%' or domain like '%{$search}%')";

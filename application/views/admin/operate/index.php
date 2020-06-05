@@ -3,14 +3,16 @@
 <div class="layui-tab admin-layui-tab layui-tab-brief">
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
-            <form action="?" method="get">
-                <div class="layui-form">
+            <form action="?" method="get"  class="layui-form">
+                <div>
                     <div class="layui-inline  col-xs-2">
-                        <select name="user" lay-search="">
-                            <option value="">直接选择或搜索选择</option>
-                            <?php foreach ($users as $v): ?>
-                                <option value="<?=$v['s_user_name']?>" <?= $v['s_user_name'] == $this->input->get ( 'user' ) ? selected : '' ?> ><?=$v['s_user_name']?></option>
-                            <?php endforeach;?>
+                        <select name="o_id" lay-search="" id="o_id" lay-filter="o_id">
+                            <option value="">--职位--</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline  col-xs-2">
+                        <select name="user" lay-search="" id="u_id">
+                            <option value="">--用户--</option>
                         </select>
                     </div>
                     <div class="layui-inline">
@@ -168,8 +170,9 @@
 <?php $this->load->view ( 'admin/common/footer' ) ?>
 <script type="text/javascript">
 
-    layui.use('laydate', function() {
-        var laydate = layui.laydate;
+    layui.use(['laydate','form'], function() {
+        var laydate = layui.laydate,
+            form = layui.form;
         //同时绑定多个
         lay('.date-time').each(function () {
             laydate.render({
@@ -177,5 +180,35 @@
                 , trigger: 'click'
             });
         });
+
+        getOrg('<?=$this->input->get ( 'o_id' )?>');
+        getUser('<?=$this->input->get ( 'o_id' )?>','<?=$this->input->get ( 'user' )?>');
+
+        form.on('select(o_id)', function(data){
+            getUser(data.value);
+        });
+
+        //获取运营列表
+        function getOrg($o_id){
+            $("#o_id").html("<option value=''>--职位--</option>");
+            $.post('/admin/common/getOrgOperate',{o_id:$o_id},function(obj){
+                if(obj.status==1){
+                    $('#o_id').append(obj.data);
+                }
+                form.render();
+            })
+        }
+
+        //获取对应的用户列表
+        function getUser($o_id,$u_id){
+            $("#u_id").html("<option value=''>--用户--</option>");
+            $.post('/admin/common/getOrgUser',{o_id:$o_id,u_id:$u_id},function(obj){
+                if(obj.status==1){
+                    $('#u_id').append(obj.data);
+                }
+                form.render();
+            })
+        }
+
     });
 </script>

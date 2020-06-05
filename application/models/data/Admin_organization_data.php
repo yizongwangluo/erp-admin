@@ -42,6 +42,7 @@ class Admin_organization_data extends \Application\Component\Common\IData{
 		$data['name'] 	 = $input['name'];
 		$data['pid'] 	 = $input['pid']?$input['pid']:0;
 		$data['status'] = $input['status'];
+		$data['is_operate'] = $input['is_operate']?$input['is_operate']:0;
 
 		return $this->store($data);
 

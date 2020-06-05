@@ -15,7 +15,7 @@
         <li><a href="<?php echo base_url ( 'admin/goods/addexcel' ) ?>">导入</a></li>
     </ul>
     <div class="layui-tab-content">
-              <form action="?" method="get" >
+      <form action="?" method="get" >
                 <div class="layui-form">
                     <div class="layui-inline">
                         <select name="category_id" lay-verify="required" lay-search>

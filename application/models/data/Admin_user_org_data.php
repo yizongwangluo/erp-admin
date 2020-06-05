@@ -95,4 +95,51 @@ class Admin_user_org_data extends \Application\Component\Common\IData{
 			return $info;
 		}
 	}
+
+	/**
+	 * 获取该分组下的所有用户
+	 * @param int $o_id
+	 * @return mixed
+	 */
+	public function getOrgUser($o_id = 0){
+
+		//获取该分组下的所有分组ID
+		$o_ids = $this->getPorgAll($o_id,$o_id);
+		$o_ids_reg = str_replace(',','|',$o_ids);
+
+		if($o_id){
+			$sql = 'SELECT
+					id,
+					user_name,
+					real_name,
+					job_number
+				FROM admin  WHERE
+					org_id REGEXP ("'.$o_ids_reg.'")';
+
+			$query = $this->db->query($sql);
+			$info = $query->result_array();
+
+			return $info;
+		}
+	}
+
+
+	/**
+	 *
+	 * @param string $o_id
+	 * @param string $o_ids
+	 * @return string
+	 */
+	public function getPorgAll($o_id = '',&$o_ids = ''){
+
+		$query = $this->db->query('select id from admin_organization where pid in ('.$o_id.')');
+		$list  =  $query->result_array();
+
+		if($list){
+			$o_id = implode(',',array_column($list,'id'));
+			$o_ids.=','.$o_id;
+			$this->getPorgAll($o_id,$o_ids);
+		}
+		return trim($o_ids,',');
+	}
 }

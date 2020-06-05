@@ -40,6 +40,12 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label for="" class="layui-form-label">是否是运营</label>
+            <div class="layui-inline col-xs-3">
+                <input type="checkbox" name="is_operate" value="1" lay-skin="switch" lay-text="是|否">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" type="button" onclick="save_form()">保存</button>
             </div>

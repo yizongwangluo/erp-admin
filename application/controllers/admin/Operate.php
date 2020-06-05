@@ -13,6 +13,7 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
         parent::__construct ();
         $this->load->model ( 'data/operate_data' );
         $this->load->model ( 'data/my_data' );
+        $this->load->model ( 'data/admin_user_org_data' );
     }
 
     //运营数据列表
@@ -30,6 +31,7 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
         if(isset($order_s)){
             $sort = $order_s;
         }
+
         $result = $this->operate_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
         $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $result['users'] = $this->operate_data->get_users($admin_id);
@@ -54,7 +56,15 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
         $where_sql = "";
         $where = [];
         if (!empty($user)){
-            $where[] = " user_name = '$user'";
+            $where[] = " user_id = '$user'";
+        }
+        if(empty($user) && $input['o_id']){ //按照部门查询
+            //获取该部门下的所有用户
+            $userlist = $this->admin_user_org_data->getOrgUser($input['o_id']);
+            if($userlist){
+                $user_ids = implode(',',array_column($userlist,'id'));
+                $where[] = " user_id in (".$user_ids.") ";
+            }
         }
         if (!empty($search)){
             $where[] = " (user_name like '%{$search}%' or domain like '%{$search}%')";
