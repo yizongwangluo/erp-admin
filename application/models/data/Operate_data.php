@@ -208,15 +208,17 @@ FROM
         $list = []; //初始化数组
 
         foreach($sku_order_sum as $k=>$v){
-
-            $sql = "select b.code,b.alias,a.`name`,b.price,b.weight from goods a LEFT JOIN goods_sku b on a.id=b.spu_id	where  b.code in ('".$k."') or b.alias REGEXP '(^|,)(".$k.")(,|$)' GROUP BY b.code";
-            $data = $this->db->query ( $sql )->row_array ();
-
-            if($data){
-                $data['quantity'] = $v['quantity'];
-                $data['product_cost'] = $data['price']*$v['quantity'];
+            if($k){
+                $sql = "select b.code,b.alias,a.`name`,b.price,b.weight from goods a LEFT JOIN goods_sku b on a.id=b.spu_id	where  b.code in ('".$k."') or b.alias REGEXP '(^|,)(".$k.")(,|$)' GROUP BY b.code";
+                $data = $this->db->query ( $sql )->row_array ();
+                if($data){
+                    $data['quantity'] = $v['quantity'];
+                    $data['product_cost'] = $data['price']*$v['quantity'];
+                }else{
+                    $data['code'] = $k;
+                }
             }else{
-                $data['code'] = $k;
+                $data = ['code'=>'null(请填写sku信息)','quantity'=>$v['quantity']];
             }
             $list[]  = $data;
         }

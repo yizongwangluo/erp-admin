@@ -131,7 +131,11 @@ class Getoperate_operate extends \Application\Component\Common\IData
 
         //获取对应的sku_总成本,商品总重量,sku是否存在标识
         $cost = $this->get_cost($data);
-        if($cost==false){
+        if($cost===2){
+            $data['operate_remark'] = '请填写sku信息';
+            return $data;
+        }
+        if($cost===1){
             $data['operate_remark'] = '该店铺有sku没有匹配成功';
             return $data;
         }
@@ -194,11 +198,14 @@ class Getoperate_operate extends \Application\Component\Common\IData
 
         //获取对应的sku_总成本,商品总重量,sku是否存在标识
         $cost = $this->get_cost($data);
-        if($cost==false){
+        if($cost===2){
+            $data['operate_remark'] = '请填写sku信息';
+            return $data;
+        }
+        if($cost===1){
             $data['operate_remark'] = '该店铺有sku没有匹配成功';
             return $data;
         }
-
         $data['sku_total_cost'] = $cost['sku_total_cost'];//sku总成本(人民币)
         $data['total_weight'] = $cost['total_weight']; //sku商品总重量(g)
 
@@ -244,12 +251,15 @@ class Getoperate_operate extends \Application\Component\Common\IData
         $sku_list_sum = model('data/order_goods_data')->split_sku_comm($sku_list);
 
         foreach($sku_list_sum as $k=>$v){
+            if(empty($k)){ //sku_id为空时 跳出
+                return 2;
+            }
 
             $sql = "select price,weight from goods_sku where  code in ('".$k."') or alias REGEXP '(^|,)(".$k.")(,|$)' GROUP BY code";
             $sku_info = $this->db->query ( $sql )->row_array ();
 
             if(!$sku_info){ //没有查到对应sku信息时，跳出
-                return false;
+                return 1;
             }
             $sku_list_sum[$k]['product_cost'] = $sku_info['price']*$v['quantity'];
             $sku_list_sum[$k]['weight'] = $sku_info['weight']*($v['quantity']-$v['countfreight']);
