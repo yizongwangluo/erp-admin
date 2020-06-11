@@ -243,8 +243,9 @@ class Getoperate_operate extends \Application\Component\Common\IData
                 `order` a
             RIGHT JOIN order_goods b ON a.id = b.o_id
             WHERE
-                b.shop_id = {$data['shop_id']}
-            AND b.datetime = '".$data['datetime']."'
+                a.shop_id = {$data['shop_id']}
+            AND a.datetime = '".$data['datetime']."'
+            and a.financial_status = 'paid'
             GROUP BY
                 b.sku_id,a.freight) c GROUP BY c.sku_id";
         $sku_list = $this->db->query ( $sql )->result_array ();

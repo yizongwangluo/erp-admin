@@ -47,4 +47,22 @@ class Synchronize extends \Application\Component\Common\AdminPermissionValidateC
             $this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
         }
     }
+
+    /**
+     * 修复订单时间
+     */
+    public function repair_order_time(){
+
+        if ( IS_POST ) {
+            $input = $this->input->post();
+
+            if ( !$this->synchronize_operate->repair_order_time ( $input ) ) {
+                $this->output->ajax_return ( AJAX_RETURN_FAIL, $this->synchronize_operate->get_error () );
+            }
+            $this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
+        }
+
+    }
+
+
 }

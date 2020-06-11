@@ -286,5 +286,30 @@ class Synchronize_operate extends \Application\Component\Common\IData
 
 
     }
+
+
+    /**
+     * 更新订单时间
+     */
+    public function repair_order_time($input = []){
+
+        if(!$input['datetime']){
+            $this->set_error('请选择时间');return false;
+        }
+        if(!$input['shop_id']){
+            $this->set_error('请选择店铺');return false;
+        }
+
+        $list = $this->order_data->lists($input);
+
+        foreach($list as $value){
+             $datetime = substr($value['created_at'],0,strpos($value['created_at'], 'T'));
+
+            $this->order_data->update($value['id'],['datetime'=>$datetime]);
+            $this->order_goods_data->update($value['id'],['datetime'=>$datetime],'o_id');
+
+        }
+        return true;
+    }
 }
 

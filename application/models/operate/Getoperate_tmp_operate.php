@@ -16,7 +16,6 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
         $this->load->model ( 'data/shop_data' );
         $this->load->model ( 'data/admin_data' );
         $this->load->model ( 'data/royalty_rules_data' );
-        $this->load->model ( 'data/order_goods_data' );
         $this->load->model ( 'operate/getoperate_operate' );
     }
 

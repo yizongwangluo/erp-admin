@@ -143,11 +143,11 @@ class Shopify_orders extends \Application\Component\Common\IFacade
             $order_info['gateway'] = $v['gateway'];
             $order_info['addtime'] = $time; //新增时间
             $order_info['tracking_number'] = $v['fulfillments'][0]['tracking_number'];
-            if($status == 0){
+//            if($status == 0){
                 $order_info['datetime'] = substr($v['created_at'],0,strpos($v['created_at'], 'T'));
-            }else{
-                $order_info['datetime'] = substr($v['updated_at'],0,strpos($v['updated_at'], 'T'));
-            }
+//            }else{
+//                $order_info['datetime'] = substr($v['updated_at'],0,strpos($v['updated_at'], 'T'));
+//            }
             $order_id = $this->order_data->save($order_info);
 
             if($order_id){
