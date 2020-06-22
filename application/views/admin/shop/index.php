@@ -13,6 +13,13 @@
                         <input type="text" name="search" value="<?php echo $this->input->get ( 'search' ); ?>"
                                class="layui-input" placeholder="请输入查询关键词"/>
                     </div>
+                    <div class="layui-inline">
+                        <select name="status" lay-verify="required" >
+                            <option value="" >--状态--</option>
+                            <option value="0" <?php if($this->input->get ( 'status' )==0 && is_numeric($this->input->get ( 'status' ))){ echo 'selected'; } ?>>关闭</option>
+                            <option value="1" <?php if($this->input->get ( 'status' )==1){ echo 'selected'; } ?>>开启</option>
+                        </select>
+                    </div>
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索
                 </div>
                 <div style='overflow:auto'>
@@ -40,6 +47,7 @@
                 </span>
                         </td>
                         <td>店铺套餐</td>
+                        <td>店铺状态</td>
                         <td>授权ERP
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=authorization_erp&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
@@ -95,6 +103,7 @@
                                     ?>
                                 </td>
                                 <td><?=$v['authorization_erp']?></td>
+                                <td><?=$v['status']?'开启':'<a style="color: red">关闭</a>'?></td>
                                 <td><?=$v['company_name']?></td>
                                 <td><?=$v['user_name']?></td>
                                 <td><?=$v['shop_remark']?></td>

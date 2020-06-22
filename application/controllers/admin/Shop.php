@@ -43,12 +43,15 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " where domain like '%{$search}%' or company_name like '%{$search}%' or shop_remark like '%{$search}%' or user_name like '%{$search}%'";
+            $condition[] = " (domain like '%{$search}%' or company_name like '%{$search}%' or shop_remark like '%{$search}%' or user_name like '%{$search}%')";
+        }
+        if (isset($input['status']) && is_numeric($input['status'])){
+            $condition[] = " status = ".$input['status'];
         }
         if (empty($condition)){
             return array ();
         }else{
-            return $condition;
+            return [' where '.implode(' and ',$condition)];
         }
 
     }

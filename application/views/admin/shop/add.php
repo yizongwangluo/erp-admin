@@ -92,6 +92,19 @@
                             <input type="text" name="shop_api_pwd" value="<?=$info['shop_api_pwd']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
+                    <div class="layui-inline">
+                        <div class="layui-input-inline">
+                           <a class="layui-btn  layui-btn-normal" id="jiaoyan">API校验</a>
+                        </div>
+                    </div>
+                    </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">时区/时间差</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="timezone" value="<?=$info['timezone']?>" placeholder="" class="layui-input">
+                        </div>
+                    </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">店铺套餐</label>
@@ -177,3 +190,32 @@
     }
 
 </style>
+<script>
+    layui.use(['layer'], function(){
+
+        var layer = layui.layer;
+
+        $('#jiaoyan').click(function(){
+            var index = layer.load(1, {
+                shade: [0.1,'#fff'] //0.1透明度的白色背景
+            });
+            var backstage = $('input[name="backstage"]').val(),
+                shop_api_key = $('input[name="shop_api_key"]').val(),
+                shop_api_pwd = $('input[name="shop_api_pwd"]').val();
+            $.post('/admin/ShopifyApi/getShopInfo',
+                        {backstage:backstage,
+                        shop_api_key:shop_api_key,
+                        shop_api_pwd:shop_api_pwd},
+                function(obj){
+                    console.log(obj);
+                    if(obj.code){
+                        layer.msg('校验成功');
+                        $('input[name="timezone"]').val(obj.data.timezone);
+                    }else{
+                        layer.msg(obj.msg);
+                    }
+                    layer.close(index);
+                },'json')
+        })
+    });
+</script>
