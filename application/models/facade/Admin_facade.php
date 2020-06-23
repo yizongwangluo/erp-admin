@@ -166,7 +166,7 @@ class Admin_facade extends \Application\Component\Common\IFacade
 			return false;
 		}
 		$admin = $this->admin_data->get_info_by_job_number ( $job_number );
-		if ( $admin['id'] != $userid ) {
+		if (!empty($admin) && $admin['id'] != $userid ) {
 			$this->set_error ( '该工号已存在！' );
 			return false;
 		}
