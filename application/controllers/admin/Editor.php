@@ -52,9 +52,11 @@ class Editor extends \Application\Component\Common\AdminPermissionValidateContro
 			$file = $_FILES['file'];
 		}
 
+		$FCPATH = dirname(FCPATH).'/data/';
+
 		if(explode('/',$file['type'])[0]=='image'){ //图片
 
-			$file_path = FCPATH .'upload/images/'.date("Ymd").'/';
+			$file_path = $FCPATH .'upload/images/'.date("Ymd").'/';
 
 			$filearr = explode('.', $file["name"]);
 
@@ -63,10 +65,10 @@ class Editor extends \Application\Component\Common\AdminPermissionValidateContro
 
 		}else{ //文件
 
-			$file_path = FCPATH .'upload/files/';
+			$file_path = $FCPATH .'upload/files/';
 			$fileNameArr = explode('.',$file["name"]);
 			$name = uniqid ( rand_string ( 10 ) ).'.'.$fileNameArr[count($fileNameArr)-1];
-			$url =FCPATH.'upload/files/'.$name;
+			$url =$FCPATH.'upload/files/'.$name;
 		}
 
 		if(!is_dir($file_path)){

@@ -524,6 +524,6 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 //$config['img_url'] =  'http://cs.qianrenshu.com';
-$config['img_url'] =  '';
+$config['img_url'] =  'http://data.vasilijh.com';
 $config['img_url_default'] =  '/logo.png';
 $config['static_cdn'] = (ENVIRONMENT == 'production') ? 'https://static.erp.com' : '';
