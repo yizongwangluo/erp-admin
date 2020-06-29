@@ -66,7 +66,7 @@
                   <tr>
                       <td><input type="checkbox" class="id" name="ids" value="<?= $v['id'] ?>"/></td>
                       <td><?=$v['id']?></td>
-                      <td class="img"><a href="<?=base_url($v['img'])?>" target="_blank"><img src="<?=base_url($v['img'])?>"></a></td>
+                      <td class="img"><a href="<?=$v['img']?>" target="_blank"><img src="<?=$v['img']?>"></a></td>
                       <td><?=$v['name']?></td>
                       <td><?=$v['sku_code']?></td>
                       <td><?=$v['alias']?></td>

@@ -14,7 +14,7 @@
             <select name="shop" lay-search="">
                 <option value="">直接选择或搜索选择同步店铺</option>
                 <?php foreach ($shops as $v): ?>
-                    <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? selected : '' ?> ><?=$v['domain']?></option>
+                    <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? 'selected' : '' ?> <?=$v['status']==1?'':'disabled';?> ><?=$v['domain']?></option>
                 <?php endforeach;?>
             </select>
         </div>
@@ -37,7 +37,7 @@
         <select name="shop" lay-search="">
             <option value="">直接选择或搜索选择同步店铺</option>
             <?php foreach ($shops as $v): ?>
-                <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? selected : '' ?> ><?=$v['domain']?></option>
+                <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? 'selected' : '' ?> <?=$v['status']==1?'':'disabled';?> ><?=$v['domain']?></option>
             <?php endforeach;?>
         </select>
     </div>
@@ -55,7 +55,7 @@
         <select name="shop_id" lay-search="">
             <option value="">直接选择或搜索选择同步店铺</option>
             <?php foreach ($shops as $v): ?>
-                <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? selected : '' ?> ><?=$v['domain']?></option>
+                <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? 'selected' : '' ?> <?=$v['status']==1?'':'disabled';?> ><?=$v['domain']?></option>
             <?php endforeach;?>
         </select>
     </div>
