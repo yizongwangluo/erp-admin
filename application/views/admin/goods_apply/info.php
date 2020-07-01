@@ -245,10 +245,10 @@
                     {field:'id', width:80, title: 'ID' }
                     ,{field:'code',  title: 'SKU编码'}
                     ,{field:'alias', title: '别名' }
-                    ,{field:'norms',  title: '规格名1'}
-                    ,{field:'norms_name',  title: '规格值1'}
-                    ,{field:'norms1',  title: '规格名2'}
-                    ,{field:'norms_name1',  title: '规格值2'}
+                    ,{field:'norms_name',  title: '规格名1'}
+                    ,{field:'norms',  title: '规格值1'}
+                    ,{field:'norms_name1',  title: '规格名2'}
+                    ,{field:'norms1',  title: '规格值2'}
                     ,{field:'img',  title: '图片', templet: function(res){
                         return '<a href="'+res.img+'" target="_blank"><img width="50px" src="'+res.img+'"></a>'
                     }}

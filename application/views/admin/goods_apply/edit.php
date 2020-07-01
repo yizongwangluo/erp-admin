@@ -247,8 +247,8 @@
                     ,{field:'alias', title: '别名' }
                     ,{field:'norms_name',  title: '规格名1',minWidth:30}
                     ,{field:'norms',  title: '规格值1',minWidth:30}
-                    ,{field:'norms_name1',  title: '规格名1',minWidth:30}
-                    ,{field:'norms1',  title: '规格值1',minWidth:30}
+                    ,{field:'norms_name1',  title: '规格名2',minWidth:30}
+                    ,{field:'norms1',  title: '规格值2',minWidth:30}
                     ,{field:'img',  title: '图片', templet: function(res){
                         return '<a href="'+res.img+'" target="_blank"><img width="50px" src="'+res.img+'"></a>'
                     }}
