@@ -110,6 +110,8 @@ class Getoperate_operate extends \Application\Component\Common\IData
         $data['paid_orders'] = max(0,$orderSum['paid_orders']);//付款订单数
         $data['freight_sum'] = max(0,$orderSum['freight_sum']);//运费
 
+        $data['operate_remark'] = ''; //初始化备注
+
         //根据user_id获取部门id
         $org_id = $this->db->query ( "select org_id from admin where id = {$data['user_id']}" )->row_array ()['org_id'];
         if(empty($org_id)){ //当员工没有部门的时候
