@@ -1260,3 +1260,28 @@ function tree_common($data=array(), $userlist = array(), $pid = 0){
 	}
 	return $tree;
 }
+
+
+/**
+ * 时间 - 转时区
+ * @param string $value
+ * @return bool|string
+ */
+function ConversionTime($value = '',$gs = 'Y-m-d'){
+
+	$str = '';
+	$sq = 8*60*60; //中国时区 正8
+	if($value){
+		$time = strtotime(substr($value,0,19));
+		$F = substr($value,19,1);
+		$sq_new = substr($value,20,5);
+		$sq_new_arr = explode(':',$sq_new);
+		$sq_new = $sq_new_arr[0]*60*60+$sq_new_arr[1]*60;
+
+		$time = $time+($sq-($F.$sq_new));
+
+		$str = date($gs,$time);
+	}
+
+	return $str;
+}

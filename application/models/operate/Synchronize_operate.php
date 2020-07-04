@@ -300,15 +300,22 @@ class Synchronize_operate extends \Application\Component\Common\IData
 
     /**
      * 更新订单时间
+     * @param array $input
+     * @return bool
      */
     public function repair_order_time($input = []){
 
-        if(!$input['datetime']){
+        if(!$input['start_time'] || !$input['end_time'] ){
             $this->set_error('请选择时间');return false;
         }
         if(!$input['shop_id']){
             $this->set_error('请选择店铺');return false;
         }
+
+        $input['datetime >='] = $input['start_time'];
+        $input['datetime <='] = $input['end_time'];
+        unset($input['start_time']);
+        unset($input['end_time']);
 
         $list = $this->order_data->lists($input);
 
