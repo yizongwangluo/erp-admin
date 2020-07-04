@@ -6,12 +6,13 @@
  * Time: 18:30
  */
 
+set_time_limit ( 0 );
+
 class Synchronize extends \Application\Component\Common\AdminPermissionValidateController
 {
     public function __construct ()
     {
         parent::__construct ();
-        set_time_limit ( 0 );
         $this->load->model ( 'data/my_data' );
         $this->load->model ( 'operate/synchronize_operate' );
     }

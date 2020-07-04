@@ -48,7 +48,7 @@ class My_data extends \Application\Component\Common\IData
 
     public function get_shops()
     {
-        $sql = "select id,domain from shop";
+        $sql = "select id,domain,status from shop order by status desc";
         $shops = $this->db->query($sql)->result_array();
         return $shops;
     }

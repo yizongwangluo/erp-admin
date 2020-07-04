@@ -78,7 +78,7 @@ class Synchronize_operate extends \Application\Component\Common\IData
         }
 
         //同步订单
-        $this->created_save($shop,$start_time,$end_time);//时间段内创建当天并付款的订单
+        $this->processed_save($shop,$start_time,$end_time);//时间段内创建当天并付款的订单
 
         //更新每日运营数据
        /* foreach($dates as $k=>$time) {
@@ -122,6 +122,16 @@ class Synchronize_operate extends \Application\Component\Common\IData
         $min_time = $start_time.'T00:00:00';
         $mix_time = $end_time.'T23:59:59';
         $url = 'https://'.$shop['shop_api_key'].':'.$shop['shop_api_pwd'].'@'.$shop['backstage'].'api/2020-01/orders.json?financial_status=paid&status=any&order=created_at&created_at_min='.$min_time.'&created_at_max='.$mix_time.'&limit=250';
+        $status = 0;
+        $this->shopify_orders->get_order_page($status,$shop,$url,$start_time,$min_time,$mix_time);
+    }
+
+    //根据时间同步该店铺某时间段内的订单
+    public function processed_save($shop,$start_time,$end_time)
+    {
+        $min_time = $start_time.'T00:00:00';
+        $mix_time = $end_time.'T23:59:59';
+        $url = 'https://'.$shop['shop_api_key'].':'.$shop['shop_api_pwd'].'@'.$shop['backstage'].'api/2020-01/orders.json?status=any&order=processed_at&processed_at_min='.$min_time.'&processed_at_max='.$mix_time.'&limit=250';
         $status = 0;
         $this->shopify_orders->get_order_page($status,$shop,$url,$start_time,$min_time,$mix_time);
     }
