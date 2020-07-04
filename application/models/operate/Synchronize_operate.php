@@ -313,8 +313,8 @@ class Synchronize_operate extends \Application\Component\Common\IData
         $list = $this->order_data->lists($input);
 
         foreach($list as $value){
-             $datetime = substr($value['created_at'],0,strpos($value['created_at'], 'T'));
-
+            $datetime = $value['processed_at']?$value['processed_at']:$value['created_at'];
+            $datetime = ConversionTime($datetime);
             $this->order_data->update($value['id'],['datetime'=>$datetime]);
             $this->order_goods_data->update($value['id'],['datetime'=>$datetime],'o_id');
 
