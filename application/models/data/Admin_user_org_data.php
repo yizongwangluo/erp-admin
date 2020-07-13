@@ -27,6 +27,12 @@ class Admin_user_org_data extends \Application\Component\Common\IData{
 		$a = array_diff($lists,$auth_rule_ids); //删除
 		$b = array_diff($auth_rule_ids,$lists); //新增
 
+		if(empty($auth_rule_ids)){
+			$a = $lists;
+		}
+		if(empty($lists)){
+			$b = $auth_rule_ids;
+		}
 		if(!$a && !$b){
 			return true;
 		}

@@ -37,7 +37,7 @@ class Goods_data extends \Application\Component\Common\IData{
         //用sku别名和编码搜索
         if(( $where['a']=='sku_code' || $where['a']=='sku_alias') && $where['name'] ){
 
-            $sql = 'select {{}} from goods a left JOIN  goods_sku b on a.id=b.spu_id ';
+            $sql = 'select {{}} from goods a left JOIN  goods_sku b  on a.id=b.spu_id  LEFT JOIN admin c on b.u_id=a.id';
 
             if( $where['a']=='sku_code'){
                 $sql_where[]=" b.code = '".$where['name']."'";
@@ -56,7 +56,7 @@ class Goods_data extends \Application\Component\Common\IData{
 
             if($total){ //有数据时，查询列表
                 $sql .=  ' order by a.id desc limit '.($page-1)*$limit.','.$limit;
-                $sql_info = str_replace('{{}}','a.*,b.code as sku_code,b.norms_name,b.norms,b.norms_name1,b.norms1,b.alias,b.price,b.weight',$sql);
+                $sql_info = str_replace('{{}}','a.*,b.code as sku_code,b.norms_name,b.norms,b.norms_name1,b.norms1,b.alias,b.price,b.weight,c.user_name',$sql);
                 $query = $this->db->query($sql_info);
                 $info = $query->result_array();
             }
@@ -85,7 +85,7 @@ class Goods_data extends \Application\Component\Common\IData{
                 $info = $query->result_array();
 
                 foreach($info as $k=>$v){
-                    $sku_list = $this->db->query('select code,norms_name,norms,norms_name1,norms1,alias,price,weight,status from goods_sku where spu_id= '.$v['id'])->result_array();
+                    $sku_list = $this->db->query('select a.code,a.norms_name,a.norms,a.norms_name1,a.norms1,a.alias,a.price,a.weight,a.status,b.user_name from goods_sku a  LEFT JOIN  admin b on a.u_id=b.id where a.spu_id= '.$v['id'])->result_array();
                     $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
                     $info[$k]['norms_name'] = implode('<br/>',array_column($sku_list,'norms_name'));
                     $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
@@ -94,6 +94,7 @@ class Goods_data extends \Application\Component\Common\IData{
                     $info[$k]['alias'] = implode('<br/>',array_column($sku_list,'alias'));
                     $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
                     $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));
+                    $info[$k]['user_name'] = implode('<br/>',array_column($sku_list,'user_name'));
                 }
             }
         }

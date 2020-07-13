@@ -171,10 +171,35 @@ class Goods_sku_data extends \Application\Component\Common\IData{
      * @return mixed
      */
     public function synchronization($input = []){
-        $insert_query = $this->db->insert_string('goods_sku', $input);
-        $insert_query = str_replace('INSERT INTO','INSERT IGNORE INTO',$insert_query); //存在则忽略，不存在则添加
-        $this->db->query($insert_query);
-        return $this->db->affected_rows();
+
+        unset($input['id']);
+        $sku_info = $this->find(['code'=>$input['code']]);
+
+        if($sku_info){ //修改
+
+            if($input['alias']){ //组合别名
+
+                if($sku_info['alias']){
+
+                    $alias = $sku_info['alias'].','.$input['alias'];
+
+                    $alias = explode(',',$alias);
+
+                    $input['alias'] = implode(',',array_unique(array_filter($alias)));
+                }
+            }else{
+                $input['alias'] = $sku_info['alias'];
+            }
+
+            return $this->update($sku_info['id'],$input);
+        }else{ //新增
+            return $this->store($input);
+        }
+
+//        $insert_query = $this->db->insert_string('goods_sku', $input);
+//        $insert_query = str_replace('INSERT INTO','INSERT IGNORE INTO',$insert_query); //存在则忽略，不存在则添加
+//        $this->db->query($insert_query);
+//        return $this->db->affected_rows();
     }
 
     /**

@@ -428,7 +428,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$i][] = $v['pack_cost'];//包装成本(CNY)
 			$data[$i][] = $v['pack_weight'];//包装重量(g)
 			$data[$i][] = $v['pack_volume'];//包装尺寸(长*宽*高)CM
-			$data[$i][] = base_url($v['img']);//产品首图
+			$data[$i][] = $v['img'];//产品首图
 			$data[$i][] = '';//业务开发员
 			$data[$i][] = '';//采购询价员
 			$data[$i][] = '';//采购员
