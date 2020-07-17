@@ -75,6 +75,37 @@ class Shopify_orders extends \Application\Component\Common\IFacade
             }
         }
     }
+    /**
+     * 同步shopify订单
+     * @return bool
+     */
+    public function sync_order_date($min_time,$mix_time){
+
+        $shop_list = $this->shop_data->lists(['status'=>1]);//状态为开启的店铺
+
+        //没有店铺时 跳出程序
+        if(empty($shop_list)){
+            return false;
+        }
+
+        $time = date('Y-m-d',time());
+        $min_time = date('Y-m-d\TH:i:s', (strtotime($min_time)-30600));
+        $mix_time = date('Y-m-d\TH:i:s', (strtotime($mix_time)-480*60));
+
+        foreach($shop_list as $k=>$value){
+
+            foreach($value as $i=>$item){ //去除文字空格
+                $value[$i] = trim($item);
+            }
+
+            if($value['shop_api_key'] && $value['shop_api_pwd'] && $value['backstage']){
+                $url = 'https://'.$value['shop_api_key'].':'.$value['shop_api_pwd'].'@'.$value['backstage'].'api/2020-01/orders.json?status=any&order=updated_at&updated_at_min='.$min_time.'&updated_at_max='.$mix_time.'&limit=250';
+//                $url = 'http://www.erp.com/ceshi.json';
+                $status = 1;
+                $this->get_order_page( $status,$value,$url,$time,$min_time,$mix_time);
+            }
+        }
+    }
 
     /**
      * 请求地址，获取订单并保存
@@ -90,8 +121,10 @@ class Shopify_orders extends \Application\Component\Common\IFacade
 
         //添加同步日志
         $log_id = $this->order_synchro_log_data->add_log($arr['id'],$url,$min_time,$mix_time,$page);
-
         $order_json = curl_get_https($url);
+
+        //log_message('get_order_page',date('Y-m-d H:i:s').'||||'.$order_json,true);
+
         $order_list = json_decode($order_json,true);
 
         if(isset($order_list['errors'])){ //接口报错
@@ -138,16 +171,13 @@ class Shopify_orders extends \Application\Component\Common\IFacade
             $order_info['total_price_usd'] = $v['total_price_usd'];
             $order_info['created_at'] = $v['created_at'];
             $order_info['updated_at'] = $v['updated_at'];
+            $order_info['processed_at'] = $v['processed_at'];
             $order_info['total_weight'] = $v['total_weight'];
             $order_info['financial_status'] = $v['financial_status'];
             $order_info['gateway'] = $v['gateway'];
             $order_info['addtime'] = $time; //新增时间
             $order_info['tracking_number'] = $v['fulfillments'][0]['tracking_number'];
-//            if($status == 0){
-                $order_info['datetime'] = substr($v['created_at'],0,strpos($v['created_at'], 'T'));
-//            }else{
-//                $order_info['datetime'] = substr($v['updated_at'],0,strpos($v['updated_at'], 'T'));
-//            }
+            $order_info['datetime'] = ConversionTime($v['processed_at']);
             $order_id = $this->order_data->save($order_info);
 
             if($order_id){
@@ -171,7 +201,6 @@ class Shopify_orders extends \Application\Component\Common\IFacade
         }
         return $count;
     }
-
 
     /**
      * get请求https链接公共方法
