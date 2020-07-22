@@ -272,8 +272,8 @@
                 ,cellMinWidth: 50 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                 ,cols: [[
                     {field:'id', width:80, title: 'ID' }
-                    ,{field:'code',  title: 'SKU编码'}
-                    ,{field:'alias',  title: '别名'}
+                    ,{field:'code',  title: 'SKU编码',width:180}
+                    ,{field:'alias',  title: '别名',width:180}
                     ,{field:'norms_name',  title: '规格名1'}
                     ,{field:'norms',  title: '规格值1'}
                     ,{field:'norms_name1',  title: '规格名1'}

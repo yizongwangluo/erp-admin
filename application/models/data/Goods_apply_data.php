@@ -135,7 +135,7 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             $info = $query->result_array();
 
             foreach($info as $k=>$v){
-                $sku_list = $this->db->query('select code,norms_name,norms,norms_name1,norms1,alias,price,weight,status,code from goods_sku_apply where spu_id= '.$v['id'])->result_array();
+                $sku_list = $this->db->query('select a.code,a.norms_name,a.norms,a.norms_name1,a.norms1,a.alias,a.price,a.weight,a.status,a.code,b.user_name from goods_sku_apply a LEFT JOIN admin b on a.u_id=b.id where spu_id= '.$v['id'])->result_array();
                 $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
                 $info[$k]['norms_name'] = implode('<br/>',array_column($sku_list,'norms_name'));
                 $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
@@ -144,6 +144,7 @@ class Goods_apply_data extends \Application\Component\Common\IData{
                 $info[$k]['alias'] = implode('<br/>',array_column($sku_list,'alias'));
                 $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
                 $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));
+                $info[$k]['user_name'] = implode('<br/>',array_column($sku_list,'user_name'));
             }
         }
 

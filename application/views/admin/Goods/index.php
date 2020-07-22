@@ -57,6 +57,7 @@
                     <td>规格值2</td>
                     <td>采购价（元）</td>
                     <td>重量（克）</td>
+                    <td>用户名</td>
 <!--                    <td>同步（通途）</td>-->
                     <td>操作</td>
                 </tr>
@@ -76,6 +77,7 @@
                       <td><?=$v['norms1']?></td>
                       <td><?=$v['price']?></td>
                       <td><?=$v['weight']?></td>
+                      <td><?=$v['user_name']?></td>
 <!--                      <td style="color: --><?//=$v['is_tongtu']!=1?'red':'';?><!--">--><?//=$v['is_tongtu']?'已同步':'未同步'?><!--</td>-->
                       <td>
                           <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods/info/{$v['id']}"); ?>">查看</a>

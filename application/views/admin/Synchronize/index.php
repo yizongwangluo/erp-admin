@@ -14,7 +14,7 @@
             <select name="shop" lay-search="">
                 <option value="">直接选择或搜索选择同步店铺</option>
                 <?php foreach ($shops as $v): ?>
-                    <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? selected : '' ?> ><?=$v['domain']?></option>
+                    <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? 'selected' : '' ?> <?=$v['status']==1?'':'disabled';?> ><?=$v['domain']?></option>
                 <?php endforeach;?>
             </select>
         </div>
@@ -37,7 +37,7 @@
         <select name="shop" lay-search="">
             <option value="">直接选择或搜索选择同步店铺</option>
             <?php foreach ($shops as $v): ?>
-                <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? selected : '' ?> ><?=$v['domain']?></option>
+                <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? 'selected' : '' ?> <?=$v['status']==1?'':'disabled';?> ><?=$v['domain']?></option>
             <?php endforeach;?>
         </select>
     </div>
@@ -48,14 +48,18 @@
 <form action="<?php echo site_url('admin/synchronize/repair_order_time'); ?>" method="post" class="layui-form" id="form1">
     <div class="layui-inline">
         <div class="layui-input-inline">
-            <input class="layui-input date-time" name="datetime" placeholder="选择日期" value="">
+            <input class="layui-input date-time" name="start_time" placeholder="开始时间" value="<?php echo input('start_time'); ?>">
+        </div>
+        <div class="layui-input-line">-</div>
+        <div class="layui-input-inline">
+            <input class="layui-input date-time" value="<?php echo input('end_time'); ?>" name="end_time" placeholder="结束时间">
         </div>
     </div>
     <div class="layui-inline  col-xs-2">
         <select name="shop_id" lay-search="">
             <option value="">直接选择或搜索选择同步店铺</option>
             <?php foreach ($shops as $v): ?>
-                <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? selected : '' ?> ><?=$v['domain']?></option>
+                <option value="<?=$v['id']?>" <?= $v['domain'] == $this->input->get ( 'shop' ) ? 'selected' : '' ?> <?=$v['status']==1?'':'disabled';?> ><?=$v['domain']?></option>
             <?php endforeach;?>
         </select>
     </div>
