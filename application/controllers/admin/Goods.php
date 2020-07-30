@@ -219,6 +219,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 							'source_address' => $value['Y'],//采购链接
 							'purchase_remarks'=>$value['Z'],//采购备注
 							't_status' => $value['AB'],//状态
+							'poperty_label' => $value['AD'],//特性标签
 							'dc_name' => $value['AG'], //中文报关名
 							'dc_name_en' => $value['AH'], //英文报关名
 							'pack_cost' => $value['AK'],//包装成本
@@ -419,7 +420,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$i][] = $v['source_address'];//采购链接
 			$data[$i][] = $category_list[$v['category_id']]['name'];//分类
 			$data[$i][] = '';//品牌
-			$data[$i][] = '';//特性标签
+			$data[$i][] = $v['poperty_label'];//特性标签
 			$data[$i][] = $v['name'];//中文配货名称
 			$data[$i][] = $v['name_en'];//英文配货名称
 			$data[$i][] = $v['dc_name'];//中文报关名

@@ -108,6 +108,12 @@
                 <em>多语言用,号分隔</em>
             </div>
         </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">特性标签：</label>
+            <div class="layui-inline">
+                <input name="poperty_label" lay-verify="required" value="<?= $info['poperty_label'] ?>" type="text" class="layui-input">
+            </div>
+        </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
