@@ -111,7 +111,12 @@
         <div class="layui-inline">
             <label class="layui-form-label">特性标签：</label>
             <div class="layui-inline">
-                <input name="poperty_label" lay-verify="required" value="<?= $info['poperty_label'] ?>" type="text" class="layui-input">
+                <select name="poperty_label" lay-verify="required">
+                    <option value="">请选择</option>
+                    <?php foreach($this->enum_field->get_values('poperty_label') as $value){ ?>
+                        <option value="<?php echo $value ?>" <?=$value==$info['poperty_label']?'selected':''?> ><?php echo $value ?></option>
+                    <?php   } ?>
+                </select>
             </div>
         </div>
     </div>
