@@ -215,6 +215,15 @@
           <table class="layui-hide" id="test" lay-filter="test" ></table>
         </div>
     </div>
+    <?php if($info['status'] == 3 && !empty($info['disallowance'])){ ?>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <p style="border: none;padding: 0;color: red;">
+                    驳回原因：<?=$info['disallowance']?>
+                </p>
+            </div>
+        </div>
+    <?php } ?>
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn layui-btn-normal" type="button" onclick="save_form(0)">暂存</button>

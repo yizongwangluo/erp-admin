@@ -211,9 +211,10 @@
     </div>
         <?php if($info['status'] == 3 && !empty($info['disallowance'])){ ?>
         <div class="layui-form-item">
-            <label class="layui-form-label" style="color: red">驳回原因：</label>
             <div class="layui-inline">
-                <input name="disallowance" value="<?= $info['disallowance'] ?>" type="text" class="layui-input" style="border: none;padding: 0;color: red;">
+                <p style="border: none;padding: 0;color: red;">
+                    驳回原因：<?=$info['disallowance']?>
+                </p>
             </div>
         </div>
         <?php } ?>
