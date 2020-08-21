@@ -26,6 +26,9 @@ class Admin_user extends \Application\Component\Common\AdminPermissionValidateCo
 		$input = array_filter($input);
 		$where = [];
 		if($input){
+
+			$input['name'] = trim($input['name']);
+
 			if(is_numeric($input['name'])){
 				$where[] = ' id = '.$input['name'];
 			}
