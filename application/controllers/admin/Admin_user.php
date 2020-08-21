@@ -28,16 +28,17 @@ class Admin_user extends \Application\Component\Common\AdminPermissionValidateCo
 		if($input){
 
 			$input['name'] = trim($input['name']);
+			if($input['name']){
+				if(is_numeric($input['name'])){
+					$where[] = ' id = '.$input['name'];
+				}
 
-			if(is_numeric($input['name'])){
-				$where[] = ' id = '.$input['name'];
+				$where[] = "user_name = '{$input['name']}'";
+				$where[] = "real_name = '{$input['name']}'";
+				$where[] = "job_number = '{$input['name']}'";
+
+				$where = implode(' or ',$where);
 			}
-
-			$where[] = "user_name = '{$input['name']}'";
-			$where[] = "real_name = '{$input['name']}'";
-			$where[] = "job_number = '{$input['name']}'";
-
-			$where = implode(' or ',$where);
 		}
 
 		$page = max ( 1, $this->input->get ( 'page' ) );

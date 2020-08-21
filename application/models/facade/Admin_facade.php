@@ -160,8 +160,9 @@ class Admin_facade extends \Application\Component\Common\IFacade
 			$this->set_error ( '权限组必须选择哦' );
 			return false;
 		}
+
 		$admin = $this->admin_data->get_info_by_user_name ( $user_name );
-		if ( $admin['id'] != $userid ) {
+		if ($admin && $admin['id'] != $userid ) {
 			$this->set_error ( '该用户名已被使用！' );
 			return false;
 		}
