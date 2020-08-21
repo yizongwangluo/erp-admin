@@ -7,6 +7,15 @@
         <li><a href="<?php echo base_url ( 'admin/admin_user/add' ) ?>">新增账户</a></li>
     </ul>
     <div class="layui-tab-content">
+        <form action="?" method="get" >
+            <div class="layui-form">
+                <div class="layui-inline">
+                    <input type="text" name="name" value="<?=$where['name']?>"
+                           class="layui-input" placeholder="输入搜索条件"/>
+                </div>
+                <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索</button>
+            </div>
+        </form>
         <div class="layui-tab-item layui-show">
             <table class="layui-table">
                 <thead>

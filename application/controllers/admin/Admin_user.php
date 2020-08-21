@@ -22,12 +22,26 @@ class Admin_user extends \Application\Component\Common\AdminPermissionValidateCo
 
 	public function lists ()
 	{
-		$id = $this->input->get('id');
+		$input = $this->input->get();
+		$input = array_filter($input);
 		$where = [];
-		if($id){ $where['id'] = $id; }
+		if($input){
+			if(is_numeric($input['name'])){
+				$where[] = ' id = '.$input['name'];
+			}
+
+			$where[] = "user_name = '{$input['name']}'";
+			$where[] = "real_name = '{$input['name']}'";
+			$where[] = "job_number = '{$input['name']}'";
+
+			$where = implode(' or ',$where);
+		}
+
 		$page = max ( 1, $this->input->get ( 'page' ) );
 		$result = $this->admin_data->lists_page ( $where, ['id', 'desc'], $page );
+
 		$result['page_html'] = create_page_html ( '?', $result['total'] );
+		$result['where'] = $input;
 		$this->load->view ( '', $result );
 	}
 
