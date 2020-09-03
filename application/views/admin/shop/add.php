@@ -1,5 +1,11 @@
 <?php $this->load->view ( 'admin/common/header' ) ?>
 <?php $this->load->view ( 'admin/common/menu' ) ?>
+<style>
+    .em-red{
+        color: red;
+        padding-right: 5px;
+    }
+</style>
 <div class="layui-tab admin-layui-tab layui-tab-brief">
     <ul class="layui-tab-title">
         <li class=""><a href='<?php echo base_url ( 'admin/shop/index' ) ?>'>店铺列表</a></li>
@@ -11,13 +17,13 @@
                 <input type="hidden" value="<?=$info['id']?>"  name="id">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">域名 &nbsp;<i style="color: red">https://</i></label>
+                        <label class="layui-form-label"><em class="em-red">*</em>域名 &nbsp;<i style="color: red">https://</i></label>
                         <div class="layui-input-inline">
                             <input type="text" name="domain" value="<?=$info['domain']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">后台 &nbsp;<i style="color: red">https://</i></label>
+                        <label class="layui-form-label"><em class="em-red">*</em>后台 &nbsp;<i style="color: red">https://</i></label>
                         <div class="layui-input-inline">
                             <input type="text" name="backstage" value="<?=$info['backstage']?>" placeholder="" class="layui-input">
                         </div>
@@ -25,6 +31,17 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><em class="em-red">*</em>所属平台</label>
+                        <div class="layui-input-inline">
+                            <select name="pt_id" lay-search="">
+                                <option value="">直接选择或搜索选择</option>
+                                <?php foreach($this->enum_field->get_values('shop_pt_list') as $key=>$value){ ?>
+                                    <option value="<?=$key?>" <?php if ( $info['pt_id'] == $key ){echo "selected=\"selected\"";}?>><?=$value?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">后台用户名</label>
                         <div class="layui-input-inline">
@@ -81,13 +98,13 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">店铺API密钥</label>
+                        <label class="layui-form-label"><em class="em-red">*</em>店铺API密钥</label>
                         <div class="layui-input-inline">
                             <input type="text" name="shop_api_key" value="<?=$info['shop_api_key']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">店铺API密码</label>
+                        <label class="layui-form-label"><em class="em-red">*</em>店铺API密码</label>
                         <div class="layui-input-inline">
                             <input type="text" name="shop_api_pwd" value="<?=$info['shop_api_pwd']?>" placeholder="" class="layui-input">
                         </div>
@@ -115,7 +132,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">授权ERP</label>
+                        <label class="layui-form-label"><em class="em-red">*</em>授权ERP</label>
                         <div class="layui-input-inline">
                             <select name="authorization_erp" lay-search="">
                                 <option value="">请选择</option>
@@ -125,7 +142,7 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">所属企业主体</label>
+                        <label class="layui-form-label"><em class="em-red">*</em>所属企业主体</label>
                         <div class="layui-input-inline">
                             <select name="company_id" lay-search="">
                                 <option value="">直接选择或搜索选择</option>
@@ -138,7 +155,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">所属人</label>
+                        <label class="layui-form-label"><em class="em-red">*</em>所属人</label>
                         <div class="layui-input-inline">
                             <select name="user_id" lay-search="">
                                 <option value="">直接选择或搜索选择</option>
@@ -149,7 +166,7 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">代码</label>
+                        <label class="layui-form-label"><em class="em-red">*</em>通途代码</label>
                         <div class="layui-input-inline">
                             <input type="text" name="code" value="<?=$info['code']?>" placeholder="" class="layui-input">
                         </div>

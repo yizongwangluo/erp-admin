@@ -108,5 +108,9 @@ $config = array (
         "粉末",
         "带电",
         "其他"
+    ],
+    "shop_pt_list"=>[
+        1=>"shopify",
+        "Xshop"
     ]
 );
