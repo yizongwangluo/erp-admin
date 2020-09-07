@@ -1482,6 +1482,53 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 	// --------------------------------------------------------------------
 
 	/**
+	 * replace_Batch
+	 *
+	 * Compiles batch replace strings and runs the queries
+	 *
+	 * @param	string	$table	Table to replace into
+	 * @param	array	$set 	An associative array of replace values
+	 * @param	bool	$escape	Whether to escape values and identifiers
+	 * @return	int	Number of rows replaceed or FALSE on failure
+	 */
+	public function replace_batch($table = '', $set = NULL, $escape = NULL)
+	{
+		if ($set !== NULL)
+		{
+			$this->set_insert_batch($set, '', $escape);
+		}
+
+		if (count($this->qb_set) === 0)
+		{
+			// No valid data array. Folds in cases where keys and values did not match up
+			return ($this->db_debug) ? $this->display_error('db_must_use_set') : FALSE;
+		}
+
+		if ($table === '')
+		{
+			if ( ! isset($this->qb_from[0]))
+			{
+				return ($this->db_debug) ? $this->display_error('db_must_set_table') : FALSE;
+			}
+
+			$table = $this->qb_from[0];
+		}
+
+		// Batch this baby
+		$affected_rows = 0;
+		for ($i = 0, $total = count($this->qb_set); $i < $total; $i += 100)
+		{
+			$this->query($this->_replace_batch($this->protect_identifiers($table, TRUE, $escape, FALSE), $this->qb_keys, array_slice($this->qb_set, $i, 100)));
+			$affected_rows += $this->affected_rows();
+		}
+
+		$this->_reset_write();
+		return $affected_rows;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Insert batch statement
 	 *
 	 * Generates a platform-specific insert string from the supplied data.
@@ -1494,6 +1541,21 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 	protected function _insert_batch($table, $keys, $values)
 	{
 		return 'INSERT INTO '.$table.' ('.implode(', ', $keys).') VALUES '.implode(', ', $values);
+	}
+
+	/**
+	 * replace batch statement
+	 *
+	 * Generates a platform-specific replace string from the supplied data.
+	 *
+	 * @param	string	$table	Table name
+	 * @param	array	$keys	INSERT keys
+	 * @param	array	$values	INSERT values
+	 * @return	string
+	 */
+	protected function _replace_batch($table, $keys, $values)
+	{
+		return 'replace INTO '.$table.' ('.implode(', ', $keys).') VALUES '.implode(', ', $values);
 	}
 
 	// --------------------------------------------------------------------

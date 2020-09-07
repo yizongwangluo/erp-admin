@@ -69,4 +69,51 @@ class Order_data extends \Application\Component\Common\IData{
             return $this->db->query ( $sql )->row_array ()['freight'];
         }
     }
+
+
+    /**
+     * 批量修改物流单号
+     * @param array $data
+     */
+    public function edit_tracking_number($data = []){
+
+        $this->db->update_batch('order', $data, 'shopify_o_id');
+    }
+
+    /**
+     * 获取需要更新物流单号的的订单ID
+     */
+    public function get_tracking_list($limit = 100){
+
+        //获取2天前  的7天内的数据
+//        $date_start = date("Y-m-d",strtotime("-9 day"));
+        $date_end = date("Y-m-d",strtotime("-1 day"));
+//        $date_end = date("Y-m-d");
+//        $data = ['datetime >='=>$date_start,'datetime <='=>$date_end,'tarcking_number_req <'=>5];
+
+        $data = ['datetime <='=>$date_end,'tracking_number_req <'=>5,'tracking_type'=>0];
+
+        //请求次数小于5次
+         $list = $this->db->select('id,shopify_o_id')
+                    ->from('order')
+                    ->where($data)
+                    ->order_by('datetime')
+                     ->limit($limit)
+                     ->get()->result_array();
+
+        return $list;
+    }
+
+    /**
+     * 同步次数加一
+     * @param array $id
+     * @return mixed
+     */
+    public function tracking_number_req_add_one($id = array()){
+        $this->db->where_in('id',$id);
+        $this->db->set('tracking_number_req','tracking_number_req+1',FALSE);
+        $result =  $this->db->update('order');
+        return $result;
+    }
+
 }

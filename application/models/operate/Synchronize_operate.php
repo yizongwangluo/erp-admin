@@ -23,7 +23,12 @@ class Synchronize_operate extends \Application\Component\Common\IData
         $this->load->model ( 'data/shop_data' );
     }
 
-    public function sync($input)
+    /**
+     * 同步订单备份
+     * @param $input
+     * @return bool
+     */
+    public function sync_bak($input)
     {
         $start_time = $input['start_time'];
         $end_time = $input['end_time'];
@@ -94,6 +99,69 @@ class Synchronize_operate extends \Application\Component\Common\IData
 
         //同步提示
         $this->set_error('同步成功！');
+    }
+
+
+    public function sync($input)
+    {
+        $start_time = $input['start_time'];
+        $end_time = $input['end_time'];
+        $shop_id = $input['shop'];
+
+        if(!$shop_id){
+            $this->set_error('请选择需要同步的店铺！');
+            return false;
+        }
+        if(!$start_time){
+            $this->set_error('请输入开始时间！');
+            return false;
+        }
+        if(!$end_time){
+            $this->set_error('请输入结束时间！');
+            return false;
+        }
+
+        if($start_time>$end_time){
+            $this->set_error('开始时间必须小于或等于结束时间！');
+            return false;
+        }
+
+        //获取选择店铺信息
+        $shop = $this->db->query ("select * from shop where id = $shop_id;" )->row_array ();
+
+        if(!$shop){
+            $this->set_error('同步失败：店铺不存在！');
+            return false;
+        }
+
+        foreach($shop as $i=>$item){ //去除文字空格
+            $shop[$i] = trim($item);
+        }
+
+        if(empty($shop['code'])){
+            $this->set_error('请填写店铺代码！');return false;
+        }
+
+        $arr =[
+            'start_time'=>$start_time,
+            'end_time'=>$end_time,
+            'shop_id'=>$shop_id,
+            'domain'=>$shop['domain'],
+            'code'=>$shop['code'],
+            'pageNo'=>1
+        ];
+
+        //添加同步队列
+        $json = file_get_contents(FCPATH.'duilie.json');
+        $json = json_decode($json,true);
+        $json['data'][] = $arr;
+
+        file_put_contents(FCPATH.'duilie.json',json_encode($json));
+
+        //同步提示
+        $this->set_error('已加入同步队列！');
+
+        return true;
     }
 
 

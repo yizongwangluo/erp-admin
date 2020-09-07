@@ -303,5 +303,24 @@ class Getoperate_operate extends \Application\Component\Common\IData
         return $data;
     }
 
+    public function shuaxinshuju(){
+
+        $sql = 'select * from operate where paid_orders>0 and datetime>="2020-06" order by datetime desc';
+
+        $list = $this->db->query ( $sql )->result_array ();
+
+        $datatime = date('Y-m-d H:i:s');
+
+        foreach($list as $value){
+
+            $value['update_time'] = $datatime;
+
+            $data = $this->common_operate_used($value);
+
+            $this->operate_data->update($value['id'],$data);
+
+        }
+    }
+
 }
 

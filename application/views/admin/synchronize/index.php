@@ -65,7 +65,41 @@
     </div>
     <button class="layui-btn layui-btn-danger btn-search" type="button" onclick="repair_order_time()">更新错误订单时间</button>
 </form>
+
+<style>
+    .chuangkou{
+        width: 350px;
+        height: 250px;
+        background-color: #8cd2ea;
+        z-index: 99999;
+        position:absolute;
+        right: 30px;
+        bottom: 0;
+        border: 1px solid #988d8d;
+
+    }
+    .chuangkou h3{
+        margin-left: 20px;
+    }
+    .duilie-ul{
+        height: 208px;
+        overflow-y:auto;
+    }
+    .duilie-ul li{
+        list-style: decimal;
+        margin: 0  15px 5px  30px ;
+    }
+</style>
+<div class="chuangkou">
+    <h3>同步订单队列</h3>
+    <hr/>
+    <ul  class="duilie-ul">
+        <li>暂无队列信息</li>
+    </ul>
+</div>
+
 <?php $this->load->view ( 'admin/common/footer' ) ?>
+
 
 <script type="text/javascript">
 
@@ -75,11 +109,31 @@
         lay('.date-time').each(function () {
             laydate.render({
                 elem: this
-                ,type: 'date'
+                ,type: 'datetime'
                 , trigger: 'click'
             });
         });
+
+        get_duilie();
     });
+
+    function get_duilie(){
+        $.get('/duilie.json',function(obj){
+            if(obj.code==1){
+
+                if(obj.data.length){
+
+                    var html = '';
+
+                    $.each(obj.data, function(index, value) {
+                        html +='<li>店铺：'+value.domain+',开始时间：'+value.start_time+',结束时间：'+value.end_time+'</li>';
+                    });
+                    $('.duilie-ul').html(html);
+
+                }
+            }
+        })
+    }
 
     function save_form() {
         var index = layer.load();
@@ -90,7 +144,8 @@
                 layer.close(index);
                 return false;
             } else {
-                layer.msg('同步成功', {time: 2000, icon: 6}, function () {
+                layer.msg('已加入同步队列', {time: 2000, icon: 6}, function () {
+                    get_duilie();
                     window.location = '/admin/synchronize/index';
                 })
             }
