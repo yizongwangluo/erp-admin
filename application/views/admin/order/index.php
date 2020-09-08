@@ -39,6 +39,8 @@
                     <td>运单号</td>
                     <td>运费（￥）</td>
                     <td>总价（$）</td>
+                    <td>原价</td>
+                    <td>汇率</td>
                     <td>创建时间</td>
                     <td>修改时间</td>
                     <td>总重量 （g）</td>
@@ -56,6 +58,8 @@
                       <td><?=$v['tracking_number']?></td>
                       <td><?=$v['freight']?$v['freight']:'<em style="color: red;">暂无</em>'?></td>
                       <td><?=$v['total_price_usd']?></td>
+                      <td><?=$v['total_price']?>（<?=$v['price_currency']?>）</td>
+                      <td><?=$v['rate']?></td>
                       <td><?=$v['created_at']?></td>
                       <td><?=$v['updated_at']?></td>
                       <td><?=$v['total_weight']?></td>
