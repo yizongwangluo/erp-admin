@@ -201,8 +201,8 @@ class Tongtu_orders extends \Application\Component\Common\IFacade
                 foreach($v['goodsInfo']['platformGoodsInfoList'] as $k=>$item){
                     $order_goods_info = [];
                     $order_goods_info['o_id'] = $order_id;
-                    $order_goods_info['product_id'] = $v['goodsInfo']['platformGoodsInfoList'][$k]['webstoreSku'];
-                    $order_goods_info['sku_id'] = $item['goodsSku'];
+                    $order_goods_info['product_id'] = $item['product_id'];
+                    $order_goods_info['sku_id'] = $item['webstoreSku'];
                     $order_goods_info['shopify_o_id'] = $v['orderIdCode'];
                     $order_goods_info['quantity'] = $item['quantity'];
                     $order_goods_info['shop_id'] = $order_info['shop_id'];
@@ -256,14 +256,16 @@ class Tongtu_orders extends \Application\Component\Common\IFacade
                 //查询次数批量加一
                 $this->order_data->tracking_number_req_add_one($idArr);
 
-                $arr = [];
-                foreach($ret['datas']['array'] as $v){
-                    if($v['trackingNumber']!=null){
-                        $arr[] = ['shopify_o_id'=>$v['orderId'],'tracking_number'=>$v['trackingNumber'],'tracking_type'=>1];
+                if(count($ret['datas']['array'])){
+                    $arr = [];
+                    foreach($ret['datas']['array'] as $v){
+                        if($v['trackingNumber']!=null){
+                            $arr[] = ['shopify_o_id'=>$v['orderId'],'tracking_number'=>$v['trackingNumber'],'tracking_type'=>1];
+                        }
                     }
-                }
 
-                $this->order_data->edit_tracking_number($arr); //修改物流编号
+                    $this->order_data->edit_tracking_number($arr); //修改物流编号
+                }
             }
         }
 

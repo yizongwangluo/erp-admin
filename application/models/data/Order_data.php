@@ -91,7 +91,7 @@ class Order_data extends \Application\Component\Common\IData{
 //        $date_end = date("Y-m-d");
 //        $data = ['datetime >='=>$date_start,'datetime <='=>$date_end,'tarcking_number_req <'=>5];
 
-        $data = ['datetime <='=>$date_end,'tracking_number_req <'=>5,'tracking_type'=>0];
+        $data = ['datetime <='=>$date_end,'datetime >='=>'2020-09-07','tracking_number_req <'=>5,'tracking_type'=>0];
 
         //请求次数小于5次
          $list = $this->db->select('id,shopify_o_id')

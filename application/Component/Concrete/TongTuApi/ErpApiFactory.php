@@ -21,10 +21,13 @@ class ErpApiFactory
         $this->APP_Key = 'a573447c6bce46ebb698515c043ca689';
         $this->secret = '18498c1c39db43daba8e69cc6caa54b92d7aebe7fbe9419ea70419e709663fd6';
         $this->time_M = $this->getMilliseconds();
-        $this->token = $this->get_token(); //获取token
+        if(!$this->time_M){
+            $this->ajax_return(AJAX_RETURN_FAIL,'未获取到时间戳');
+        }
 
-        if(!$this->token || !$this->time_M){
-            $this->ajax_return(AJAX_RETURN_FAIL,'未获取到token 或者时间戳');
+        $this->token = $this->get_token(); //获取token
+        if(!$this->token ){
+            $this->ajax_return(AJAX_RETURN_FAIL,'未获取到token ');
         }
         $this->merchantId = $this->get_partnerOpenId(); //获取partnerOpenId（merchantId加密后）
 
@@ -47,12 +50,15 @@ class ErpApiFactory
      * @return mixed
      */
     public function get_token(){
-        $url = 'https://open.tongtool.com/open-platform-service/devApp/appToken?accessKey='.$this->APP_Key.'&secretAccessKey='.$this->secret;
+        /*$url = 'https://open.tongtool.com/open-platform-service/devApp/appToken?accessKey='.$this->APP_Key.'&secretAccessKey='.$this->secret;
         $ret = $this->curl_get_https($url);
         $ret = json_decode($ret,true);
         if($ret['success']){
             return $ret['datas'];
-        }
+        }*/
+
+        //原本是上面的动态获取的方法，但是通途方说，该token只要在不修改应用信息的情况下，都是永久的
+        return 'c59f638ab42a341e18b6c724ab5511df';
     }
 
     /**
@@ -60,9 +66,12 @@ class ErpApiFactory
      * @return mixed
      */
     public function get_partnerOpenId(){
-        $sign = $this->get_sign(['app_token'=>$this->token,'timestamp'=>$this->time_M]);
+        /*$sign = $this->get_sign(['app_token'=>$this->token,'timestamp'=>$this->time_M]);
         $url = 'https://open.tongtool.com/open-platform-service/partnerOpenInfo/getAppBuyerList?app_token='.$this->token.'&timestamp='.$this->time_M.'&sign='.$sign;
-        $ret = $this->curl_get_https($url);
+        $ret = $this->curl_get_https($url);*/
+
+        //数据写死是跟token一样的原因
+        $ret = '{"success":true,"code":0,"message":"成功","datas":[{"tokenId":"1684c3d41aac40bbaa650beccd5ecfb8","devId":"044500","devAppId":"321339775871090688","accessKey":"a573447c6bce46ebb698515c043ca689","appToken":"c59f638ab42a341e18b6c724ab5511df","appTokenExpireDate":253402214400000,"partnerOpenId":"dfeafa44535ecc1fcbfc7b6032c91f1b","partnerName":"深圳大龙猫网络科技有限公司","userOpenId":"7d6e19b6cf803c13500ef75863f9b044","userName":"刘伟","buyDate":1570589302000,"price":0.0,"createdDate":1570589302000,"createdBy":"201908230006007813","updatedDate":1570589302000,"updatedBy":"201908230006007813"}],"others":null}';
         $ret = json_decode($ret,true);
         if($ret['success']){
             return $ret['datas'];
@@ -92,30 +101,85 @@ class ErpApiFactory
 
     /**
      * 获取订单
-     * @param string $accountCode 店铺代码
-     * @param string $updatedDateFrom 更新开始时间
-     * @param string $updatedDateTo 更新结束时间
+     * @param array $data
+     * @return mixed
      */
     public function get_order($data = []){
 
         $url = $this->get_link('/openapi/tongtool/ordersQuery');
 
-        $data = ['accountCode'=>'SQ','merchantId'=>$this->merchantId[0]['partnerOpenId'],'storeFlag'=>'0','updatedDateFrom'=>'2019-12-09 00:00:00','updatedDateTo'=>'2019-12-10 00:00:00'];
+        //storeFlag 0”查询活跃表，”1”为查询1年表，”2”为查询归档表，默认为”0”
+
+        $data = ['merchantId'=>$this->merchantId[0]['partnerOpenId'],'pageNo'=>$data['pageNo'],
+                'payDateFrom'=>$data['updatedDateFrom'],'payDateTo'=>$data['updatedDateTo']];
+//                'updatedDateFrom'=>$data['updatedDateFrom'],'updatedDateTo'=>$data['updatedDateTo']];
+
+        if(isset($data['code'])){
+            $data['accountCode'] = $data['code'];
+        }
+
+        $ret = $this->curl_post_https_json($url,$data);
+
+//        $ret = file_get_contents('http://www.erp.com/ceshi.json');
+
+        //记录日志
+        if(isset($data['code'])){
+            log_message ( 'erp_get_order_in_shop', json_encode($data).'------'.$ret, true );
+        }else{
+            log_message ( 'erp_get_order', json_encode($data).'------'.$ret, true );
+        }
+        //记录日志end
+
+        $ret = json_decode($ret,true);
+
+        return $ret;
+
+    }
+
+
+    /**
+     * 获取shopify订单
+     * @param string $payDateFrom
+     * @param string $payDateTo
+     * @param int $pageNo
+     * @return mixed
+     */
+    public function  get_shopify_order($payDateFrom = '',$payDateTo = '',$pageNo = 1){
+
+        $url = $this->get_link('/openapi/tongtool/shopifyOrderQuery');
+
+        $data = ['pageNo'=>$pageNo,
+                'merchantId'=>$this->merchantId[0]['partnerOpenId'],
+                'payDateFrom'=>$payDateFrom,
+                'payDateTo'=>$payDateTo];
 
         $ret = $this->curl_post_https_json($url,$data);
 
         $ret = json_decode($ret,true);
 
-        //记录日志
-        log_message ( 'erp_get_order', json_encode($ret), true );
-        //记录日志end
+        return $ret;
 
-        if($ret['code']!=200){ //请求失败
-            $this->ajax_return(AJAX_RETURN_FAIL,$ret['message']);
-        }
+    }
 
-        $this->ajax_return(AJAX_RETURN_SUCCESS,'ok',['data'=>$ret['datas']]);
+    /**
+     * 根据订单ID查询物流单号
+     * @param array $orderIds
+     * @param int $pageNo
+     * @return mixed
+     */
+    public function get_trackingNumberQuery($orderIds = array(),$pageNo = 1){
 
+        $url = $this->get_link('/openapi/tongtool/trackingNumberQuery');
+
+        $data = ['merchantId'=>$this->merchantId[0]['partnerOpenId'],'orderIds'=>$orderIds,'pageNo'=>$pageNo];
+
+        $ret = $this->curl_post_https_json($url,$data);
+
+//        $ret = file_get_contents('http://erp.vasilijh.com/ceshi.json');
+
+        $ret = json_decode($ret,true);
+
+        return $ret;
     }
 
     /**
@@ -171,7 +235,7 @@ class ErpApiFactory
     }
 
     /**
-     * get请求https链接公共方法(json)
+     * post请求https链接公共方法(json)
      * @param $url
      * @return mixed
      */
