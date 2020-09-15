@@ -93,6 +93,23 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
             }
         }
 
+		//判断字符长度
+		$lens = 33;
+		$lens_en = 50;
+		if(strlen($input['name'])>$lens){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'产品名过长，请填写10字以内！');
+		}
+		if(strlen($input['name_en'])>$lens){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'产品英文名过长，请填写'.$lens_en.'字以内！');
+		}
+		if(strlen($input['dc_name'])>$lens){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'中文报关名过长，请填写10字以内！');
+		}
+		if(strlen($input['dc_name_en'])>$lens){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'英文报关名过长，请填写'.$lens_en.'字以内！');
+		}
+		//判断字符长度end
+
 		if($id){ //修改
 			if(!$input['code'] && $input['status']==1){ //编码未填写
 				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写SPU编码');

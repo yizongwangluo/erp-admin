@@ -58,12 +58,12 @@ class Tongtu_orders extends \Application\Component\Common\IFacade
         $this->erpApi = new ErpApiFactory();
 
 //        $yesterday_time = strtotime("-1 day");
-        $time = time();
+        $time = strtotime(date('Y-m-d H:i').':00');
         $data = [];
-//        $data['updatedDateFrom'] = date('Y-m-d H:i:s',$yesterday_time-(5*60));
-//        $data['updatedDateTo'] = date('Y-m-d H:i:s',$yesterday_time);
-        $data['updatedDateFrom'] = date('Y-m-d H:i:s',$time-(35*60));
-        $data['updatedDateTo'] = date('Y-m-d H:i:s',$time-(30*60));
+//        $data['updatedDateFrom'] = ' 2020-09-14 23:50:00';
+//        $data['updatedDateTo'] = ' 2020-09-14 23:55:00';
+        $data['updatedDateFrom'] = date('Y-m-d H:i:s',$time-(12*60*60+5*60));
+        $data['updatedDateTo'] = date('Y-m-d H:i:s',$time-(12*60*60));
         $data['pageNo'] = 1;
 
         for($data['pageNo'];$data['pageNo']<=self::$limit_times;$data['pageNo']++){ //通途接口，短时间内最多请求5次

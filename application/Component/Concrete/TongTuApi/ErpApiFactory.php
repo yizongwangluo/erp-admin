@@ -110,7 +110,8 @@ class ErpApiFactory
 
         //storeFlag 0”查询活跃表，”1”为查询1年表，”2”为查询归档表，默认为”0”
 
-        $data = ['merchantId'=>$this->merchantId[0]['partnerOpenId'],'pageNo'=>$data['pageNo'],
+        $data = ['storeFlag'=>0,'merchantId'=>$this->merchantId[0]['partnerOpenId'],'pageNo'=>$data['pageNo'],
+//                'orderId'=>'LMb001j-200913161522583'];
                 'payDateFrom'=>$data['updatedDateFrom'],'payDateTo'=>$data['updatedDateTo']];
 //                'updatedDateFrom'=>$data['updatedDateFrom'],'updatedDateTo'=>$data['updatedDateTo']];
 
@@ -119,7 +120,6 @@ class ErpApiFactory
         }
 
         $ret = $this->curl_post_https_json($url,$data);
-
 //        $ret = file_get_contents('http://www.erp.com/ceshi.json');
 
         //记录日志
