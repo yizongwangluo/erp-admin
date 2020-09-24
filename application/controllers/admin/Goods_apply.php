@@ -373,4 +373,68 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 
 	}
 
+
+	/**
+	 * 根据采购链接获取商品信息
+	 */
+	public function source_address_html(){
+
+		$source_address = $this->input->post('source_address');
+//		$source_address = 'http://www.erp.com/ceshi1.html';
+//		$source_address = 'https://detail.1688.com/offer/582385280303.html?spm=a26352.b28411319.offerlist.249.5bb61e62Y3bJJR';
+		$html = catchData($source_address);
+
+		if(!$html){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'同步sku信息失败，请手动填写！');
+		}
+
+		$data = [];
+		preg_match('/<title>([^<>]*)<\/title>/', $html, $title);
+		//标题
+		$data['title'] = $title[1];
+
+		preg_match('/<img src="([^<>]*)400x400.jpg" alt=/', $html, $img);
+		//图片
+		$data['img'] = $img[1].'400x400.jpg';
+
+		preg_match('/<a class="name has-tips " ([^<>]*)>([^<>]*)<\/a>/', $html, $gys);
+		//供应商
+		$data['gys'] = $gys[2];
+
+		preg_match('/iDetailData =([^<>]*)( };)/', $html, $iDetailData);
+		$iDetailData = $iDetailData[1].'}';
+		$iDetailData =  preg_replace('@([\w_0-9]+):@', '"\1":', $iDetailData);
+		$iDetailData =  preg_replace('["https"]', 'https', $iDetailData);
+		$iDetailData = json_decode($iDetailData,true);
+		/*preg_match('/skuMap:([^<>]*)},/', $html, $sku);
+		$sku = $sku[1].'}';
+		$sku = json_decode($sku,true);*/
+		$norms_name = $iDetailData['sku']['skuProps'][0]['prop'];
+		$imgs = array_column( $iDetailData['sku']['skuProps'][0]['value'],'imageUrl','name');
+		$sku = $iDetailData['sku']['skuMap'];
+		$i=1;
+		foreach($sku as $key=>$value){
+
+
+
+			$data['sku'][$i-1] = ['id'=>$i,
+								'norms_name'=>$norms_name,
+								'norms'=>$key,
+								'price'=>$value['price']?$value['price']:$iDetailData['sku']['priceRange'][0][1],
+								];
+
+			if($imgs[$key]){
+				$data['sku'][$i-1]['img'] = $imgs[$key];
+			}else{
+				$imgK = explode('&gt;',$key);
+				$data['sku'][$i-1]['img'] = $imgs[$imgK[0]]?$imgs[$imgK[0]]:$data['img'];
+			}
+
+			$i++;
+		}
+
+		$this->output->ajax_return(AJAX_RETURN_SUCCESS,'Ok',$data);
+
+	}
+
 }

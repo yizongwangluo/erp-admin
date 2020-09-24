@@ -65,10 +65,6 @@
             <label class="layui-form-label">*产品图片：</label>
             <div class="layui-inline">
                 <img src="<?= $info['img'] ?>" class="thumb_img" style="max-width: 115px;" onclick="javascript:window.open('_blank').location=this.src">
-                <input id="thumb_img" name="img" value="<?=$info['img']?>" type="hidden" class="layui-input thumb_img" />
-            </div>
-            <div class="layui-inline">
-                <a id="thumb_img_btn"  href="javascript:void(0)" class="layui-btn upload-img-all" >上传图片</a>
             </div>
         </div>
     </div>

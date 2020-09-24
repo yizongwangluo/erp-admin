@@ -1285,3 +1285,43 @@ function ConversionTime($value = '',$gs = 'Y-m-d'){
 
 	return $str;
 }
+
+function catchData($url) {
+//	header("Content-type: text/html; charset=gb2312");
+	header("Content-type:text/html;charset=UTF-8");
+
+	$headers=[
+			"Accept: application/json, text/javascript, */*; q=0.01",
+			"Content-Type: application/x-www-form-urlencoded; charset=UTF-8",
+			"Origin:https://detail.1688.com",
+			"Referer: $url",
+			"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36",
+
+	];
+	$curl = curl_init();
+	//设置抓取的url
+	curl_setopt($curl, CURLOPT_URL, $url);
+	curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);//指定头部参数
+	//设置头文件的信息作为数据流输出
+	curl_setopt($curl, CURLOPT_HEADER, 0);
+	//设置获取的信息以文件流的形式返回，而不是直接输出。
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+	//重要！
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE); // https请求 不验证证书和hosts
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+	curl_setopt($curl,CURLOPT_USERAGENT,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)"); //模拟浏览器代理
+
+	//执行命令
+	$data = curl_exec($curl);
+	//关闭URL请求
+	curl_close($curl);
+	$encode = mb_detect_encoding($data, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5'));
+	$data = mb_convert_encoding($data, 'UTF-8',$encode);//使用该函数对结果进行转码
+	return $data;
+}
+
+function clearBom($str){
+	$bom = chr(239).chr(187).chr(191);
+	return str_replace($bom ,'',$str);
+}

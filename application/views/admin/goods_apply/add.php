@@ -14,6 +14,16 @@
     <div class="layui-field-box">
     <input type="hidden" name="id" value="<?= $info['id'] ?>">
     <div class="layui-form-item">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">采购链接：</label>
+            <div class="layui-inline">
+                <input name="source_address" id="source_address" lay-verify="required" value="<?= $info['source_address'] ?>" type="text" class="layui-input">
+            </div>
+            <button type="button" class="layui-btn layui-btn-danger" id="huoqu">获取</button>
+        </div>
+
+    </div>
         <!--<div class="layui-inline">
             <label class="layui-form-label">*SPU编码：</label>
             <div class="layui-inline">
@@ -64,22 +74,12 @@
         <div class="layui-inline">
             <label class="layui-form-label">*产品图片：</label>
             <div class="layui-inline">
-                <img src="" class="thumb_img" style="max-width: 115px;" onclick="javascript:window.open('_blank').location=this.src">
-                <input id="thumb_img" name="img" value="" type="hidden" class="layui-input thumb_img" />
+                <input id="thumb_img" name="img" value="" type="text" class="layui-input thumb_img" />
             </div>
-            <div class="layui-inline">
-                <a id="thumb_img_btn"  href="javascript:void(0)" class="layui-btn upload-img-all" >上传图片</a>
-            </div>
-            <em>点击图片看大图</em>
+            <em onclick="javascript:window.open('_blank').location=$('#thumb_img').val()" class="layui-btn layui-btn-xs">预览</em>
         </div>
     </div>
     <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">采购链接：</label>
-            <div class="layui-inline">
-                <input name="source_address" lay-verify="required" value="<?= $info['source_address'] ?>" type="text" class="layui-input">
-            </div>
-        </div>
         <div class="layui-inline">
             <label class="layui-form-label">起批量：</label>
             <div class="layui-inline">
@@ -259,10 +259,10 @@
                 ,cols: [[
                     {field:'id', width:80, title: 'ID' }
                     ,{field:'alias', title: '别名' }
-                    ,{field:'norms',  title: '规格名1',minWidth:30}
-                    ,{field:'norms_name',  title: '规格值1',minWidth:30}
-                    ,{field:'norms1',  title: '规格名2',minWidth:30}
-                    ,{field:'norms_name1',  title: '规格值2',minWidth:30}
+                    ,{field:'norms_name',  title: '规格名1',minWidth:30}
+                    ,{field:'norms',  title: '规格值1',minWidth:30}
+                    ,{field:'norms_name1',  title: '规格名2',minWidth:30}
+                    ,{field:'norms1',  title: '规格值2',minWidth:30}
                     ,{field:'img',  title: '图片', templet: function(res){
                         return '<a href="'+res.img+'" target="_blank"><img width="50px" src="'+res.img+'"></a>'
                     }}
@@ -323,6 +323,36 @@
                 });
             }
         });
+
+
+        $('#huoqu').click(function(){
+            var source_address = $('#source_address').val(),index = layer.load();
+
+            if(source_address==''){
+                layer.msg('请填写采购链接', {time: 2000, icon: 2});
+                layer.close(index);
+                return false;
+            }else{
+
+                $.post('/admin/goods_apply/source_address_html',{source_address:source_address},function(obj){
+                    layer.close(index);
+                    console.log(obj.data);
+                    if (!obj.status) {
+                        layer.msg(response.msg, {time: 2000, icon: 6});
+                    } else {
+//                        $('input[name="name"]').val(obj.data.title);
+//                        $('input[name="dc_name"]').val(obj.data.title);
+                        $('input[name="supplier_name"]').val(obj.data.gys);
+                        $('#thumb_img').val(obj.data.img);
+                        data_sku = obj.data.sku;
+
+                        table.reload('idTest',{data:data_sku}); //重载 table
+                    }
+                },'json')
+
+            }
+        })
+
     });
 
     function save_form(status) {
