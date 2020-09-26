@@ -17,6 +17,7 @@
                     <tr>
                         <td>ID</td>
                         <td>域名</td>
+                        <td>平台</td>
                         <td>后台地址</td>
                         <td>客服邮箱</td>
                         <td>收款paypal
@@ -65,6 +66,7 @@
                             <tr>
                                 <td><?=$v['id']?></td>
                                 <td><?=$v['domain']?></td>
+                                <td><?=$this->enum_field->get_values('shop_pt_list')[$v['pt_id']]?></td>
                                 <td><?=$v['backstage']?></td>
                                 <td><?=$v['customer_service_email']?></td>
                                 <td>

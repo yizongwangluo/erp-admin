@@ -393,7 +393,7 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		//标题
 		$data['title'] = $title[1];
 
-		preg_match('/<img src="([^<>]*)400x400.jpg" alt=/', $html, $img);
+		preg_match('/<img src="([^<>]*)60x60.jpg" alt=/', $html, $img);
 		//图片
 		$data['img'] = $img[1].'400x400.jpg';
 

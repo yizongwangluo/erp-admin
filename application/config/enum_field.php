@@ -111,6 +111,7 @@ $config = array (
     ],
     "shop_pt_list"=>[
         1=>"shopify",
-        "Xshop"
+        "Xshop",
+        "店匠",
     ]
 );
