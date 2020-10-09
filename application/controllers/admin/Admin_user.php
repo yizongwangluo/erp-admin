@@ -44,6 +44,12 @@ class Admin_user extends \Application\Component\Common\AdminPermissionValidateCo
 		$page = max ( 1, $this->input->get ( 'page' ) );
 		$result = $this->admin_data->lists_page ( $where, ['id', 'desc'], $page );
 
+		if($result['data']){
+			foreach($result['data'] as &$value){
+				$value['title'] = $this->admin_auth_group_data->get_group_name($value['role_id']);
+			}
+		}
+
 		$result['page_html'] = create_page_html ( '?', $result['total'] );
 		$result['where'] = $input;
 		$this->load->view ( '', $result );

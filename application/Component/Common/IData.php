@@ -253,7 +253,7 @@ abstract class IData extends ILayer implements DateInterface
             $order_by = array(static::_get_pk_field(), 'asc');
         }
         $sql_all = $sql.$condition[0];
-//        echo $sql_all;
+//        echo $sql_all;exit;
         $datas = $this->db->query ( $sql_all )->result_array ();
         $total = count($datas);
         $this->page->init($total, $page_num, $page_size);
@@ -290,6 +290,8 @@ abstract class IData extends ILayer implements DateInterface
 	        }
         }
         $data = $this->db->get()->result_array();
+
+//        echo $this->db->last_query();exit;
 
         if ($returnArr){
         	return $data;

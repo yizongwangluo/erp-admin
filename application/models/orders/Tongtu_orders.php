@@ -62,8 +62,8 @@ class Tongtu_orders extends \Application\Component\Common\IFacade
         $data = [];
 //        $data['updatedDateFrom'] = ' 2020-09-14 23:50:00';
 //        $data['updatedDateTo'] = ' 2020-09-14 23:55:00';
-        $data['updatedDateFrom'] = date('Y-m-d H:i:s',$time-(12*60*60+5*60));
-        $data['updatedDateTo'] = date('Y-m-d H:i:s',$time-(12*60*60));
+        $data['updatedDateFrom'] = date('Y-m-d H:i:s',$time-(24*60*60+5*60));
+        $data['updatedDateTo'] = date('Y-m-d H:i:s',$time-(24*60*60));
         $data['pageNo'] = 1;
 
         for($data['pageNo'];$data['pageNo']<=self::$limit_times;$data['pageNo']++){ //通途接口，短时间内最多请求5次
@@ -182,9 +182,9 @@ class Tongtu_orders extends \Application\Component\Common\IFacade
             $order_info['total_price'] = $v['orderAmount'];
             $order_info['total_price_usd'] = bcdiv($v['orderAmount'],$rate,2);
 
-            $order_info['created_at'] = $v['saleTime'];
-            $order_info['updated_at'] = $v['saleTime'];
-            $order_info['processed_at'] = $v['saleTime'];
+            $order_info['created_at'] = $v['saleTime']; //订单生成时间
+            $order_info['updated_at'] = $time;
+            $order_info['processed_at'] = $v['paidTime']; //订单付款时间
             $order_info['total_weight'] = array_sum(array_column($v['goodsInfo']['tongToolGoodsInfoList'],'goodsWeight'));
             $order_info['financial_status'] = 'paid';
             $order_info['orderStatus'] = $v['orderStatus'];
@@ -193,7 +193,7 @@ class Tongtu_orders extends \Application\Component\Common\IFacade
             $order_info['addtime'] = $time; //新增时间
             $order_info['tracking_number'] = $v['packageInfoList'][0]['trackingNumber']; //运单号
             $order_info['tracking_type'] = $order_info['tracking_number']?1:0; //运单号
-            $order_info['datetime'] = $v['saleTime'];
+            $order_info['datetime'] = $v['paidTime']; //订单付款时间
             $order_id = $this->order_data->save($order_info);
 
             if($order_id){

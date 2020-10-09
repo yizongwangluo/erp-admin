@@ -380,10 +380,9 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 	public function source_address_html(){
 
 		$source_address = $this->input->post('source_address');
-//		$source_address = 'http://www.erp.com/ceshi1.html';
-//		$source_address = 'https://detail.1688.com/offer/582385280303.html?spm=a26352.b28411319.offerlist.249.5bb61e62Y3bJJR';
+//		$source_address = 'http://www.erp.com/ceshi.html';
+//		$source_address = 'https://detail.1688.com/offer/584198577642.html?spm=a26352.13672862.offerlist.47.12e642d42qYuAy';
 		$html = catchData($source_address);
-
 		if(!$html){
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'同步sku信息失败，请手动填写！');
 		}
@@ -392,7 +391,6 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		preg_match('/<title>([^<>]*)<\/title>/', $html, $title);
 		//标题
 		$data['title'] = $title[1];
-
 		preg_match('/<img src="([^<>]*)60x60.jpg" alt=/', $html, $img);
 		//图片
 		$data['img'] = $img[1].'400x400.jpg';

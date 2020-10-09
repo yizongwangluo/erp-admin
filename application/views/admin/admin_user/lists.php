@@ -23,6 +23,7 @@
                 <th>工号</th>
                 <th>用户名</th>
                 <th>真实姓名</th>
+                <th>权限组</th>
                 <th>最后登陆时间</th>
                 <th>是否禁用</th>
                 <th>操作</th>
@@ -34,6 +35,7 @@
                     <td><?=$item['job_number'];?></td>
                     <td><?=$item['user_name'];?></td>
                     <td><?=$item['real_name'];?></td>
+                    <td><?=$item['title'];?></td>
                     <td><?=$item['login_time']?date ('Y-m-d H:i:s',$item['login_time']):''?></td>
                     <td><?=$item['is_disable'] == 1? '是':'否'?></td>
                     <td>

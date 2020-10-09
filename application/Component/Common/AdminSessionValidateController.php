@@ -92,7 +92,7 @@ class AdminSessionValidateController extends \MY_Controller
 		$url = $this->uri->uri_string ();
 		if ( empty( $title ) ) {
 			$result = model ( 'data/menu_data' )->find ( array ('url' => $url) );
-			$title = $result['name'];
+			$title = $result?$result['name']:'';
 		}
 		model ( 'data/admin_logs_data' )->store (
 			[

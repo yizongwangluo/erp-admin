@@ -344,7 +344,7 @@
 //                        $('input[name="dc_name"]').val(obj.data.title);
                         $('input[name="supplier_name"]').val(obj.data.gys);
                         $('#thumb_img').val(obj.data.img);
-                        data_sku = obj.data.sku;
+                        data_sku = obj.data.sku?obj.data.sku:[];
 
                         table.reload('idTest',{data:data_sku}); //重载 table
                     }
