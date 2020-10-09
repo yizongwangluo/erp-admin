@@ -227,6 +227,7 @@
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
                 <button type="button" class="layui-btn layui-btn-sm" lay-event="add" ><i class="layui-icon">&#xe654;</i></button>
+                <button type="button" class="layui-btn layui-btn-sm  layui-btn-danger" lay-event="del" ><i class="layui-icon">&#xe640;</i></button>
             </div>
         </script>
         <script type="text/html" id="barDemo">
@@ -257,7 +258,8 @@
                 ,limit:9999
                 ,cellMinWidth: 50 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                 ,cols: [[
-                    {field:'id', width:80, title: 'ID' }
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field:'id', width:80, title: 'ID' }
                     ,{field:'alias', title: '别名' }
                     ,{field:'norms_name',  title: '规格名1',minWidth:30}
                     ,{field:'norms',  title: '规格值1',minWidth:30}
@@ -279,17 +281,50 @@
 
             switch(obj.event) {
                 case 'add':
-                layer.open({
-                    type: 2,
-                    title: '添加SKU',
-                    area: ['500px','500px'],
-                    shadeClose: true, //点击遮罩关闭
-                    maxmin: true,
-                    content: '/admin/goods_apply/add_sku',
-                    success: function(layero, index){
-                        layer.getChildFrame('body', index).find('input[name="r_id"]').val(<?=$info['id']?>);
+                    layer.open({
+                        type: 2,
+                        title: '添加SKU',
+                        area: ['500px','500px'],
+                        shadeClose: true, //点击遮罩关闭
+                        maxmin: true,
+                        content: '/admin/goods_apply/add_sku',
+                        success: function(layero, index){
+                            layer.getChildFrame('body', index).find('input[name="r_id"]').val(<?=$info['id']?>);
+                        }
+                    });
+                    break;
+                case 'del':
+                    var checkStatus = table.checkStatus('idTest'),
+                        tableData = checkStatus.data,
+                        selectCount = tableData.length,
+                        delList = [],
+                        data_tmp = [];
+
+                    if(selectCount == 0){
+                        layer.msg('批量删除至少选中一项数据');
+                        return false;
                     }
-                });
+
+                    layer.confirm('确定删除<a style="color: red;margin: 5px"> '+selectCount+' </a>项数据吗？', function(index){
+                        tableData.forEach(function(n,i){
+                             delList.push(n.id);
+                        });
+
+                        console.log('delList：'+delList);
+
+                        data_sku.forEach(function(n,i){
+                            if(delList.indexOf(n.id)<=-1){
+                                data_tmp.push(n);
+                            }
+                        });
+
+                        data_sku = data_tmp;
+
+                        table.reload('idTest',{data:data_sku}); //重载 table
+
+                        layer.close(index);
+                    });
+                    break;
             }
         });
 
@@ -345,6 +380,7 @@
                         $('input[name="supplier_name"]').val(obj.data.gys);
                         $('#thumb_img').val(obj.data.img);
                         data_sku = obj.data.sku?obj.data.sku:[];
+                        sku_id = obj.data.sku_id?obj.data.sku_id:0;
 
                         table.reload('idTest',{data:data_sku}); //重载 table
                     }

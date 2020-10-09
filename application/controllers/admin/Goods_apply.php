@@ -373,14 +373,13 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 
 	}
 
-
 	/**
 	 * 根据采购链接获取商品信息
 	 */
 	public function source_address_html(){
 
-		$source_address = $this->input->post('source_address');
-//		$source_address = 'http://www.erp.com/ceshi.html';
+//		$source_address = $this->input->post('source_address');
+		$source_address = 'http://www.erp.com/ceshi.html';
 //		$source_address = 'https://detail.1688.com/offer/584198577642.html?spm=a26352.13672862.offerlist.47.12e642d42qYuAy';
 		$html = catchData($source_address);
 		if(!$html){
@@ -413,8 +412,6 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		$i=1;
 		foreach($sku as $key=>$value){
 
-
-
 			$data['sku'][$i-1] = ['id'=>$i,
 								'norms_name'=>$norms_name,
 								'norms'=>$key,
@@ -430,6 +427,8 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 
 			$i++;
 		}
+
+		$data['sku_id'] = count($data['sku']);
 
 		$this->output->ajax_return(AJAX_RETURN_SUCCESS,'Ok',$data);
 
