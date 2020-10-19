@@ -1286,9 +1286,37 @@ function ConversionTime($value = '',$gs = 'Y-m-d'){
 	return $str;
 }
 
+function randIP(){
+	$ip_long = array(
+			array('607649792', '608174079'), //36.56.0.0-36.63.255.255
+			array('1038614528', '1039007743'), //61.232.0.0-61.237.255.255
+			array('1783627776', '1784676351'), //106.80.0.0-106.95.255.255
+			array('2035023872', '2035154943'), //121.76.0.0-121.77.255.255
+			array('2078801920', '2079064063'), //123.232.0.0-123.235.255.255
+			array('-1950089216', '-1948778497'), //139.196.0.0-139.215.255.255
+			array('-1425539072', '-1425014785'), //171.8.0.0-171.15.255.255
+			array('-1236271104', '-1235419137'), //182.80.0.0-182.92.255.255
+			array('-770113536', '-768606209'), //210.25.0.0-210.47.255.255
+			array('-569376768', '-564133889'), //222.16.0.0-222.95.255.255
+	);
+	$rand_key = mt_rand(0, 9);
+	$ip= long2ip(mt_rand($ip_long[$rand_key][0], $ip_long[$rand_key][1]));
+	$headers['CLIENT-IP'] = $ip;
+	$headers['X-FORWARDED-FOR'] = $ip;
+
+	$headerArr = array();
+	foreach( $headers as $n => $v ) {
+		$headerArr[] = $n .':' . $v;
+	}
+	return $headerArr;
+}
+
+
 function catchData($url) {
 //	header("Content-type: text/html; charset=gb2312");
 	header("Content-type:text/html;charset=UTF-8");
+
+	$ips = randIP();
 
 	$headers=[
 			"Accept: application/json, text/javascript, */*; q=0.01",
@@ -1296,12 +1324,22 @@ function catchData($url) {
 			"Origin:https://detail.1688.com",
 			"Referer: $url",
 			"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36",
-
 	];
+
+	$referer = [
+		'http:www.ceshi.com',
+		'http:www.ceshi1.com',
+		'http:www.ceshi2.com',
+		'http:www.ceshi3.com'
+	];
+
+	$headers = array_merge($ips,$headers);
+
 	$curl = curl_init();
 	//设置抓取的url
 	curl_setopt($curl, CURLOPT_URL, $url);
 	curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);//指定头部参数
+	curl_setopt($curl, CURLOPT_REFERER, $referer[mt_rand(0,3)]); //构造来路
 	//设置头文件的信息作为数据流输出
 	curl_setopt($curl, CURLOPT_HEADER, 0);
 	//设置获取的信息以文件流的形式返回，而不是直接输出。

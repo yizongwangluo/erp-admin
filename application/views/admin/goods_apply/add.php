@@ -373,7 +373,7 @@
                     layer.close(index);
                     console.log(obj.data);
                     if (!obj.status) {
-                        layer.msg(response.msg, {time: 2000, icon: 6});
+                        layer.msg(obj.msg, {time: 2000, icon: 2});
                     } else {
 //                        $('input[name="name"]').val(obj.data.title);
 //                        $('input[name="dc_name"]').val(obj.data.title);

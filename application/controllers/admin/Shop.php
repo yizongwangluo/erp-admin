@@ -31,6 +31,7 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         if(isset($order_s)){
             $sort = $order_s;
         }
+
         $result = $this->shop_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
         $result['page_html'] = create_page_html ( '?', $result['total'],10 );
         $this->load->view('',$result);
@@ -43,7 +44,7 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         $condition = array ();
         $search = trim($input['search']);
         if (!empty($search)){
-            $condition[] = " (domain like '%{$search}%' or company_name like '%{$search}%' or shop_remark like '%{$search}%' or user_name like '%{$search}%')";
+            $condition[] = " (domain like '%{$search}%' or company_name like '%{$search}%' or shop_remark like '%{$search}%' or user_name like '%{$search}%' or `code` like '%{$search}%')";
         }
         if (isset($input['status']) && is_numeric($input['status'])){
             $condition[] = " status = ".$input['status'];

@@ -373,15 +373,18 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 
 	}
 
+
 	/**
 	 * 根据采购链接获取商品信息
 	 */
 	public function source_address_html(){
 
-//		$source_address = $this->input->post('source_address');
-		$source_address = 'http://www.erp.com/ceshi.html';
+		$source_address = $this->input->post('source_address');
+//		$source_address = 'http://www.erp.com/ceshi.html';
 //		$source_address = 'https://detail.1688.com/offer/584198577642.html?spm=a26352.13672862.offerlist.47.12e642d42qYuAy';
 		$html = catchData($source_address);
+
+//		print_R($html);exit;
 		if(!$html){
 			$this->output->ajax_return(AJAX_RETURN_FAIL,'同步sku信息失败，请手动填写！');
 		}
@@ -390,9 +393,14 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		preg_match('/<title>([^<>]*)<\/title>/', $html, $title);
 		//标题
 		$data['title'] = $title[1];
+
+		if($data['title']=='security-X5'){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'请求频繁，请10分钟后再试！');
+		}
+
 		preg_match('/<img src="([^<>]*)60x60.jpg" alt=/', $html, $img);
 		//图片
-		$data['img'] = $img[1].'400x400.jpg';
+		$data['img'] = $img[1]? $img[1].'400x400.jpg':'';
 
 		preg_match('/<a class="name has-tips " ([^<>]*)>([^<>]*)<\/a>/', $html, $gys);
 		//供应商

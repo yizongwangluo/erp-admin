@@ -33,9 +33,9 @@ class Admin_user extends \Application\Component\Common\AdminPermissionValidateCo
 					$where[] = ' id = '.$input['name'];
 				}
 
-				$where[] = "user_name = '{$input['name']}'";
-				$where[] = "real_name = '{$input['name']}'";
-				$where[] = "job_number = '{$input['name']}'";
+				$where[] = "user_name like '%{$input['name']}%'";
+				$where[] = "real_name like '%{$input['name']}%'";
+				$where[] = "job_number like '%{$input['name']}%'";
 
 				$where = implode(' or ',$where);
 			}
