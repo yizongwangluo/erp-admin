@@ -13,6 +13,13 @@
                     <input type="text" name="name" value="<?=$where['name']?>"
                            class="layui-input" placeholder="输入搜索条件"/>
                 </div>
+                <div class="layui-inline">
+                    <select name="is_disable" >
+                        <option value="" >--状态--</option>
+                        <option value="0" <?php if($this->input->get ( 'is_disable' )==0 && is_numeric($this->input->get ( 'is_disable' ))){ echo 'selected'; } ?>>正常</option>
+                        <option value="1" <?php if($this->input->get ( 'is_disable' )==1){ echo 'selected'; } ?>>禁用</option>
+                    </select>
+                </div>
                 <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索</button>
             </div>
         </form>

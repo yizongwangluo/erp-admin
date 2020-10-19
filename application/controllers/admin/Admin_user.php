@@ -23,21 +23,31 @@ class Admin_user extends \Application\Component\Common\AdminPermissionValidateCo
 	public function lists ()
 	{
 		$input = $this->input->get();
-		$input = array_filter($input);
+
 		$where = [];
 		if($input){
 
 			$input['name'] = trim($input['name']);
+
 			if($input['name']){
 				if(is_numeric($input['name'])){
 					$where[] = ' id = '.$input['name'];
 				}
 
-				$where[] = "user_name like '%{$input['name']}%'";
+				$where[] = "(user_name like '%{$input['name']}%'";
 				$where[] = "real_name like '%{$input['name']}%'";
-				$where[] = "job_number like '%{$input['name']}%'";
+				$where[] = "job_number like '%{$input['name']}%')";
 
 				$where = implode(' or ',$where);
+			}
+
+
+			if($input['is_disable']==1 || $input['is_disable']==0){
+				if($where){
+					$where .= ' and is_disable = '.$input['is_disable'] ;
+				}else{
+					$where['is_disable'] = $input['is_disable'];
+				}
 			}
 		}
 
