@@ -229,4 +229,35 @@ class Admin_data extends \Application\Component\Common\IData
     }
 
 
+    /**
+     * 获取用户列表
+     * @param $admin_id
+     * @return mixed
+     */
+    public function get_users($admin_id)
+    {
+        if($admin_id == 1){
+            $sql = "select id as s_u_id,real_name as s_real_name,user_name as s_user_name,is_disable from admin order by s_u_id desc";
+        }else{
+            $sql = "SELECT
+	a.s_u_id,
+	a.s_real_name,
+	a.s_user_name,
+	b.is_disable
+FROM
+	admin_org_temp as a LEFT JOIN admin as b on a.s_u_id=b.id
+WHERE
+	u_id = {$admin_id}
+GROUP BY
+	s_u_id
+ORDER BY
+	s_u_id DESC";
+        }
+        $users = $this->db->query ( $sql )->result_array ();
+        return $users;
+    }
+
+
+
+
 }

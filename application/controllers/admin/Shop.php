@@ -14,6 +14,7 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
         $this->load->model ( 'data/shop_data' );
         $this->load->model ( 'data/apply_data' );
         $this->load->model ( 'data/order_synchro_data' );
+        $this->load->model ( 'data/admin_data' );
     }
 
     //店铺列表
@@ -74,7 +75,7 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
             $this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
         } else {
             $admin_id = $this->admin['id'];
-            $data['users'] = $this->shop_data->get_users ($admin_id);
+            $data['users'] = $this->admin_data->get_users ($admin_id);
             $data['company'] = $this->shop_data->get_company ();
             $this->load->view ( '' ,$data);
         }
@@ -86,7 +87,7 @@ class Shop extends \Application\Component\Common\AdminPermissionValidateControll
     {
         $admin_id = $this->admin['id'];
         $data['info'] = $this->shop_data->get_info ( $id );
-        $data['users'] = $this->shop_data->get_users ( $admin_id );
+        $data['users'] = $this->admin_data->get_users ( $admin_id );
         $data['company'] = $this->shop_data->get_company ();
         $this->load->view ( '@/add', $data );
     }

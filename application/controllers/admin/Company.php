@@ -13,6 +13,7 @@ class Company extends \Application\Component\Common\AdminPermissionValidateContr
         parent::__construct ();
         $this->load->model ( 'data/company_data' );
         $this->load->model ( 'data/my_data' );
+        $this->load->model ( 'data/admin_data' );
     }
 
     //企业主体列表
@@ -76,7 +77,7 @@ class Company extends \Application\Component\Common\AdminPermissionValidateContr
             $this->output->ajax_return ( AJAX_RETURN_SUCCESS, 'ok' );
         } else {
             $admin_id = $this->admin['id'];
-            $data['users'] = $this->company_data->get_users ($admin_id);
+            $data['users'] = $this->admin_data->get_users ($admin_id);
             $this->load->view ( '' ,$data);
         }
 
@@ -107,7 +108,7 @@ class Company extends \Application\Component\Common\AdminPermissionValidateContr
             $data['page_html'] = create_page_html ( '?', $data['total'],5 );
             $data['info'] = $this->company_data->get_info ( $id );
             $admin_id = $this->admin['id'];
-            $data['users'] = $this->company_data->get_users ($admin_id);
+            $data['users'] = $this->admin_data->get_users ($admin_id);
             $this->load->view ( '' ,$data);
         }
     }

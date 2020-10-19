@@ -160,7 +160,12 @@
                             <select name="user_id" lay-search="">
                                 <option value="">直接选择或搜索选择</option>
                                 <?php foreach ($users as $v): ?>
-                                    <option value="<?=$v['s_u_id']?>" <?php if ( $info['user_id'] == $v['s_u_id'] ){echo "selected=\"selected\"";}?> <?=$v['is_disable']?'disabled':''?> ><?=$v['s_user_name']?></option>
+
+
+                                    <?php if(!$v['is_disable']){ ?>
+                                        <option value="<?=$v['s_u_id']?>" <?php if ( $info['user_id'] == $v['s_u_id'] ){echo "selected=\"selected\"";}?> <?=$v['is_disable']?'disabled':''?> ><?=$v['s_user_name']?></option>
+                                    <?php   } ?>
+
                                 <?php endforeach;?>
                             </select>
                         </div>
