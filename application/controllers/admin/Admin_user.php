@@ -34,17 +34,17 @@ class Admin_user extends \Application\Component\Common\AdminPermissionValidateCo
 					$where[] = ' id = '.$input['name'];
 				}
 
-				$where[] = "(user_name like '%{$input['name']}%'";
+				$where[] = "user_name like '%{$input['name']}%'";
 				$where[] = "real_name like '%{$input['name']}%'";
-				$where[] = "job_number like '%{$input['name']}%')";
+				$where[] = "job_number like '%{$input['name']}%'";
 
 				$where = implode(' or ',$where);
 			}
 
+			if($input['is_disable']==1 || ($input['is_disable']==0 && is_numeric($input['is_disable']))){
 
-			if($input['is_disable']==1 || $input['is_disable']==0){
 				if($where){
-					$where .= ' and is_disable = '.$input['is_disable'] ;
+					$where =  ' ('.$where.') and is_disable = '.$input['is_disable'] ;
 				}else{
 					$where['is_disable'] = $input['is_disable'];
 				}
