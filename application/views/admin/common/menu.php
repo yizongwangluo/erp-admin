@@ -23,9 +23,9 @@
 <div class="layui-side layui-bg-black">
     <div class="layui-side-scroll">
         <ul class="layui-nav layui-nav-tree" lay-filter="menulist">
-            <li class="layui-nav-header">
+            <!--<li class="layui-nav-header">
                 <i class="layui-icon layui-icon-set"></i><span class="menu-masked">控制台</span>
-            </li>
+            </li>-->
            <?php foreach ($menulist as $vo){
                if (isset($vo['_child'])){ ?>
             <li class="layui-nav-item">

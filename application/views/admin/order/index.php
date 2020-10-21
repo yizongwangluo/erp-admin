@@ -25,6 +25,13 @@
                         </select>
                     </div>
                     <div class="layui-inline">
+                        <select name="error_order" lay-verify="required" lay-search>
+                            <option value="">所有订单</option>
+                            <option value="0" <?php if($this->input->get ( 'error_order' )==0 && is_numeric($this->input->get ( 'error_order' ))){ echo 'selected'; } ?>>异常订单</option>
+                            <option value="1" <?php if($this->input->get ( 'error_order' )==1){ echo 'selected'; } ?>>正常订单</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
                         <input class="layui-input date-time" name="datetime" placeholder="时间" value="<?php echo input('datetime'); ?>">
                     </div>
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索</button>

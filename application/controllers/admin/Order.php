@@ -30,7 +30,16 @@ class Order extends \Application\Component\Common\AdminPermissionValidateControl
 		$page = max(1,$input['page']);
 		unset($input['page']);
 
-		$input = array_filter($input); //清空空数组
+		$input = array_filterempty($input); //清空空数组
+
+		if(isset($input['error_order'])){
+			if($input['error_order']==1){
+				$input['user_id <>'] = 0;
+			}else{
+				$input['user_id'] = 0;
+			}
+			unset($input['error_order']);
+		}
 
 		$data = $this->order_data->lists_page($input,['id','desc'],$page);
 		$data['where'] = $input;

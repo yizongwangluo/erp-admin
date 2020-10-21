@@ -1363,3 +1363,17 @@ function clearBom($str){
 	$bom = chr(239).chr(187).chr(191);
 	return str_replace($bom ,'',$str);
 }
+
+/**
+ * 过滤空数组，不过滤O
+ * @param $data
+ * @return array
+ */
+function array_filterempty($data){
+	return array_filter($data,function($v) use(&$dada){
+		if($v === '' || $v === null || $v === false){
+			return false;
+		}
+		return true;
+	});
+}
