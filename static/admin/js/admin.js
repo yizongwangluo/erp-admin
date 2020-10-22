@@ -162,7 +162,38 @@ layui.use(['layer', 'upload', 'form', 'layedit', 'laydate', 'element'], function
     this.$body.on('click','[data-modal]',function () {
         return JYT.modal($(this).attr('data-modal'), $(this).attr('data-width') || '888px', $(this).attr('data-title') || '编辑');
     });
+
+    /**
+     * 获取统计
+     */
+    function common_sum(){
+        console.log('定时刷新统计数据');
+        JYT.ajax_post('/admin/index/index',{},function (d){
+            if(d.status==1){
+                if(d.data.advert_sum){
+                    $('.advert_sum').html(d.data.advert_sum);
+                    $('.advert_sum-em').html(d.data.advert_sum);
+                    $('.advert_sum-em').css('background-color','red');
+                }else{
+                    $('.goods_dsh').html(0);
+                    $('.advert_sum-em').html('');
+                    $('.advert_sum-em').css('background-color','none');
+                }
+                if(d.data.goods_dsh){
+                    $('.goods_dsh').html(d.data.goods_dsh);
+                    $('.goods_dsh-em').html(d.data.goods_dsh);
+                    $('.goods_dsh-em').css('background-color','red');
+                }else{
+                    $('.goods_dsh').html(0);
+                    $('.goods_dsh-em').html('');
+                    $('.goods_dsh-em').css('background-color','none');
+                }
+            }
+        });
+    }
+    setInterval(common_sum(),15000);
 });
+
 function upFiles($elem,$toClass) {
     //上传文件
    layui.use(['upload'],function () {

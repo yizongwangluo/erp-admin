@@ -58,7 +58,13 @@
                             <li class="layui-col-xs3 xs2-div-ss">
                                 <a href="/admin/advert/index?status=0" class="layadmin-backlog-body">
                                     <h3>广告申请</h3>
-                                    <p><cite><?=$advert_sum?></cite></p>
+                                    <p><cite class="advert_sum"><?=$advert_sum?$advert_sum:0;?></cite></p>
+                                </a>
+                            </li>
+                            <li class="layui-col-xs3  xs2-div-ss">
+                                <a href="/admin/goods_apply/index?status=2" class="layadmin-backlog-body">
+                                    <h3>商品待审核</h3>
+                                    <p><cite class="goods_dsh?"><?=$goods_dsh?$goods_dsh:0;?></cite></p>
                                 </a>
                             </li>
                             <li class="layui-col-xs3  xs2-div-ss">

@@ -1,5 +1,19 @@
 <style>
     .layui-nav-tree .layui-this>a{ background-color: #33aecc; }
+    .common_sum{
+        position: absolute;
+        color: white;
+        font-size: 14px;
+        min-height: 12px;
+        min-width: 12px;
+        line-height: 12px;
+        right: -1%;
+        top: 7px;
+        text-align: center;
+        -webkit-border-radius: 24px;
+        border-radius: 24px;
+        padding: 2px;
+    }
 </style>
 <div class="layui-layout layui-layout-admin">
     <!--头部-->
@@ -9,7 +23,8 @@
         <span> 大龙猫OA系统 </span>
     </a>
     <ul class="layui-nav">
-<!--        <li class="layui-nav-item"><a href="/" target="_blank">【网站首页】</a></li>-->
+        <li class="layui-nav-item"><a href="/admin/advert/index?status=0">广告申请<em class="common_sum advert_sum-em"></em></a></li>
+        <li class="layui-nav-item"><a href="/admin/goods_apply/index?status=2">商品待审核<span class="common_sum goods_dsh-em"></span></a></li>
         <li class="layui-nav-item">
             <a href="javascript:void(0)">当前用户：<?php echo $admin['user_name']; ?></a>
             <dl class="layui-nav-child">
