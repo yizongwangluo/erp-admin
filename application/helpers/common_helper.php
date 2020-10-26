@@ -1313,6 +1313,9 @@ function randIP(){
 
 
 function catchData($url) {
+
+	$url = str_replace('detail','m',$url);
+
 //	header("Content-type: text/html; charset=gb2312");
 	header("Content-type:text/html;charset=UTF-8");
 

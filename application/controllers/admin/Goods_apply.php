@@ -377,10 +377,10 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 	/**
 	 * 根据采购链接获取商品信息
 	 */
-	public function source_address_html(){
+	public function source_address_html_bak(){
 
-		$source_address = $this->input->post('source_address');
-//		$source_address = 'http://www.erp.com/ceshi.html';
+//		$source_address = $this->input->post('source_address');
+		$source_address = 'http://www.erp.com/ceshi.html';
 //		$source_address = 'https://detail.1688.com/offer/584198577642.html?spm=a26352.13672862.offerlist.47.12e642d42qYuAy';
 		$html = catchData($source_address);
 
@@ -424,6 +424,82 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 								'norms_name'=>$norms_name,
 								'norms'=>$key,
 								'price'=>$value['price']?$value['price']:$iDetailData['sku']['priceRange'][0][1],
+								];
+
+			if($imgs[$key]){
+				$data['sku'][$i-1]['img'] = $imgs[$key];
+			}else{
+				$imgK = explode('&gt;',$key);
+				$data['sku'][$i-1]['img'] = $imgs[$imgK[0]]?$imgs[$imgK[0]]:$data['img'];
+			}
+
+			$i++;
+		}
+
+		$data['sku_id'] = count($data['sku']);
+
+		$this->output->ajax_return(AJAX_RETURN_SUCCESS,'Ok',$data);
+
+	}
+	/**
+	 * 根据采购链接获取商品信息
+	 */
+	public function source_address_html(){
+
+		$source_address = $this->input->post('source_address');
+//		$source_address = 'http://www.erp.com/ceshi.html';
+//		$source_address = 'https://detail.1688.com/offer/584198577642.html?spm=a26352.13672862.offerlist.47.12e642d42qYuAy';
+		$html = catchData($source_address);
+
+//		print_R($html);exit;
+		if(!$html){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'同步sku信息失败，请手动填写！');
+		}
+
+		$data = [];
+		preg_match('/<title>([^<>]*)<\/title>/', $html, $title);
+		//标题
+		$data['title'] = $title[1];
+
+		if($data['title']=='security-X5'){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'请求频繁，请10分钟后再试！');
+		}
+
+		preg_match('/<img class="J_ImageFirstRender" src="([^<>]*)" swipe-lazy-src/', $html, $img);
+		//图片
+		$data['img'] = $img[1];
+
+		preg_match('/shop-name-text">([^<>]*)<span>([^<>]*)<\/span>/', $html, $gys);
+		//供应商
+		$data['gys'] = $gys[2];
+
+		preg_match('/skuProps":([^<>]*)(}},)/', $html, $iDetailData);
+
+		$string_ss = $iDetailData[0];
+		$string_ss = explode('"skuMap"',$string_ss);
+
+		$skuProps = str_replace('skuProps":','',$string_ss[0]);
+		$skuProps = rtrim(trim($skuProps),',');
+		$skuProps = json_decode($skuProps,true);
+
+		$skuMap = ltrim($string_ss[1],' : ');
+		$skuMap = rtrim($skuMap,',');
+		$skuMap = json_decode($skuMap,true);
+
+		$norms_name = $skuProps[0]['prop'];
+		$imgs = array_column( $skuProps[0]['value'],'imageUrl','name');
+
+		preg_match('/data-min-price="([^<>]*)(")/', $html, $priceMin);
+		preg_match('/data-max-price="([^<>]*)(")/', $html, $priceMax);
+		$price = $priceMin[1]?$priceMin[1]:$priceMin[1];
+
+		$i=1;
+		foreach($skuMap as $key=>$value){
+
+			$data['sku'][$i-1] = ['id'=>$i,
+								'norms_name'=>$norms_name,
+								'norms'=>$key,
+								'price'=>$value['price']?$value['price']:$price,
 								];
 
 			if($imgs[$key]){
