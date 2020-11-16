@@ -311,6 +311,8 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	 */
 	public function daochu_all(){
 
+		set_time_limit(0);
+
 		//获取商品详情
 		$spu_list = $this->goods_data->lists();
 		$category_list = $this->goods_category_data->lists();
@@ -322,7 +324,8 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 		$data = $this->goods_excel_temp($spu_list,$category_list); //导出模板
 
-		$this->_exportExcel($data,'商品列表',38);
+//		$this->_exportExcel($data,'商品列表',38);
+		$this->exportCsv($data,'商品列表');
 	}
 
 	public function daochu(){

@@ -294,6 +294,40 @@ class MY_Controller extends CI_Controller
 	}
 
 	/**
+	 * 导出CSV
+	 * @param        $rows
+	 * @param string $file_name
+	 */
+	function exportCsv($rows, $file_name = '数据')
+	{
+		$filename =  $file_name. date('YmdHi') . '.csv'; //设置文件名
+		header("Content-type:text/csv");
+		header("Content-Disposition:attachment;filename=\"" . $filename . "\"");
+		header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
+		header('Expires:0');
+		header('Pragma:public');
+
+		$fp    = fopen('php://output', 'a');
+		$cnt   = 0; // 计数器
+		$limit = 5000; // 每隔$limit行，刷新输出buffer
+
+		//加上bomtou utf-8正常显示，但编辑之后会有问题，要另存为xls、xlsb、xlsx等格式
+		fwrite($fp, "\xEF\xBB\xBF");
+
+		foreach ($rows as $row) {
+			$cnt++;
+			if ($limit == $cnt) { //刷新输出buffer，防止由于数据过多造成问题
+				ob_flush();
+				flush();
+				$cnt = 0;
+			}
+			fputcsv($fp, $row);
+			unset($v);
+			unset($row);
+		}
+	}
+
+	/**
 	 * 匹配字符串与数组是否存在相同数据
 	 * @param string $str
 	 * @param array $arr
