@@ -46,6 +46,40 @@ class Company extends \Application\Component\Common\AdminPermissionValidateContr
 
     }
 
+
+    /**
+     * 导出
+     */
+    public function daochu_all(){
+
+        $lists = $this->company_data->daochu();
+
+        $data['heard'] = [
+            '代理商','公司名称','营业执照图片','广告主联系人姓名','广告主联系人邮箱','时区','BM','开户状态(0审核成功、1审核中、2审核失败)','下户时间','BM API','备注','FB粉丝页链接','域名','所属人'
+        ];
+
+        foreach($lists as $k=>$v){
+            $data[$k][] = $v['agent'];
+            $data[$k][] = $v['company_name'];
+            $data[$k][] = $v['business_license_image'];
+            $data[$k][] = $v['ad_connect_name'];
+            $data[$k][] = $v['ad_connect_email'];
+            $data[$k][] = $v['time_zone'];
+            $data[$k][] = $v['BM'].' ';
+            $data[$k][] = $v['account_status'];
+            $data[$k][] = $v['logout_time'];
+            $data[$k][] = $v['BMAPI'];
+            $data[$k][] = $v['company_remark'];
+            $data[$k][] = $v['fanslink'];
+            $data[$k][] = $v['domain'];
+            $data[$k][] = $v['user_name'];
+        }
+
+        $this->_exportExcel($data,'企业主体',14);
+
+    }
+
+
     //查询条件
     private function parse_query_lists ($input)
     {

@@ -173,4 +173,30 @@ FROM
         $domains = $this->db->query ( $sql )->result_array ();
         return $domains;
     }
+
+    /**
+     * 导出
+     * @return mixed
+     */
+    public function daochu(){
+        $sql = 'SELECT
+                a.*, b.agent,b.belong_to,
+                b.domain,
+                s.domain AS shop_domain,
+                u.user_name
+            FROM
+                (
+                    (
+                        companyaccount a
+                        LEFT JOIN company b ON a.company_id = b.id
+                    )
+                    LEFT JOIN shop s ON a.shop_id = s.id
+                )
+            LEFT JOIN admin u ON b.belong_to = u.id';
+
+        $query = $this->db->query($sql);
+        $lists = $query->result_array();
+        return $lists;
+    }
+
 }

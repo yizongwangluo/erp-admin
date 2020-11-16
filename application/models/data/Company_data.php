@@ -293,7 +293,6 @@ FROM
         return true;
     }
 
-
     public function get_lists($id)
     {
         $sql = "SELECT
@@ -309,5 +308,20 @@ WHERE
         return $sql;
     }
 
+    /**
+     * 导出
+     * @return mixed
+     */
+    public function daochu(){
+        $sql = 'SELECT
+                a.*, FROM_UNIXTIME(a.logout_time) AS logout_time,
+                b.user_name
+            FROM
+                company a
+            LEFT JOIN admin b ON a.belong_to = b.id';
+        $query = $this->db->query($sql);
+        $lists = $query->result_array();
+        return $lists;
+    }
 
 }

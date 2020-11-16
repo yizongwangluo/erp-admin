@@ -118,6 +118,9 @@ class Goods_apply_data extends \Application\Component\Common\IData{
         if($where['name']){
             $sql_where[]= ' a.name= "'.$where['name'].'" ';
         }
+        if($where['code']){
+            $sql_where[]= ' a.code= "'.$where['code'].'" ';
+        }
 
         if($sql_where){
             $sql .= ' where '.implode(' and ',$sql_where);

@@ -11,10 +11,8 @@ namespace Application\Component\Common;
 
 class AdminPermissionValidateController extends AdminSessionValidateController
 {
-//	protected $erpApi;
 	public function __construct ()
 	{
-//		$this->erpApi = new ErpApiFactory();
 		parent::__construct ();
 	}
 

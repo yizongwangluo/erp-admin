@@ -41,6 +41,7 @@
                     <td>ID</td>
                     <td class="img">产品图片</td>
                     <td>产品名</td>
+                    <td>SPU编码</td>
                     <td>SKU</td>
                     <td>SKU别名</td>
                     <td>规格名1</td>
@@ -60,6 +61,7 @@
                       <td><?=$v['id']?></td>
                       <td class="img"><a href="<?=$v['img']?>" target="_blank"><img src="<?=$v['img']?>"></a></td>
                       <td><?=$v['name']?></td>
+                      <td><?=$v['code']?></td>
                       <td><?=$v['sku_code']?></td>
                       <td><?=$v['alias']?></td>
                       <td><?=$v['norms_name']?></td>

@@ -66,4 +66,34 @@ class Companyaccount extends \Application\Component\Common\AdminPermissionValida
         $this->output->ajax_return(AJAX_RETURN_SUCCESS, '操作成功');
     }
 
+
+    /**
+     * 导出
+     */
+    public function daochu(){
+
+        $lists = $this->companyaccount_data->daochu();
+
+        $data['heard'] = [
+            '代理商','域名','ID','企业账户ID','店铺ID','店铺','是否解限','状态（0正常，1封户，2申诉中）','备注','所属人'
+        ];
+
+        foreach($lists as $k=>$v){
+            $data[$k][] = $v['agent'];
+            $data[$k][] = $v['domain'];
+            $data[$k][] = $v['id'];
+            $data[$k][] = $v['company_account_id'].' ';
+            $data[$k][] = $v['shop_id'];
+            $data[$k][] = $v['shop_domain'];
+            $data[$k][] = $v['isunlock'];
+            $data[$k][] = $v['status'];
+            $data[$k][] = $v['companyaccount_remark'];
+            $data[$k][] = $v['user_name'];
+        }
+
+        $this->_exportExcel($data,'企业账号',10);
+
+    }
+
+
 }
