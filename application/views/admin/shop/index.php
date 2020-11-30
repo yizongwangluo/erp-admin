@@ -26,7 +26,7 @@
                     <table class="layui-table"  style='white-space: nowrap'>
                     <thead>
                     <tr>
-                        <td>ID</td>
+                        <td>ID(<a style="color: red" title="马帮erp后台对应店铺名">马帮店铺名</a>)</td>
                         <td>网站域名</td>
                         <td>平台</td>
                         <td>代码</td>

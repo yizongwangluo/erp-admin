@@ -114,6 +114,17 @@
                 </select>
             </div>
         </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">*仓库：</label>
+            <div class="layui-inline">
+                <select name="warehouse_id" lay-verify="required">
+                    <option value="">请选择</option>
+                    <?php foreach($warehouse_list as $key=>$value){ ?>
+                        <option value="<?php echo $value['id'] ?>" <?=$value['status']==2?'disabled':'';?> <?=$value['id']==$info['warehouse_id']?'selected':''?> ><?php echo $value['name'] ?></option>
+                    <?php   } ?>
+                </select>
+            </div>
+        </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">

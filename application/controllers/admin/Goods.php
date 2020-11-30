@@ -8,7 +8,7 @@
  * Time: 9:41
  */
 
-use  Application\Component\Concrete\TongTuApi\ErpApiFactory;
+use  Application\Component\Concrete\MabangApi\ErpApiFactory;
 
 class Goods extends \Application\Component\Common\AdminPermissionValidateController
 {
@@ -23,6 +23,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		$this->load->model ( 'goods/goods_excel_goods' );
 		$this->load->model ( 'data/excel_error_log_data' );
 		$this->load->model ( 'data/goods_category_data' );
+		$this->load->model ( 'data/goods_warehouse_data' );
 
 	}
 
@@ -62,8 +63,9 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 		$info = $this->goods_data->get_info($id);
 		$category_list = $this->goods_category_data->lists();
+		$warehouse_list = $this->goods_warehouse_data->lists();
 
-		$this->load->view ('',['info'=>$info,'category_list'=>$category_list]);
+		$this->load->view ('',['info'=>$info,'category_list'=>$category_list,'warehouse_list'=>$warehouse_list]);
 	}
 
 	/**
@@ -144,6 +146,120 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$this->goods_data->update($id,['is_tongtu'=>1]);
 			$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
 		}
+	}
+
+
+	/**
+	 * 同步商品到马帮 批量
+	 */
+	public function add_sku_mabang(){
+
+		$id = input('id');
+
+		//查询该spu
+		$info = $this->goods_data->get_info($id);
+		if(!$info){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'系统繁忙，请稍后重试！');
+		}
+		$sku_list = $this->goods_sku_data->lists(['spu_id'=>$id]);
+		if(empty($sku_list)){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'未查询到sku,请重试！');
+		}
+
+		$this->erpApi = new ErpApiFactory();
+
+		foreach($sku_list as $k=>$v){
+
+			$v['name'] = $info['name']; //英文名
+			$v['name_en'] = $info['name_en']; //英文名
+			$v['dc_name_en'] = $info['dc_name_en']; //报关英文名
+			$v['dc_name'] = $info['dc_name']; //报关中文名
+			$v['is_liquid'] = $info['is_liquid']; //报关中文名
+			$v['is_battery'] = $info['is_battery']; //报关中文名
+			$v['is_tort'] = $info['is_tort']; //报关中文名
+			$v['is_magnetism'] = $info['is_magnetism']; //报关中文名
+			$v['is_powder'] = $info['is_powder']; //报关中文名
+			$v['supplier_name'] = $info['supplier_name']; //供应商
+//			$v['className'] = $this->goods_category_data->get_info($info['category_id'])['name'];
+			$v['warehouse_name'] = $this->goods_warehouse_data->get_info($info['warehouse_id'])['name'];
+
+			if(!$v['is_mabang']){ //新增
+
+				$ret = $this->erpApi->add_stock($v);
+
+				if($ret['code']=='000'){
+					//修改同步马帮状态
+					$this->goods_sku_data->update($v['id'],['is_mabang'=>1,'stockId'=>$ret['stockId']]);
+				}else{
+					$this->output->ajax_return(AJAX_RETURN_FAIL,$ret['message']);
+				}
+			}else{  //更新
+
+				$ret = $this->erpApi->change_stock($v);
+
+				if($ret['code']!='000'){
+					$this->output->ajax_return(AJAX_RETURN_FAIL,$ret['message']);
+				}
+			}
+
+		}
+
+
+		$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
+	}
+
+	/**
+	 * 同步商品到马帮 单个
+	 */
+	public function add_sku_mabang_one(){
+
+		$id = input('sku_id');
+
+		//查询该spu
+		$sku_info = $this->goods_sku_data->get_info($id);
+		if(!$sku_info){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'未查询到该sku,请重试！');
+		}
+		$spu_info = $this->goods_data->get_info($sku_info['spu_id']);
+		if(empty($spu_info)){
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'未查询到对应商品，请稍后重试！');
+		}
+
+		$this->erpApi = new ErpApiFactory();
+
+		$sku_info['name'] = $spu_info['name']; //英文名
+		$sku_info['name_en'] = $spu_info['name_en']; //英文名
+		$sku_info['dc_name_en'] = $spu_info['dc_name_en']; //报关英文名
+		$sku_info['dc_name'] = $spu_info['dc_name']; //报关中文名
+		$sku_info['is_liquid'] = $spu_info['is_liquid']; //报关中文名
+		$sku_info['is_battery'] = $spu_info['is_battery']; //报关中文名
+		$sku_info['is_tort'] = $spu_info['is_tort']; //报关中文名
+		$sku_info['is_magnetism'] = $spu_info['is_magnetism']; //报关中文名
+		$sku_info['is_powder'] = $spu_info['is_powder']; //报关中文名
+		$sku_info['supplier_name'] = $spu_info['supplier_name']; //供应商
+//			$sku_info['className'] = $this->goods_category_data->get_info($info['category_id'])['name'];
+		$sku_info['warehouse_name'] = $this->goods_warehouse_data->get_info($spu_info['warehouse_id'])['name'];
+
+		if(!$sku_info['is_mabang']){ //新增
+
+			$ret = $this->erpApi->add_stock($sku_info);
+
+			if($ret['code']=='000'){
+				//修改同步马帮状态
+				$this->goods_sku_data->update($sku_info['id'],['is_mabang'=>1,'stockId'=>$ret['stockId']]);
+			}else{
+				$this->output->ajax_return(AJAX_RETURN_FAIL,$ret['message']);
+			}
+		}else{  //更新
+
+			$ret = $this->erpApi->change_stock($sku_info);
+
+			if($ret['code']!='000'){
+				$this->output->ajax_return(AJAX_RETURN_FAIL,$ret['message']);
+			}
+		}
+
+		$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
 	}
 
 	/**

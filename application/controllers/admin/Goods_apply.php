@@ -16,6 +16,7 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		$this->load->model ( 'data/goods_apply_data' );
 		$this->load->model ( 'data/goods_sku_apply_data' );
 		$this->load->model ( 'data/goods_category_data' );
+		$this->load->model ( 'data/goods_warehouse_data' );
 		$this->load->model ( 'facade/goods_distribution_facade' );
 	}
 
@@ -111,8 +112,13 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		//判断字符长度end
 
 		if($id){ //修改
-			if(!$input['code'] && $input['status']==1){ //编码未填写
-				$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写SPU编码');
+			if($input['status']==1){
+				if(!$input['code']){//编码未填写
+					$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写SPU编码');
+				}
+				if(empty($input['warehouse_id'])){
+					$this->output->ajax_return(AJAX_RETURN_FAIL,'请选择仓库');
+				}
 			}
 
 			$input['edittime'] = time();
@@ -126,6 +132,7 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 			//修改sku状态
 			$sku_app_ret = $this->goods_sku_apply_data->edit_status($id,['status'=>$input['status'],'is_real'=>0]);
             $ret = $this->goods_apply_data->update($id,$input);
+
 			if($sku_app_ret && $ret && $input['status']==1){//同步到主表中
 
 				$c = $this->goods_distribution_facade->synchronization($id);
@@ -240,8 +247,9 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 
 		$info = $this->goods_apply_data->get_info($id);
 		$category_list = $this->goods_category_data->lists();
+		$warehouse_list = $this->goods_warehouse_data->lists();
 
-		$this->load->view ('',['info'=>$info,'category_list'=>$category_list]);
+		$this->load->view ('',['info'=>$info,'category_list'=>$category_list,'warehouse_list'=>$warehouse_list]);
 	}
 
 	/**
@@ -264,7 +272,7 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		$input = $this->input->post();
 
 		if(!$input['code']){
-			$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写SKU编码');
+			$this->output->ajax_return(AJAX_RETURN_FAIL,'请填写SKU编码');return false;
 		}
 
 		$alias = $input['alias'];

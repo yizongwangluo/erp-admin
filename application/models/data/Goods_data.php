@@ -85,7 +85,7 @@ class Goods_data extends \Application\Component\Common\IData{
                 $info = $query->result_array();
 
                 foreach($info as $k=>$v){
-                    $sku_list = $this->db->query('select a.code,a.norms_name,a.norms,a.norms_name1,a.norms1,a.alias,a.price,a.weight,a.status,b.user_name from goods_sku a  LEFT JOIN  admin b on a.u_id=b.id where a.spu_id= '.$v['id'])->result_array();
+                    $sku_list = $this->db->query('select a.code,a.norms_name,a.norms,a.norms_name1,a.norms1,a.alias,a.price,a.weight,a.status,b.user_name,a.is_mabang,a.id as sku_id from goods_sku a  LEFT JOIN  admin b on a.u_id=b.id where a.spu_id= '.$v['id'])->result_array();
                     $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
                     $info[$k]['norms_name'] = implode('<br/>',array_column($sku_list,'norms_name'));
                     $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
@@ -95,6 +95,11 @@ class Goods_data extends \Application\Component\Common\IData{
                     $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
                     $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));
                     $info[$k]['user_name'] = implode('<br/>',array_column($sku_list,'user_name'));
+                    $is_mabang = array_column($sku_list,'is_mabang');
+                    foreach($is_mabang as $key=>$value){
+                        $is_mabang[$key] = $value?'<a class="tb_mabang" data_id="'.$sku_list[$key]['sku_id'].'" title="更新">已同步</a>':'<a class="tb_mabang" style="color: red"  data_id="'.$sku_list[$key]['sku_id'].'"  title="上传"  >未同步</a>';
+                    }
+                    $info[$k]['is_mabang'] = implode('<br/>',$is_mabang);
                 }
             }
         }
@@ -136,6 +141,9 @@ class Goods_data extends \Application\Component\Common\IData{
         if(empty($input['img'])){
             $this->set_error('请上传产品图片');return false;
         }
+        if(empty($input['warehouse_id'])){
+            $this->set_error('请选择仓库');return false;
+        }
 
         //判断code是否重复
         if($this->removal(['id'=>$id,'code'=>$input['code']])){
@@ -172,6 +180,10 @@ class Goods_data extends \Application\Component\Common\IData{
         if($this->removal(['code'=>$input['code']])){
             $this->set_error('该spu编码已存在！');return false;
         }
+        if(empty($input['warehouse_id'])){
+            $this->set_error('请选择仓库');return false;
+        }
+
 
         $input = array_filter($input);
 

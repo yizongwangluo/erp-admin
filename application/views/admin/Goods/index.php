@@ -8,6 +8,9 @@
         cursor:pointer;
         border: 1px solid silver
     }
+    .tb_mabang{
+        cursor:pointer;
+    }
 </style>
 <div class="layui-tab admin-layui-tab layui-tab-brief">
     <ul class="layui-tab-title">
@@ -58,6 +61,7 @@
                     <td>采购价（元）</td>
                     <td>重量（克）</td>
                     <td>用户名</td>
+                    <td>同步（马帮）</td>
 <!--                    <td>同步（通途）</td>-->
                     <td>操作</td>
                 </tr>
@@ -78,10 +82,11 @@
                       <td><?=$v['price']?></td>
                       <td><?=$v['weight']?></td>
                       <td><?=$v['user_name']?></td>
-<!--                      <td style="color: --><?//=$v['is_tongtu']!=1?'red':'';?><!--">--><?//=$v['is_tongtu']?'已同步':'未同步'?><!--</td>-->
+                      <td><?=$v['is_mabang']?></td>
                       <td>
                           <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods/info/{$v['id']}"); ?>">查看</a>
                           <a class="layui-btn layui-btn-xs" href="<?=base_url("admin/goods/edit/{$v['id']}"); ?>">编辑</a>
+                          <button data-url="<?php echo base_url ( 'admin/goods/add_sku_mabang' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到马帮</button>
 <!--                          <button data-url="--><?php //echo base_url ( 'admin/goods/add_sku_tongtu' ) ?><!--" data-id="--><?//= $v['id'] ?><!--" class="layui-btn layui-btn-xs confirm_post layui-btn-warm">同步到通途</button>-->
                           <button data-url="<?php echo base_url ( 'admin/goods/delete' ) ?>" data-id="<?= $v['id'] ?>" class="layui-btn layui-btn-xs layui-btn-danger confirm_post">删除</button>
                       </td>
@@ -121,6 +126,38 @@
         layer.close(index);
     });
 
+    $('.tb_mabang').click(function(){
+        var id  = $(this).attr('data_id'),val = $(this).html();
+
+        if(val=='已同步'){
+            val ='更新';
+        }else
+        { val ='上传'; }
+
+        layer.confirm('确定<a style="color: red">'+val+'</a>该 sku 到马帮吗？', {
+            btn: ['确认', '取消'] //可以无限个按钮
+        }, function(index, layero){
+
+            var t = layer.load();
+
+            $.post('/admin/goods/add_sku_mabang_one', {sku_id:$(this).attr('data_id')} , function (response) {
+
+                layer.close(t);
+
+                if (!response.status) {
+                    layer.msg(response.msg, {time: 2000, icon: 6});
+                    return false;
+                } else {
+                    layer.msg('保存成功', {time: 2000, icon: 6}, function () {
+                        window.location.href = '<?php echo site_url ( 'admin/goods/index' ); ?>';
+                    })
+                }
+            }, 'json');
+
+        });
+
+
+    });
 
     $('#daochu').click(function(){
         var text="";

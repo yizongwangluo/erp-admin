@@ -14,6 +14,7 @@ class Crontab extends \MY_Controller
 		set_time_limit ( 0 );
 		$this->load->model ( 'orders/shopify_orders' );
 		$this->load->model ( 'orders/tongtu_orders' );
+		$this->load->model ( 'orders/mabang_orders' );
 		$this->load->model ( 'data/income_data' );
 		$this->load->model ( 'operate/salary_operate' );
 		$this->load->model ( 'operate/getoperate_operate' );
@@ -42,9 +43,11 @@ class Crontab extends \MY_Controller
 	 */
 	public function run_every_5_minutes(){
 
-
 		//同步通途订单
 		$this->tongtu_orders->get_order();
+
+		//同步马帮订单
+		$this->mabang_orders->get_order();
 
 	}
 
