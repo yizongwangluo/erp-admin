@@ -26,10 +26,11 @@
                     <table class="layui-table"  style='white-space: nowrap'>
                     <thead>
                     <tr>
-                        <td>ID(<a style="color: red" title="马帮erp后台对应店铺名">马帮店铺名</a>)</td>
+                        <td>ID</td>
                         <td>网站域名</td>
                         <td>平台</td>
                         <td>代码</td>
+                        <td>马帮</td>
                         <td>收款paypal
                             <span class="layui-table-sort layui-inline">
                     <a href='index?title=receipt_paypal&sort=asc&search=<?php echo $this->input->get ( 'search' ); ?>'><i class="layui-edge layui-table-sort-asc"></i></a>
@@ -80,6 +81,7 @@
                                 <td><?=$v['domain']?></td>
                                 <td><?=$this->enum_field->get_values('shop_pt_list')[$v['pt_id']]?></td>
                                 <td><?=$v['code']?></td>
+                                <td><?=$v['mb_name']?></td>
                                 <td>
                                     <?php
                                     if(strpos($v['receipt_paypal'],',') !== false) {

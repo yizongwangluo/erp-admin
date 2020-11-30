@@ -176,6 +176,12 @@
                             <input type="text" name="code" value="<?=$info['code']?>" placeholder="" class="layui-input">
                         </div>
                     </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><em class="em-red">*</em>马帮店铺名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mb_name" value="<?=$info['mb_name']?>" placeholder="" class="layui-input">
+                        </div>
+                    </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">开关</label>
                         <div class="layui-input-block">
