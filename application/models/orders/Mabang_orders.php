@@ -46,8 +46,8 @@ class Mabang_orders extends \Application\Component\Common\IFacade
      */
     public function get_shop($code = ''){
         if(!self::$shopList){
-            self::$shopList = $this->shop_data->get_field_by_where(['id','user_id'],[],true);
-            self::$shopList = array_column(self::$shopList,null,'id');
+            self::$shopList = $this->shop_data->get_field_by_where(['id','mb_name','user_id'],[],true);
+            self::$shopList = array_column(self::$shopList,null,'mb_name');
         }
         return self::$shopList[$code] ? self::$shopList[$code]: '';
     }
