@@ -74,9 +74,9 @@ class ErpApiFactory
         $data['nameCN'] = $sku_data['name'];
         $data['nameEN'] = $sku_data['name_en']; //英文名
 
-        $data['status'] = 1;
+        $data['status'] = 3;
 
-//        $data['picture'] = $sku_data['img']; //图片
+        $data['picture'] = $sku_data['img']; //图片
 
         $size = explode('*',$sku_data['size']);
 
@@ -131,7 +131,7 @@ class ErpApiFactory
         $data['nameCN'] = $sku_data['name'];
         $data['nameEN'] = $sku_data['name_en']; //英文名
 
-        $data['status'] = '1';
+        $data['status'] = 3;
 
         $data['picture'] = $sku_data['img']; //图片
 

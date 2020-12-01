@@ -44,10 +44,10 @@ class Crontab extends \MY_Controller
 	public function run_every_5_minutes(){
 
 		//同步通途订单
-		$this->tongtu_orders->get_order();
+//		$this->tongtu_orders->get_order();
 
 		//同步马帮订单
-		$this->mabang_orders->get_order();
+//		$this->mabang_orders->get_order();
 
 	}
 

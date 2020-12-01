@@ -78,6 +78,25 @@ class Goods_sku_data extends \Application\Component\Common\IData{
         return $this->update($id,$input);
     }
 
+
+    /**
+     * 根据id查询商品详情
+     * @param string $ids
+     * @return bool
+     */
+    public function get_list_inspuids($ids = ''){
+
+        if(empty($ids)){
+            return false;
+        }
+
+        $lists = $this->db->query('select * from goods_sku where spu_id in ('.$ids.')')->result_array();
+
+        return $lists;
+    }
+
+
+
     /**
      * 添加
      * @param array $input

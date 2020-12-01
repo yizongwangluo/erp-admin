@@ -48,7 +48,7 @@
             <table class="layui-table"  style='white-space: nowrap'>
               <thead>
                 <tr>
-                    <td><input type="checkbox" id="all"><i class="layui-icon layui-icon-print" id="daochu" title="导出"></td>
+                    <td><input type="checkbox" id="all"><i class="layui-icon layui-icon-print" id="daochu" title="导出"></i> - <i class="layui-icon layui-icon-print" id="daochu_mb" title="导出马帮"></i></td>
                     <td>ID</td>
                     <td class="img">产品图片</td>
                     <td>产品名</td>
@@ -140,7 +140,7 @@
 
             var t = layer.load();
 
-            $.post('/admin/goods/add_sku_mabang_one', {sku_id:$(this).attr('data_id')} , function (response) {
+            $.post('/admin/goods/add_sku_mabang_one', {sku_id:id} , function (response) {
 
                 layer.close(t);
 
@@ -169,6 +169,21 @@
 
         if(text){
             window.location.href = "/admin/goods/daochu?ids="+text;
+        }else{
+            layer.msg('请选择商品！', {time: 2000, icon: 5});
+        }
+    });
+
+    $('#daochu_mb').click(function(){
+        var text="";
+        $("input[name=ids]").each(function() {
+            if ($(this).is(':checked')) {
+                text += ","+$(this).val();
+            }
+        });
+
+        if(text){
+            window.location.href = "/admin/goods/daochu_mb?ids="+text;
         }else{
             layer.msg('请选择商品！', {time: 2000, icon: 5});
         }
