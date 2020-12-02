@@ -182,6 +182,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$v['supplier_name'] = $info['supplier_name']; //供应商
 //			$v['className'] = $this->goods_category_data->get_info($info['category_id'])['name'];
 			$v['warehouse_name'] = $this->goods_warehouse_data->get_info($info['warehouse_id'])['name'];
+			$v['source_address'] = $v['source_address']?$v['source_address']:$info['source_address'];
 
 			if(!$v['is_mabang']){ //新增
 
@@ -460,11 +461,14 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		$spu_list = array_column($spu_list,null,'id');
 		$warehouse_list = $this->goods_warehouse_data->lists();
 		$warehouse_list = array_column($warehouse_list,null,'id');
+		$category_list = $this->goods_category_data->lists();
+		$category_list = array_column($category_list,null,'id');
 		$sku_list = $this->goods_sku_data->lists_page([],['id','desc'],$page,$limit);
 
-		$data = $this->goods_excel_temp_mb($spu_list,$sku_list['data'],$warehouse_list);
+		$data = $this->goods_excel_temp_mb($spu_list,$sku_list['data'],$warehouse_list,$category_list);
+//		$data = $this->goods_excel_temp_mb_update($spu_list,$sku_list['data'],$warehouse_list,$category_list);
 
-		$this->_exportExcel($data,'商品列表',54);
+		$this->_exportExcel($data,'商品列表-'.$page,56);
 	}
 
 	public function daochu(){
@@ -499,10 +503,12 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		$warehouse_list = $this->goods_warehouse_data->lists();
 		$warehouse_list = array_column($warehouse_list,null,'id');
 		$sku_list = $this->goods_sku_data->get_list_inspuids($ids);
+		$category_list = $this->goods_category_data->lists();
+		$category_list = array_column($category_list,null,'id');
 
-		$data = $this->goods_excel_temp_mb($spu_list,$sku_list,$warehouse_list); //导出模板
+		$data = $this->goods_excel_temp_mb_update($spu_list,$sku_list,$warehouse_list,$category_list); //导出模板
 
-		$this->_exportExcel($data,'商品列表',38);
+		$this->_exportExcel($data,'商品列表',56);
 	}
 
 
@@ -513,7 +519,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	 * @param array $warehouse_list
 	 * @return array
 	 */
-	private function goods_excel_temp_mb($spu_list = [],$sku_list = [],$warehouse_list = []){
+	private function goods_excel_temp_mb($spu_list = [],$sku_list = [],$warehouse_list = [],$category_list = []){
 
 		$data = [];
 
@@ -530,7 +536,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 		foreach($sku_list as $k=>$v){
 
 			$data[$k][] = $v['code'];//库存sku编号
-			$data[$k][] = $spu_list[$v['spu_id']]['name'];//库存sku名称
+			$data[$k][] = $spu_list[$v['spu_id']]['name'].'-'.$v['norms'].$v['norms1'];//库存sku名称
 			$data[$k][] = $spu_list[$v['spu_id']]['name_en'];//库存sku英文名称
 			$data[$k][] = '正常销售';//sku状态(自动创建、等待开发、正常销售)
 			$data[$k][] = '';//主SKU
@@ -541,8 +547,8 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$k][] = '';//商品目录
 			$data[$k][] = $spu_list[$v['spu_id']]['dc_name'];//申报品名(中文)
 			$data[$k][] = $spu_list[$v['spu_id']]['dc_name_en'];//申报品名(英文)
-			$data[$k][] = '';//商品自定义分类(多个用英文';'号隔开)
-			$data[$k][] = $warehouse_list[$v['warehouse_id']]['name'];//商品仓库
+			$data[$k][] = $category_list[$spu_list[$v['spu_id']]['category_id']]['name'];//商品自定义分类(多个用英文';'号隔开)
+			$data[$k][] = $warehouse_list[$spu_list[$v['spu_id']]['warehouse_id']]['name'];//商品仓库
 			$data[$k][] = '';//仓位
 			$data[$k][] = '';//仓库成本价
 			$data[$k][] = '';//库存
@@ -569,7 +575,8 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$k][] = $v['remarks'];//商品备注
 			$data[$k][] = '';//销售备注
 			$data[$k][] = '';//采购备注
-			$data[$k][] = $v['alias'];//虚拟sku(多个用英文';'分割)
+//			$data[$k][] = $v['alias'];//虚拟sku(多个用英文';'分割)
+			$data[$k][] = '';//虚拟sku(多个用英文';'分割)
 
 			$size = explode('*',$v['size']);
 
@@ -585,6 +592,92 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$k][] = $spu_list[$v['spu_id']]['is_magnetism'];//是否带磁（0/1）
 			$data[$k][] = '';//采购方式（分仓采购/联合采购）
 			$data[$k][] = '';//报关编码
+			$data[$k][] = date('Y/m/d H:i:s',$spu_list[$v['spu_id']]['edittime']);//创建时间(2018/12/18 23:59:59)创建时间(2018/12/18 23:59:59)
+		}
+
+		return $data;
+	}
+
+	/**
+	 * 导出模板 - 更新
+	 * @param array $spu_list
+	 * @param array $sku_list
+	 * @param array $warehouse_list
+	 * @return array
+	 */
+	private function goods_excel_temp_mb_update($spu_list = [],$sku_list = [],$warehouse_list = [],$category_list = []){
+
+		$data = [];
+
+		$data['heard'] = ['*库存sku编号','sku状态(自动创建、等待开发、正常销售、商品清仓、停止销售)','库存sku名称','主SKU','库存sku英文名称',
+				'成本价','品牌','售价','最新采购价','商品父目录','商品子目录','申报品名(中文)','申报品名(英文)','商品仓库','仓位','仓库成本价',
+				'商品重量区间(最小值/最大值用英文";"号隔开)','商品重量','供应商','最低采购价格','供应商商品网址','美工','销售员(多个用","隔开)',
+				'采购员','采购天数','最小采购数量','最大采购数量','库存警戒天数','警戒库存','配货员','包材','可包装个数','原厂SKU',
+				'是否带电池(0/1)','库存图片地址','产品细节图片地址(多个用英文“;”分割)','销售备注','商品备注','采购备注','商品尺寸长(cm)',
+				'商品尺寸宽(cm)','商品尺寸高(cm)','体积重系数','虚拟sku(多个用英文\';\'分割)','开发员','申报价格($)',
+				'液体化妆品（非液体、液体(化妆品)、非液体(化妆品)、液体(非化妆品)）','是否赠品（0/1）（0代表否，1代表是）',
+				'是否粉末（0/1）','是否带磁（0/1）','是否侵权（0/1）','采购方式（分仓采购/联合采购）','报关编码','自定义分类(多个用英文\';\'号隔开)',
+				'质检标准','创建时间(2018/12/18 23:59:59)'];
+
+		foreach($sku_list as $k=>$v){
+
+			$data[$k][] = $v['code'];//库存sku编号
+			$data[$k][] = '正常销售';//sku状态(自动创建、等待开发、正常销售)
+			$data[$k][] = $spu_list[$v['spu_id']]['name'].'-'.$v['norms'].$v['norms1'];//库存sku名称
+			$data[$k][] = '';//主SKU
+			$data[$k][] = $spu_list[$v['spu_id']]['name_en'];//库存sku英文名称
+			$data[$k][] = $v['price'];//成本价
+			$data[$k][] = '';//品牌
+			$data[$k][] = $v['price'];//售价
+			$data[$k][] = $v['price'];//最新采购价
+			$data[$k][] = '';//商品父目录
+			$data[$k][] = '';//商品子目录
+			$data[$k][] = $spu_list[$v['spu_id']]['dc_name'];//申报品名(中文)
+			$data[$k][] = $spu_list[$v['spu_id']]['dc_name_en'];//申报品名(英文)
+			$data[$k][] = $warehouse_list[$spu_list[$v['spu_id']]['warehouse_id']]['name'];//商品仓库
+			$data[$k][] = '';//仓位
+			$data[$k][] = '';//仓库成本价
+			$data[$k][] = '';//商品重量区间(最小值/最大值用英文";"号隔开)
+			$data[$k][] = $v['weight'];//商品重量
+			$data[$k][] = $spu_list[$v['spu_id']]['supplier_name'];//供应商
+			$data[$k][] = $v['price'];//最低采购价格
+			$data[$k][] = $spu_list[$v['spu_id']]['source_address'];//供应商商品网址
+			$data[$k][] = '';//美工
+			$data[$k][] = '';//销售员(多个用","隔开)
+			$data[$k][] = '';//采购员
+			$data[$k][] = $v['cycle'];//采购天数
+			$data[$k][] = $spu_list[$v['spu_id']]['batch_quantity'];//最小采购数量
+			$data[$k][] = '';//最大采购数量
+			$data[$k][] = '';//库存警戒天数
+			$data[$k][] = '';//警戒库存
+			$data[$k][] = '';//配货员
+			$data[$k][] = '';//包材
+			$data[$k][] = '';//可包装个数
+			$data[$k][] = '';//原厂SKU
+			$data[$k][] = $spu_list[$v['spu_id']]['is_battery'];//是否带电池（0/1）
+			$data[$k][] = $v['img'];//库存图片地址
+			$data[$k][] = '';//产品细节图片地址(多个用英文“;”分割)
+			$data[$k][] = '';//销售备注
+			$data[$k][] = $v['remarks'];//商品备注
+			$data[$k][] = '';//采购备注
+			$size = explode('*',$v['size']);
+			$data[$k][] = $size[0];//商品尺寸长(cm)
+			$data[$k][] = $size[1];//商品尺寸宽(cm)
+			$data[$k][] = $size[2];//商品尺寸高(cm)
+			$data[$k][] = '';//体积重系数
+			$data[$k][] = str_replace(',',';',$v['alias']);//虚拟sku(多个用英文';'分割)
+//			$data[$k][] = '';//虚拟sku(多个用英文';'分割)
+			$data[$k][] = '';//开发员
+			$data[$k][] = '';//申报价格($)
+			$data[$k][] = '';//液体化妆品（非液体、液体(化妆品)、非液体(化妆品)、液体(非化妆品)）
+			$data[$k][] = 0;//是否赠品（0/1）（0代表否，1代表是）
+			$data[$k][] = $spu_list[$v['spu_id']]['is_powder'];//是否粉末（0/1）
+			$data[$k][] = $spu_list[$v['spu_id']]['is_magnetism'];//是否带磁（0/1）
+			$data[$k][] = $spu_list[$v['spu_id']]['is_tort'];//是否侵权（0/1）
+			$data[$k][] = '';//采购方式（分仓采购/联合采购）
+			$data[$k][] = '';//报关编码
+			$data[$k][] = $category_list[$spu_list[$v['spu_id']]['category_id']]['name'];//商品自定义分类(多个用英文';'号隔开)
+			$data[$k][] = '';//质检标准
 			$data[$k][] = date('Y/m/d H:i:s',$spu_list[$v['spu_id']]['edittime']);//创建时间(2018/12/18 23:59:59)创建时间(2018/12/18 23:59:59)
 		}
 

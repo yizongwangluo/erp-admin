@@ -71,7 +71,7 @@ class ErpApiFactory
         $data['action'] = 'do-add-stock';
 
         $data['stockSku'] = $sku_data['code'];
-        $data['nameCN'] = $sku_data['name'];
+        $data['nameCN'] = $sku_data['name'].'-'.$sku_data['norms'].$sku_data['norms1'];
         $data['nameEN'] = $sku_data['name_en']; //英文名
 
         $data['status'] = 3;
@@ -95,10 +95,11 @@ class ErpApiFactory
         $data['remark'] = $sku_data['remarks']; //备注
         $data['autoCreateSupplier'] = '1'; //备注
 //
-        $data['suppliersData'] = $this->json_encode_data([['name'=>$sku_data['supplier_name']]]); //关联供应商信息
+        $data['suppliersData'] = $this->json_encode_data([['name'=>$sku_data['supplier_name'],'productLinkAddress'=>$sku_data['source_address']]]); //关联供应商信息
         $data['warehouseData'] = $this->json_encode_data([['name'=>$sku_data['warehouse_name']]]); //仓库
 
-        $data['virtualSkus'] = $sku_data['alias']; //别名
+//        $data['virtualSkus'] = $sku_data['alias']; //别名
+        $data['virtualSkus'] = ''; //别名
 
         $ret = $this->http_url($this->url, $data, $this->get_sign($data));
 
@@ -128,7 +129,7 @@ class ErpApiFactory
 
 
         $data['stockSku'] = $sku_data['code'];
-        $data['nameCN'] = $sku_data['name'];
+        $data['nameCN'] = $sku_data['name'].'-'.$sku_data['norms'].$sku_data['norms1'];
         $data['nameEN'] = $sku_data['name_en']; //英文名
 
         $data['status'] = 3;
@@ -152,10 +153,11 @@ class ErpApiFactory
         $data['powder'] = $sku_data['is_powder']?'1':'2'; //		粉末 1.是 2.否
         $data['remark'] = $sku_data['remarks']; //备注
 
-        $data['suppliersData'] = $this->json_encode_data([['name'=>$sku_data['supplier_name']]]); //关联供应商信息
+        $data['suppliersData'] = $this->json_encode_data([['name'=>$sku_data['supplier_name'],'productLinkAddress'=>$sku_data['source_address']]]); //关联供应商信息
         $data['warehouseData'] = $this->json_encode_data([['name'=>$sku_data['warehouse_name']]]); //仓库
 
-        $data['virtualSkus'] = $sku_data['alias']; //别名
+//        $data['virtualSkus'] = $sku_data['alias']; //别名
+        $data['virtualSkus'] = ''; //别名
 
         $ret = $this->http_url($this->url, $data, $this->get_sign($data));
 
@@ -211,6 +213,7 @@ class ErpApiFactory
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_PROXY, '162.14.17.156:80');
         // post数据
         curl_setopt($ch, CURLOPT_POST, 1);
         // post设置头
