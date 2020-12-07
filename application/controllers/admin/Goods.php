@@ -341,6 +341,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 							'pack_cost' => $value['AK'],//包装成本
 							'pack_weight' => $value['AL'],//包装重量
 							'pack_volume' => $value['AM'],//体积 带包装
+							'img' => $value['AU'],//产品图片
 							'u_id' => $this->admin['id'] //操作人
 					];
 
@@ -348,7 +349,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					$spu_id = $ret;
 					if(!$ret){
 						$spu_id = 0;
-						$value['AU'] = $this->goods_excel_goods->get_error();
+						$value['AV'] = $this->goods_excel_goods->get_error();
 						$error[] = $value;
 					}
 
@@ -367,17 +368,18 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 					 'price'=>$value['L'],
 					 'alias'=>$value['M'],
 					 'source_address'=>$value['Y'],//采购链接
+					 'img'=>$value['AU'],//产品图片
 					 'purchase_remarks'=>$value['Z']//采购备注
 					];
 
 					$ret = $this->goods_sku_data->excelSave($sku);
 					if(!$ret){
-						$value['AU'] = $this->goods_sku_data->get_error();
+						$value['AV'] = $this->goods_sku_data->get_error();
 						$error[] = $value;
 					}
 
 				}else{
-					$value['AU'] = '没有对应的SPU数据';
+					$value['AV'] = '没有对应的SPU数据';
 					$error[] = $value;
 				}
 			}

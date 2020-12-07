@@ -23,6 +23,21 @@
 </form>
 <br>
 <br>
+<form action="<?php echo site_url('admin/synchronize/synchronize_save_mb'); ?>" method="post" class="layui-form" id="form_mb">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input class="layui-input date-time" name="start_time" placeholder="开始时间" value="<?php echo input('start_time'); ?>">
+            </div>
+            <div class="layui-input-line">-</div>
+            <div class="layui-input-inline">
+                <input class="layui-input date-time" value="<?php echo input('end_time'); ?>" name="end_time" placeholder="结束时间">
+            </div>
+        </div>
+        <button class="layui-btn layui-btn-danger btn-search" type="button" onclick="save_form_mb()">同步马帮订单</button>
+    <em style="color: red">* 上午7:00~19:00时间范围只支持近一天数据查询,其余时间只允许时间范围为一天的数据</em>
+</form>
+<br>
+<br>
 <form action="<?php echo site_url('admin/synchronize/up_operate'); ?>" method="post" class="layui-form" id="form0">
     <div class="layui-inline">
         <div class="layui-input-inline">
@@ -146,6 +161,22 @@
             } else {
                 layer.msg('已加入同步队列', {time: 2000, icon: 6}, function () {
                     get_duilie();
+                    window.location = '/admin/synchronize/index';
+                })
+            }
+        });
+    }
+
+    function save_form_mb() {
+        var index = layer.load();
+        var form = $('#form_mb'),index = layer.load(),data = form.serializeArray();
+        $.post(form.attr('action'), data , function (response) {
+            if(!response.status){
+                layer.msg(response.msg, {time: 2000, icon: 6});
+                layer.close(index);
+                return false;
+            } else {
+                layer.msg('同步成功', {time: 2000, icon: 6}, function () {
                     window.location = '/admin/synchronize/index';
                 })
             }

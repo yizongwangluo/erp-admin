@@ -191,7 +191,7 @@ layui.use(['layer', 'upload', 'form', 'layedit', 'laydate', 'element'], function
             }
         });
     }
-    setInterval(common_sum(),15000);
+    setInterval(common_sum(),60000);
 });
 
 function upFiles($elem,$toClass) {

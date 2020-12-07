@@ -146,4 +146,27 @@ class Goods_sku extends \Application\Component\Common\AdminPermissionValidateCon
 		echo json_encode(['code'=>0,'msg'=>'ok','data'=>$list]);
 	}
 
+
+	/**
+	 * 修改同步状态
+	 */
+	public function editIsMabang(){
+
+		$input = $this->input->post();
+
+		if($input['sku_id'] && is_numeric($input['sku_id'])){
+
+			$input['is_mabang'] = $input['is_mabang']=='false' ? 0:1;
+
+			$ret = $this->goods_sku_data->update($input['sku_id'],['is_mabang'=>$input['is_mabang']]);
+
+			if($ret){ //成功
+				$this->output->ajax_return(AJAX_RETURN_SUCCESS,'ok');
+			}
+		}
+
+		$this->output->ajax_return(AJAX_RETURN_FAIL,'系统繁忙，请稍后重试！');
+
+	}
+
 }

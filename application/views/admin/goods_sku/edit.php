@@ -112,6 +112,13 @@
 <!--                        <input class="is_real" type="radio" value="1" name="is_real" title="是" lay-filter="is_real">-->
 <!--                    </div>-->
 <!--                </div>-->
+                <div class="layui-inline">
+                    <label for="" class="layui-form-label">同步马帮状态</label>
+                    <div class="layui-inline">
+                        <input class="is_mabang" type="radio" checked value="0" name="is_mabang" title="未同步" lay-filter="is_mabang">
+                        <input class="is_mabang" type="radio" value="1" name="is_mabang" title="已同步" lay-filter="is_mabang">
+                    </div>
+                </div>
             </div>
             <div class="layui-form-item" id="save_from">
                 <div class="layui-input-block">

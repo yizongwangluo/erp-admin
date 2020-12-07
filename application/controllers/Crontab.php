@@ -6,12 +6,14 @@
  * Date: 2017/4/19
  * Time: 9:13
  */
+
+set_time_limit ( 0 );
+
 class Crontab extends \MY_Controller
 {
 	public function __construct ()
 	{
 		parent::__construct ();
-		set_time_limit ( 0 );
 		$this->load->model ( 'orders/shopify_orders' );
 		$this->load->model ( 'orders/tongtu_orders' );
 		$this->load->model ( 'orders/mabang_orders' );
@@ -35,7 +37,7 @@ class Crontab extends \MY_Controller
 	 */
 	public function run_every_minute ()
 	{
-		$this->tongtu_orders->get_order_in_shop();
+//		$this->tongtu_orders->get_order_in_shop();
 	}
 
 	/**
@@ -48,6 +50,16 @@ class Crontab extends \MY_Controller
 
 		//同步马帮订单
 //		$this->mabang_orders->get_order();
+
+	}
+
+	/**
+	 * 每10分钟执行
+	 */
+	public function run_every_10_minutes(){
+
+		//同步马帮订单
+		$this->mabang_orders->get_order();
 
 	}
 
@@ -97,6 +109,21 @@ class Crontab extends \MY_Controller
      */
 	public function run_every_half_hour ()
     {
+		//定时获取shopify订单
+//        $this->shopify_orders->sync_order();
+
+		//生成临时每日运营数据
+//		$this->getoperate_tmp_operate->get_datas_tmp();
+    }
+
+	/**
+     * 每半小时都执行一次的计划任务
+     */
+	public function run_every_half_hour_ceshi ()
+    {
+		ini_set("display_errors", "On");
+		error_reporting(E_ALL | E_STRICT);
+
 		//定时获取shopify订单
 //        $this->shopify_orders->sync_order();
 

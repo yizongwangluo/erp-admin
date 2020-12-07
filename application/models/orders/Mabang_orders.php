@@ -63,7 +63,7 @@ class Mabang_orders extends \Application\Component\Common\IFacade
 //        $yesterday_time = strtotime("-1 day");
         $time = strtotime(date('Y-m-d H:i').':00');
         $data = [];
-        $data['updateTimeStart'] = date('Y-m-d H:i:s',$time-(5*60*60+5*60)); //获取五小时前的数据
+        $data['updateTimeStart'] = date('Y-m-d H:i:s',$time-(5*60*60+10*60)); //获取五小时前的数据
         $data['updateTimeEnd'] = date('Y-m-d H:i:s',$time-(5*60*60));
         $data['page'] = 1;
 
@@ -159,6 +159,49 @@ class Mabang_orders extends \Application\Component\Common\IFacade
             }
         }
         return $count;
+    }
+
+
+    /**
+     * 同步指定条件的订单
+     * @param string $start_time
+     * @param string $end_time
+     * @return bool
+     */
+    public function get_order_in_time($start_time = '',$end_time = ''){
+
+        $data = [];
+        $data['paidtimeStart'] = $start_time;//付款开始时间
+        $data['paidtimeEnd'] = $end_time;//付款结束时间
+        $data['page'] = 1;
+
+        $this->erpApi = new ErpApiFactory();
+
+        for( $data['page']; $data['page'] >0; $data['page'] ++){ //马帮接口 不限制请求次数
+
+            $log_id = $this->order_synchro_log_data->add_log(0,'mabang',$data['updateTimeStart'],$data['updateTimeEnd'],$data['page']);
+
+            $ret = $this->erpApi->get_lists($data);
+
+            //列表获取失败
+            if($ret['code']!=000){
+                $this->order_synchro_log_data->edit_log($log_id,2,0,0,$ret['message']);
+                $this->set_error($ret['message']);
+                return false;
+            }else{
+
+                $order_cout = count($ret['data']);
+
+                $count = $this->add_order($ret['data']);
+
+                //修改订单同步状态
+                $this->order_synchro_log_data->edit_log($log_id,1,$order_cout,$count);
+
+                if($order_cout<self::$limit){ break; } //未满指定条时，跳出循环
+            }
+        }
+
+        return true;
     }
 
 

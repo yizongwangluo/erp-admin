@@ -270,14 +270,20 @@
             <a class="layui-btn layui-btn-xs"  lay-event="edit" >编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
+
+        <script type="text/html" id="checkboxTpl">
+            <!-- 这里的 checked 的状态只是演示 -->
+            <input type="checkbox" name="lock" value="{{d.id}}" title="已同步" lay-filter="lockDemo" {{ d.is_mabang == 1 ? 'checked' : '' }}>
+        </script>
     </div>
 </div>
 
 <script type="text/javascript">
     var table,is_status = <?=json_encode($this->enum_field->get_values('is_status'))?>;
 
-    layui.use('table', function(){
-        table = layui.table;
+    layui.use(['table','form'], function(){
+            table = layui.table;
+            var form = layui.form;
 
         layui.use('table', function(){
             var table = layui.table;
@@ -304,9 +310,30 @@
                     ,{field:'size', title: '包装尺寸(长*宽*高)'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
                     ,{field:'weight', title: '重量（g）'}
                     ,{field:'cycle', title: '采购周期'}
+                    ,{field:'is_mabang', title:'同步状态', width:110, templet: '#checkboxTpl', unresize: true}
+                    /*,{field:'is_mabang', title: '同步状态', templet: function(res){
+                        if(res.is_mabang==1){ return '已同步' }else{ return '未同步'; }
+                    }}*/
                     ,{field:'right', title:'操作', toolbar: '#barDemo',minWidth:150}
                 ]]
             });
+        });
+
+        //监听锁定操作
+        form.on('checkbox(lockDemo)', function(obj){
+            var index = layer.load(),_self = this;
+            $.post('/admin/goods_sku/editIsMabang',
+                {
+                    sku_id:_self.value,
+                     is_mabang:obj.elem.checked
+                },function(e){
+                    layer.close(index);
+                    if(!e.status){
+                        layer.msg(e.msg, {time: 2000, icon: 6});
+                        return false;
+                    }
+            });
+//            layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
         });
 
         //监听行工具事件
@@ -334,7 +361,7 @@
                     success: function(layero, index){
                         var body = layer.getChildFrame('body', index);
                         $.each(data,function(k,v){
-                            if(k=='type' || k=='is_real'){
+                            if(k=='type' || k=='is_real' || k=='is_mabang'){
                                 layui.use('form', function() { //监控复选框状态
                                     var form = layui.form;
                                     body.find("input[name='"+k+"'][value='"+v+"']").prop('checked',true);

@@ -21,6 +21,7 @@ class Synchronize_operate extends \Application\Component\Common\IData
         $this->load->model ( 'data/order_data' );
         $this->load->model ( 'data/order_goods_data' );
         $this->load->model ( 'data/shop_data' );
+        $this->load->model ( 'orders/mabang_orders' );
     }
 
     /**
@@ -182,6 +183,8 @@ class Synchronize_operate extends \Application\Component\Common\IData
             $this->set_error('同步失败：清除订单表时间段内已有数据失败！');
             return false;
         }
+
+        return true;
     }
 
     //根据创建时间同步该店铺某时间段内的订单
