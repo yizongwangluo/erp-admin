@@ -139,6 +139,10 @@ class Goods_sku_data extends \Application\Component\Common\IData{
 
         $input = array_filter($input);
 
+        if(!$this->get_only($input)){
+            $this->set_error('别名重复');return false;
+        }
+
         if($info){ //修改
             $this->update($info['id'],$input);
 
