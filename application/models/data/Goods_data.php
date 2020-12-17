@@ -65,8 +65,10 @@ class Goods_data extends \Application\Component\Common\IData{
 
             $sql = 'select {{}} from goods a '.$table_b;
 
-            if($where['name']){
+            if($where['a']=='name'){
                 $sql_where[]=" a.name = '".$where['name']."'";
+            }elseif($where['a']=='code'){
+                $sql_where[]=" a.code = '".$where['name']."'";
             }
 
             if($sql_where){

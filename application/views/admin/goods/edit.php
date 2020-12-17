@@ -191,7 +191,7 @@
             </div>
         </div>
         <div class="layui-inline">
-            <label for="" class="layui-form-label">是否带电池<?=$info['is_battery']?></label>
+            <label for="" class="layui-form-label">是否带电池</label>
             <div class="layui-inline">
                 <input <?=$info['is_battery']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_battery" title="是">
                 <input <?=$info['is_battery']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_battery" title="否">
@@ -214,21 +214,12 @@
             </div>
         </div>
         <div class="layui-inline">
-            <label for="" class="layui-form-label">是否液体</label>
-            <div class="layui-inline">
-                <input <?=$info['is_liquid']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_liquid" title="是">
-                <input <?=$info['is_liquid']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_liquid" title="否">
-            </div>
-        </div>
-        <div class="layui-inline">
             <label for="" class="layui-form-label">*是否粉末</label>
             <div class="layui-inline">
                 <input <?=$info['is_powder']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_powder" title="是">
                 <input <?=$info['is_powder']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_powder" title="否">
             </div>
         </div>
-    </div>
-    <div class="layui-form-item">
         <div class="layui-inline">
             <label for="" class="layui-form-label">是否定制</label>
             <div class="layui-inline">
@@ -236,6 +227,8 @@
                 <input <?=$info['is_customized']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_customized" title="否">
             </div>
         </div>
+    </div>
+    <div class="layui-form-item">
         <div class="layui-inline">
             <label for="" class="layui-form-label">是否有独立包装</label>
             <div class="layui-inline">
@@ -250,11 +243,14 @@
                 <input <?=$info['is_goods']==0?'checked':'';?> class="checkbox" type="radio" value="0" name="is_goods" title="否">
             </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">SKU列表：</label>
         <div class="layui-inline">
-          <table class="layui-hide" id="test" lay-filter="test" ></table>
+            <label for="" class="layui-form-label">液体</label>
+            <div class="layui-inline">
+                <input  <?=$info['is_liquid']==0 || empty($info['is_liquid']) ? 'checked':'';?> class="checkbox" type="radio" value="0" name="is_liquid" title="非液体">
+                <input <?=$info['is_liquid']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_liquid" title="液体(化妆品)">
+                <input <?=$info['is_liquid']==2?'checked':'';?> class="checkbox" type="radio" value="2" name="is_liquid" title="非液体(化妆品)">
+                <input <?=$info['is_liquid']==3?'checked':'';?> class="checkbox" type="radio" value="3" name="is_liquid" title="液体(非化妆品)">
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
@@ -265,17 +261,26 @@
     </div>
     </div>
 </form>
-    <div class="px">
-        <script type="text/html" id="barDemo">
-            <a class="layui-btn layui-btn-xs"  lay-event="edit" >编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-        </script>
 
-        <script type="text/html" id="checkboxTpl">
-            <!-- 这里的 checked 的状态只是演示 -->
-            <input type="checkbox" name="lock" value="{{d.id}}" title="已同步" lay-filter="lockDemo" {{ d.is_mabang == 1 ? 'checked' : '' }}>
-        </script>
+    <div class="layui-form-item">
+        <label class="layui-form-label">SKU列表：</label>
+        <div class="layui-inline">
+            <table class="layui-hide" id="test" lay-filter="test" ></table>
+        </div>
     </div>
+
+</div>
+
+<div class="px">
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs"  lay-event="edit" >编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
+    <script type="text/html" id="checkboxTpl">
+        <!-- 这里的 checked 的状态只是演示 -->
+        <input type="checkbox" name="lock" value="{{d.id}}" title="已同步" lay-filter="lockDemo" {{ d.is_mabang == 1 ? 'checked' : '' }}>
+    </script>
 </div>
 
 <script type="text/javascript">

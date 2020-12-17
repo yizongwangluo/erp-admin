@@ -172,21 +172,12 @@
             </div>
         </div>
         <div class="layui-inline">
-            <label for="" class="layui-form-label">是否液体</label>
-            <div class="layui-inline">
-                <input checked="<?=$info['is_liquid']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_liquid" title="是">
-                <input checked="<?=$info['is_liquid']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_liquid" title="否">
-            </div>
-        </div>
-        <div class="layui-inline">
             <label for="" class="layui-form-label">*是否粉末</label>
             <div class="layui-inline">
                 <input checked="<?=$info['is_powder']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_powder" title="是">
                 <input checked="<?=$info['is_powder']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_powder" title="否">
             </div>
         </div>
-    </div>
-    <div class="layui-form-item">
         <div class="layui-inline">
             <label for="" class="layui-form-label">是否定制</label>
             <div class="layui-inline">
@@ -194,6 +185,8 @@
                 <input checked="<?=$info['is_customized']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_customized" title="否">
             </div>
         </div>
+    </div>
+    <div class="layui-form-item">
         <div class="layui-inline">
             <label for="" class="layui-form-label">是否有独立包装</label>
             <div class="layui-inline">
@@ -206,6 +199,15 @@
             <div class="layui-inline">
                 <input checked="<?=$info['is_goods']==1?'checked':'';?>" class="checkbox" type="radio" value="1" name="is_goods" title="是">
                 <input checked="<?=$info['is_goods']==0?'checked':'';?>" class="checkbox" type="radio" value="0" name="is_goods" title="否">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label for="" class="layui-form-label">液体</label>
+            <div class="layui-inline">
+                <input  <?=$info['is_liquid']==0 || empty($info['is_liquid']) ? 'checked':'';?> class="checkbox" type="radio" value="0" name="is_liquid" title="非液体">
+                <input <?=$info['is_liquid']==1?'checked':'';?> class="checkbox" type="radio" value="1" name="is_liquid" title="液体(化妆品)">
+                <input <?=$info['is_liquid']==2?'checked':'';?> class="checkbox" type="radio" value="2" name="is_liquid" title="非液体(化妆品)">
+                <input <?=$info['is_liquid']==3?'checked':'';?> class="checkbox" type="radio" value="3" name="is_liquid" title="液体(非化妆品)">
             </div>
         </div>
     </div>

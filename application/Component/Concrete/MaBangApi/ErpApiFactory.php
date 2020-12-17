@@ -86,8 +86,11 @@ class ErpApiFactory
         $data['weight'] = $sku_data['weight']; //重量
         $data['declareEname'] = $sku_data['dc_name_en']; //英文报关名
         $data['declareName'] = $sku_data['dc_name']; //中文报关名
-        $data['noLiquidCosmetic'] = $sku_data['is_liquid']?3:0; //液体
+        $data['noLiquidCosmetic'] = $sku_data['is_liquid']; //液体
         $data['purchasePrice'] = $sku_data['price']; //最新采购价
+//        $data['declareValue'] = $sku_data['price']; //	申报价值
+//        $data['salePrice'] = $sku_data['price']; //售价
+        $data['defaultCost'] = $sku_data['price']; //统一成本价
         $data['hasBattery'] = $sku_data['is_battery']?1:2; //	带电池 1.是 2.否
         $data['isTort'] = $sku_data['is_tort']?1:2; //		侵权 1.是 2.否
         $data['magnetic'] = $sku_data['is_magnetism']?1:2; //		带磁 1.是 2.否
@@ -145,7 +148,7 @@ class ErpApiFactory
 //        $data['parentCategoryName'] = $sku_data['className'];
         $data['declareEname'] = $sku_data['dc_name_en']; //英文报关名
         $data['declareName'] = $sku_data['dc_name']; //中文报关名
-        $data['noLiquidCosmetic'] = $sku_data['is_liquid']?'3':'0'; //液体
+        $data['noLiquidCosmetic'] = $sku_data['is_liquid']; //液体
         $data['purchasePrice'] = $sku_data['price']; //最新采购价
         $data['hasBattery'] = $sku_data['is_battery']?'1':'2'; //	带电池 1.是 2.否
         $data['isTort'] = $sku_data['is_tort']?'1':'2'; //		侵权 1.是 2.否

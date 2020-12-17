@@ -672,7 +672,7 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$k][] = '';//开发员
 			$data[$k][] = '';//申报价格($)
 			$data[$k][] = '';//液体化妆品（非液体、液体(化妆品)、非液体(化妆品)、液体(非化妆品)）
-			$data[$k][] = 0;//是否赠品（0/1）（0代表否，1代表是）
+			$data[$k][] = $spu_list[$v['spu_id']]['is_liquid'];//是否赠品（0/1）（0代表否，1代表是）
 			$data[$k][] = $spu_list[$v['spu_id']]['is_powder'];//是否粉末（0/1）
 			$data[$k][] = $spu_list[$v['spu_id']]['is_magnetism'];//是否带磁（0/1）
 			$data[$k][] = $spu_list[$v['spu_id']]['is_tort'];//是否侵权（0/1）
