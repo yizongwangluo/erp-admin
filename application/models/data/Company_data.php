@@ -24,7 +24,7 @@ class Company_data extends \Application\Component\Common\IData
         $data = [];
 
         $data['id !=']      = $input['id'] ? $input['id']:'';
-        $data['company_name']    	 = $input['company_name'];
+        $data['company_name']    = trim($input['company_name']);
         $data['domain']    	 = $input['domain'];
 
         $data = array_filter($data); //过滤空白数组
@@ -207,10 +207,10 @@ FROM
             $this->set_error(' 请输入代理商！');
             return false;
         }
-        if (empty($in['company_name'])) {
+       /* if (empty($in['company_name'])) {
             $this->set_error(' 请输入公司名称！');
             return false;
-        }
+        }*/
         if (empty($in['domain'])) {
             $this->set_error(' 请输入域名！');
             return false;

@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label" style="width: 120px;">*公司名称</label>
+                        <label class="layui-form-label" style="width: 120px;">公司名称</label>
                         <div class="layui-input-inline">
                             <input type="text" name="company_name" value="<?=$info['company_name']?>" placeholder="" class="layui-input">
                         </div>
