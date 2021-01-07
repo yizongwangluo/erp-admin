@@ -9,7 +9,7 @@
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button type="button" class="layui-btn" data-url="<?php echo base_url ( 'admin/operate/index' ) ?>" lay-submit lay-filter="post">保存</button>
-            <a href='<?php echo base_url ( 'admin/operate/index' ) ?>'><button type="button" class="layui-btn ">取消</button></a>
+            <button type="button" class="layui-btn layui-layer-close">取消</button>
         </div>
     </div>
 </form>

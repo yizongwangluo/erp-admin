@@ -109,7 +109,7 @@
                             <tr>
                                 <td><?=$v['datetime']?></td>
                                 <td><?=$v['domain']?></td>
-                                <td><?=$v['user_name']?></td>
+                                <td><?=$users[$v['user_id']]['s_user_name']?></td>
                                 <td><?=$v['turnover']?></td>
                                 <td><?=$v['paid_orders']?></td>
                                 <?php if($v['ad_cost'] == null){ ?>

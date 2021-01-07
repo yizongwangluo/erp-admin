@@ -31,10 +31,10 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
         if(isset($order_s)){
             $sort = $order_s;
         }
-
         $result = $this->operate_data->list_page ( $sql, $condition, [$title, $sort], $page, 10 );
         $result['page_html'] = create_page_html ( '?', $result['total'],10 );
-        $result['users'] = $this->operate_data->get_users($admin_id);
+        $usersList= $this->operate_data->get_users($admin_id);
+        $result['users'] = array_column($usersList,null,'s_u_id');
         $result['sum'] = $this->operate_data->get_sum( $sql, $condition );
         $this->load->view('',$result);
     }
@@ -42,6 +42,9 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
     //查询条件
     private function parse_query_lists ($input)
     {
+        if(empty($input)){
+            return [];
+        }
         $start_time = $input['start_time'];
         $end_time = $input['end_time'];
         if($start_time != '' && $end_time != ''){
@@ -67,7 +70,8 @@ class Operate  extends \Application\Component\Common\AdminPermissionValidateCont
             }
         }
         if (!empty($search)){
-            $where[] = " (user_name like '%{$search}%' or domain like '%{$search}%')";
+//            $where[] = " (user_name like '%{$search}%' or domain like '%{$search}%')";
+            $where[] = " (domain like '%{$search}%')";
         }
         if (!empty($start_time)){
             $where[] = " datetime >= '$start_time'";
