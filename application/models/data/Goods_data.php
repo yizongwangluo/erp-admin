@@ -16,7 +16,7 @@ class Goods_data extends \Application\Component\Common\IData{
      * @param int $limit
      * @return array
      */
-    public function get_list($uid = 0,$where = [],$page = 1,$limit = 17){
+    public function get_list($uid = 0,$where = [],$page = 1,$limit = 17,$is_daochu = false){
 
 //        if($where['name'] || $uid==1){ //当输入关键词的时候
             $table_b = 'left join admin b on a.u_id=b.id ';
@@ -34,15 +34,40 @@ class Goods_data extends \Application\Component\Common\IData{
             $sql_where[] = ' a.category_id='.$where['category_id'];
         }
 
-        //用sku别名和编码搜索
-        if(( $where['a']=='sku_code' || $where['a']=='sku_alias') && $where['name'] ){
+        //用sku别名/编码/时间搜索
+        if($where['a']=='sku_code' || $where['a']=='sku_code_mh' || $where['a']=='sku_alias'){
+
+            if(empty($where['name']) && empty($where['datetime'])){
+
+                if($is_daochu) return [];
+
+                return array(
+                    'page_count' => 0,
+                    'page_num' => 0,
+                    'page_size' => 0,
+                    'total' => 0,
+                    'data' => []
+                );
+            }
 
             $sql = 'select {{}} from goods a left JOIN  goods_sku b  on a.id=b.spu_id  LEFT JOIN admin c on b.u_id=a.id';
 
-            if( $where['a']=='sku_code'){
-                $sql_where[]=" b.code = '".$where['name']."'";
-            }elseif($where['a']=='sku_alias'){
-                $sql_where[]=" b.alias like '%".$where['name']."%'";
+            if($where['name']){
+                if( $where['a']=='sku_code'){
+                    $sql_where[]=" b.code = '".$where['name']."'";
+                }elseif($where['a']=='sku_alias'){
+                    $sql_where[]=" b.alias like '%".$where['name']."%'";
+                }elseif($where['a']=='sku_code_mh'){
+                    $sql_where[]=" b.code like '%".$where['name']."%'";
+                }
+            }
+
+            if($where['datetime']){
+
+                $datetime = explode(' - ',$where['datetime']);
+
+                $sql_where[]=" b.edittime >= '".strtotime($datetime[0])."'";
+                $sql_where[]=" b.edittime <= '".strtotime($datetime[1])."'";
             }
 
             if($sql_where){
@@ -55,7 +80,11 @@ class Goods_data extends \Application\Component\Common\IData{
             $info = [];
 
             if($total){ //有数据时，查询列表
-                $sql .=  ' order by a.id desc limit '.($page-1)*$limit.','.$limit;
+                if($is_daochu){
+                    $sql .=  ' order by a.id desc';
+                }else{
+                    $sql .=  ' order by a.id desc limit '.($page-1)*$limit.','.$limit;
+                }
                 $sql_info = str_replace('{{}}','a.*,b.code as sku_code,b.norms_name,b.norms,b.norms_name1,b.norms1,b.alias,b.price,b.weight,c.user_name',$sql);
                 $query = $this->db->query($sql_info);
                 $info = $query->result_array();
@@ -65,10 +94,20 @@ class Goods_data extends \Application\Component\Common\IData{
 
             $sql = 'select {{}} from goods a '.$table_b;
 
-            if($where['a']=='name'){
-                $sql_where[]=" a.name = '".$where['name']."'";
-            }elseif($where['a']=='code'){
-                $sql_where[]=" a.code = '".$where['name']."'";
+            if($where['name']){
+                if($where['a']=='name'){
+                    $sql_where[]=" a.name = '".$where['name']."'";
+                }elseif($where['a']=='code'){
+                    $sql_where[]=" a.code = '".$where['name']."'";
+                }
+            }
+
+            if($where['datetime']){
+
+                $datetime = explode(' - ',$where['datetime']);
+
+                $sql_where[]=" a.edittime >= '".strtotime($datetime[0])."'";
+                $sql_where[]=" a.edittime <= '".strtotime($datetime[1])."'";
             }
 
             if($sql_where){
@@ -76,35 +115,46 @@ class Goods_data extends \Application\Component\Common\IData{
             }
 
             $sql_total = str_replace('{{}}',$condition['total'],$sql);
+//            echo $sql_total;exit;
             $query = $this->db->query($sql_total);
             $total = $query->result_array()[0]['total'];
             $info = [];
 
             if($total){ //有数据时，查询列表
-                $sql .=  ' order by id desc limit '.($page-1)*$limit.','.$limit;
+                if($is_daochu){
+                    $sql .=  ' order by id desc';
+                }else{
+                    $sql .=  ' order by id desc limit '.($page-1)*$limit.','.$limit;
+                }
                 $sql_info = str_replace('{{}}',$condition['info'],$sql);
                 $query = $this->db->query($sql_info);
                 $info = $query->result_array();
 
+                $hh_  = $is_daochu? "\n":'<br/>';
+
                 foreach($info as $k=>$v){
                     $sku_list = $this->db->query('select a.code,a.norms_name,a.norms,a.norms_name1,a.norms1,a.alias,a.price,a.weight,a.status,b.user_name,a.is_mabang,a.id as sku_id from goods_sku a  LEFT JOIN  admin b on a.u_id=b.id where a.spu_id= '.$v['id'])->result_array();
-                    $info[$k]['sku_code'] = implode('<br/>',array_column($sku_list,'code'));
-                    $info[$k]['norms_name'] = implode('<br/>',array_column($sku_list,'norms_name'));
-                    $info[$k]['norms'] = implode('<br/>',array_column($sku_list,'norms'));
-                    $info[$k]['norms_name1'] = implode('<br/>',array_column($sku_list,'norms_name1'));
-                    $info[$k]['norms1'] = implode('<br/>',array_column($sku_list,'norms1'));
-                    $info[$k]['alias'] = implode('<br/>',array_column($sku_list,'alias'));
-                    $info[$k]['price'] = implode('<br/>',array_column($sku_list,'price'));
-                    $info[$k]['weight'] = implode('<br/>',array_column($sku_list,'weight'));
-                    $info[$k]['user_name'] = implode('<br/>',array_column($sku_list,'user_name'));
+
+                    $info[$k]['sku_code'] = implode($hh_,array_column($sku_list,'code'));
+                    $info[$k]['norms_name'] = implode($hh_,array_column($sku_list,'norms_name'));
+                    $info[$k]['norms'] = implode($hh_,array_column($sku_list,'norms'));
+                    $info[$k]['norms_name1'] = implode($hh_,array_column($sku_list,'norms_name1'));
+                    $info[$k]['norms1'] = implode($hh_,array_column($sku_list,'norms1'));
+                    $info[$k]['alias'] = implode($hh_,array_column($sku_list,'alias'));
+                    $info[$k]['price'] = implode($hh_,array_column($sku_list,'price'));
+                    $info[$k]['weight'] = implode($hh_,array_column($sku_list,'weight'));
+                    $info[$k]['user_name'] = implode($hh_,array_column($sku_list,'user_name'));
                     $is_mabang = array_column($sku_list,'is_mabang');
                     foreach($is_mabang as $key=>$value){
                         $is_mabang[$key] = $value?'<a class="tb_mabang" data_id="'.$sku_list[$key]['sku_id'].'" title="更新">已同步</a>':'<a class="tb_mabang" style="color: red"  data_id="'.$sku_list[$key]['sku_id'].'"  title="上传"  >未同步</a>';
                     }
-                    $info[$k]['is_mabang'] = implode('<br/>',$is_mabang);
+                    $info[$k]['is_mabang'] = implode($hh_,$is_mabang);
                 }
             }
         }
+
+        if($is_daochu) return $info;
+
         return array(
             'page_count' => $this->page->get_page_count(),
             'page_num' => $page,

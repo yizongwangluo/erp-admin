@@ -3,8 +3,15 @@
         .w {
             width: 125px;
         }
+        .layui-inline-duan{
+            width: 120px;
+        }
+        .layui-gys-icon:hover{
+            color: #00a0e9;
+            cursor: pointer;
+        }
     </style>
-    <form action="/admin/goods_apply/save_sku" method="post" class="layui-form" id="add_sku">
+    <form action="/admin/goods_apply/save_sku"  method="post" class="layui-form" id="add_sku">
         <div class="layui-field-box">
             <div class="layui-form-item">
                 <div class="layui-inline">
@@ -15,27 +22,21 @@
                     <em>多个别名以 , 隔开</em>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">规格名1：</label>
-                    <div class="layui-inline" style="width: 100px;">
-                        <input type="text" name="norms_name" value="" class="layui-input" >
+                    <label class="layui-form-label">规格1：</label>
+                    <div class="layui-inline layui-inline-duan">
+                        <input type="text" name="norms_name" value="" placeholder="名" class="layui-input" >
+                    </div>-
+                    <div class="layui-inline layui-inline-duan">
+                        <input type="text" name="norms" value="" placeholder="值" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">规格值1：</label>
-                    <div class="layui-inline" style="width: 100px;">
-                        <input type="text" name="norms" value="" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">规格名2：</label>
-                    <div class="layui-inline" style="width: 100px;">
-                        <input type="text" name="norms_name1" value="" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">规格值2：</label>
-                    <div class="layui-inline" style="width: 100px;">
-                        <input type="text" name="norms1" value="" class="layui-input">
+                    <label class="layui-form-label">规格2：</label>
+                    <div class="layui-inline  layui-inline-duan" >
+                        <input type="text" name="norms_name1" value="" placeholder="名" class="layui-input">
+                    </div>-
+                    <div class="layui-inline  layui-inline-duan" >
+                        <input type="text" name="norms1" value=""   placeholder="值" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -84,6 +85,17 @@
                         <input name="remarks" lay-verify="required" value="" type="text" class="layui-input">
                     </div>
                 </div>
+                <div class="layui-inline gys">
+                    <label class="layui-form-label">供应商：</label>
+                    <div class="layui-inline  layui-inline-duan">
+                        <input type="text" name="supplier_name_1" value="" placeholder="供应商名称"  class="layui-input">
+                    </div>-
+                    <div class="layui-inline  layui-inline-duan">
+                        <input type="text" name="supplier_url_1" value=""  placeholder="采购地址"  class="layui-input">
+                    </div>
+                    <i class="layui-icon layui-gys-icon layui-gys-add">&#xe654;</i>
+                    <i class="layui-icon layui-gys-icon layui-gys-del">&#xe640;</i>
+                </div>
                 <!--<div class="layui-inline">
                     <label for="" class="layui-form-label">类型</label>
                     <div class="layui-inline sku_type">
@@ -110,9 +122,36 @@
     <script>
         var data = window.parent;
 
+        var gys_html = '<div class="layui-inline gys">' +
+            '<label class="layui-form-label">供应商：</label>' +
+            '<div class="layui-inline  layui-inline-duan">' +
+            '<input type="text" name="supplier_name_{{}}" value="" placeholder="供应商名称"  class="layui-input">' +
+            '</div>- ' +
+            '<div class="layui-inline  layui-inline-duan">' +
+            '<input type="text" name="supplier_url_{{}}" value=""  placeholder="采购地址"  class="layui-input">' +
+            '</div>' +
+            '<i class="layui-icon layui-gys-icon layui-gys-add">&#xe654;</i>' +
+            '<i class="layui-icon layui-gys-icon layui-gys-del">&#xe640;</i>' +
+            '</div>';
+
+
         if(<?=input('type')?1:0?> && data.sku_edit_id){ //渲染页面
             $.each(data.data_sku,function(i,item){
                 if(data.sku_edit_id==item.id){
+
+                    //获取供应商信息个数
+                    var gys_len = 2;
+                    $.each(item,function(k,v){
+                        var re = new RegExp('supplier_name');
+                        if(re.test(k) && k!='supplier_name_1'){
+                            var html = gys_html;
+                            var AllReplace = new RegExp('{{}}',"g");
+                            html=html.replace(AllReplace,gys_len);
+                            $('.gys:last').after(html);
+                            gys_len++;
+                        }
+                    });
+
                     $.each(item,function(k,v){
                         if(k=='type' || k=='is_real'){
                             layui.use('form', function() { //监控复选框状态
@@ -133,10 +172,15 @@
         function save_form_sku() {
 
             var input = $('#add_sku').serializeArray();
+            var re = new RegExp('supplier_name');
 
             var values = {},norms = {},aliasarr = [],dataass =[];
             var x;
             for(x in input){
+                var t = Number(x)+1;
+                if(re.test(input[x].name) && ((input[x].value!='' && input[t].value=='') || (input[x].value=='' && input[t].value!=''))){
+                    layer.msg('供应商信息未填写完整！', {time: 2000, icon: 5});return;
+                }
                 values[input[x].name] = input[x].value;
             }
 
@@ -192,13 +236,26 @@
                     }
 
                     var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-
+                    console.log(JSON.stringify(data.data_sku));
                     data.table.reload('idTest',{data:data.data_sku}); //重载 table
                     parent.layer.close(index); //再执行关闭
 
                 }
             },'json');
         }
+
+        $('.layui-form-item').on('click','.layui-gys-del',function(){
+            $(this).parent().empty();
+        }).on('click','.layui-gys-add',function(){
+            var len = $('.gys').length;
+                len++;
+
+            var html = gys_html;
+            var AllReplace = new RegExp('{{}}',"g");
+            html=html.replace(AllReplace,len);
+
+            $(this).parent().after(html);
+        });
 
     </script>
 <?php $this->load->view ( 'admin/common/footer' ) ?>

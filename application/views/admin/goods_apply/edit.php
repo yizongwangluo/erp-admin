@@ -246,6 +246,18 @@
 
 <script type="text/javascript">
     var table;
+    var gys_html = '<div class="layui-inline gys">' +
+        '<label class="layui-form-label">供应商：</label>' +
+        '<div class="layui-inline  layui-inline-duan">' +
+        '<input type="text" name="supplier_name_{{}}" value="{name}" placeholder="供应商名称"  class="layui-input">' +
+        '</div>- ' +
+        '<div class="layui-inline  layui-inline-duan">' +
+        '<input type="text" name="supplier_url_{{}}" value="{url}"  placeholder="采购地址"  class="layui-input">' +
+        '</div>' +
+        '<i class="layui-icon layui-gys-icon layui-gys-add">&#xe654;</i>' +
+        '<i class="layui-icon layui-gys-icon layui-gys-del">&#xe640;</i>' +
+        '</div>';
+
 
     layui.use('table', function(){
         table = layui.table;
@@ -330,6 +342,19 @@
                                     console.log(k+'：'+v);
                                     form.render();
                                 });
+                            }else if(k=='supplier_information'){
+
+                                if(v==null){   return true; } //为空 跳出当前循环
+
+                                var json  = jQuery.parseJSON(v);
+                                var html = '';
+                                for (var i=1;i<=json.length;i++){
+                                    var html_tmp = gys_html.replace(new RegExp('{{}}',"g"),i-1);
+                                        html_tmp = html_tmp.replace(new RegExp('{name}',"g"), json[i-1]['name']);
+                                        html_tmp = html_tmp.replace(new RegExp('{url}',"g"), json[i-1]['productLinkAddress']);
+                                    html+=html_tmp;
+                                }
+                                body.find('#gys').html(html);
                             }else{
                                 if(k=='img'){
                                     body.find('.thumb_img').attr('src',v);

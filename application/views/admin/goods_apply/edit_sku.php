@@ -3,6 +3,13 @@
         .w {
             width: 125px;
         }
+        .layui-inline-duan{
+            width: 120px;
+        }
+        .layui-gys-icon:hover{
+            color: #00a0e9;
+            cursor: pointer;
+        }
     </style>
     <form action="/admin/goods_apply/save_sku" method="post" class="layui-form" id="add_sku">
         <div class="layui-field-box">
@@ -86,6 +93,19 @@
                         <input name="remarks" lay-verify="required" value="" type="text" class="layui-input">
                     </div>
                 </div>
+                <div id="gys">
+                    <div class="layui-inline gys">
+                        <label class="layui-form-label">供应商：</label>
+                        <div class="layui-inline  layui-inline-duan">
+                            <input type="text" name="supplier_name_1" value="" placeholder="供应商名称"  class="layui-input">
+                        </div>-
+                        <div class="layui-inline  layui-inline-duan">
+                            <input type="text" name="supplier_url_1" value=""  placeholder="采购地址"  class="layui-input">
+                        </div>
+                        <i class="layui-icon layui-gys-icon layui-gys-add">&#xe654;</i>
+                        <i class="layui-icon layui-gys-icon layui-gys-del">&#xe640;</i>
+                    </div>
+                </div>
                 <!--<div class="layui-inline">
                     <label for="" class="layui-form-label">类型</label>
                     <div class="layui-inline sku_type">
@@ -110,6 +130,7 @@
     </form>
 
     <script>
+
 
         function save_form_sku() {
 
@@ -144,6 +165,20 @@
 
             },'json');
         }
+
+        $('.layui-form-item').on('click','.layui-gys-del',function(){
+            $(this).parent().empty();
+        }).on('click','.layui-gys-add',function(){
+            var len = $('.gys').length;
+            len++;
+
+            var html = window.parent.gys_html;
+            html=html.replace(new RegExp('{{}}',"g"),len);
+            html=html.replace(new RegExp('{url}',"g"),'');
+            html=html.replace(new RegExp('{name}',"g"),'');
+
+            $(this).parent().after(html);
+        });
 
     </script>
 <?php $this->load->view ( 'admin/common/footer' ) ?>

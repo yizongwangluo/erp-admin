@@ -198,6 +198,8 @@ class Goods_sku_data extends \Application\Component\Common\IData{
         unset($input['id']);
         $sku_info = $this->find(['code'=>$input['code']]);
 
+        $time = time();
+
         if($sku_info){ //修改
 
             if($input['alias']){ //组合别名
@@ -214,8 +216,11 @@ class Goods_sku_data extends \Application\Component\Common\IData{
                 $input['alias'] = $sku_info['alias'];
             }
 
+            $input['edittime'] = $time;
             return $this->update($sku_info['id'],$input);
         }else{ //新增
+
+            $input['addtime'] = $time;
             return $this->store($input);
         }
 

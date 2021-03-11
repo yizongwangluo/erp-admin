@@ -10,7 +10,7 @@ class Goods_sku_apply_data extends \Application\Component\Common\IData{
 
 
     public function add($input = []){
-
+        $input['addtime'] = time();
         return $this->store($input);
     }
 
@@ -21,6 +21,7 @@ class Goods_sku_apply_data extends \Application\Component\Common\IData{
      * @return bool
      */
     public function edit_status($spu_id = 0,$input = []){
+        $input['edittime'] = time();
         return $this->update($spu_id,$input,'spu_id');
     }
 

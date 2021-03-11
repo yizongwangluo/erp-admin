@@ -30,9 +30,11 @@
                     </div>
                     <div class="layui-inline">
                         <select name="a" lay-verify="required" lay-search>
-                            <option value="name" selected>商品名称</option>
+                            <option value=""  >-- 搜索条件 --</option>
+                            <option value="name"  <?=$where['a']=='name'?'selected':'';?>>商品名称</option>
                             <option value="code" <?=$where['a']=='code'?'selected':'';?>>商品编码</option>
                             <option value="sku_code" <?=$where['a']=='sku_code'?'selected':'';?>>sku编码</option>
+                            <option value="sku_code_mh" <?=$where['a']=='sku_code_mh'?'selected':'';?>>sku编码模糊搜索</option>
                             <option value="sku_alias" <?=$where['a']=='sku_alias'?'selected':'';?>>sku别名</option>
                         </select>
                     </div>
@@ -40,8 +42,12 @@
                         <input type="text" name="name" value="<?=$where['name']?>"
                                class="layui-input" placeholder="输入搜索条件"/>
                     </div>
+                    <div class="layui-inline">
+                        <input type="text" class="layui-input" name="datetime" value="<?=$where['datetime']?>" id="test10" placeholder="选择时间">
+                    </div>
                     <button class="layui-btn layui-btn-danger btn-search" type="submit">搜索</button>
-                    <button class="layui-btn layui-btn-normal" type="button" id="daochu_all">导出全部</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    <button class="layui-btn layui-btn-normal" type="button" id="daochu_all">导出</button>
                 </div>
             </form>
         <div style='overflow:auto'>
@@ -102,8 +108,18 @@
 </div>
 
 <script type="text/javascript">
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
 
-    //全选操作
+        //日期时间范围
+        laydate.render({
+            elem: '#test10'
+            ,type: 'datetime'
+            ,range: true
+        });
+    });
+
+        //全选操作
     $('#all').click(function(){
         if($(this).is(':checked')){ //全选
             $('.id').prop('checked',true);
@@ -114,15 +130,14 @@
     //全选操作end
 
     $('#daochu_all').click(function(){
-        /*var t = $('form').serializeArray(),text = '';
+        var index = layer.load();
+        var t = $('form').serializeArray(),text = '';
         $.each(t, function() {
             text += this.name+'='+this.value+'&';
         });
-        window.location.href = "/admin/goods/daochu_all?"+text;
-         */
-        var index = layer.load();
         $(this).addClass('layui-btn-disabled').attr('disabled','');
-        window.location.href = "/admin/goods/daochu_all";
+        window.location.href = "/admin/goods/daochu_all?"+text;
+//        window.location.href = "/admin/goods/daochu_all";
         layer.close(index);
     });
 

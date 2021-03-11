@@ -1380,3 +1380,33 @@ function array_filterempty($data){
 		return true;
 	});
 }
+
+/**
+ * 解析 供应商数据
+ * @param array $arr
+ * @return string
+ */
+function analysis_sku($arr){
+
+	$supplierArr = [];
+
+	foreach($arr as $k=>$v){
+
+		$supplier_name =  '/supplier_name_([0-9]+)$/';
+		if(preg_match($supplier_name, $k, $mc)){
+			$supplierArr[$mc[1]]['name'] = $v;
+			unset($arr[$k]);
+			continue;
+		}
+
+		$supplier_url =  '/supplier_url_([0-9]+)$/';
+		if(preg_match($supplier_url, $k, $mc)){
+			$supplierArr[$mc[1]]['productLinkAddress'] = $v;
+			unset($arr[$k]);
+			continue;
+		}
+	}
+
+	$arr['supplier_information'] = json_encode(array_values($supplierArr),MB_JSONENCODE);
+	return $arr;
+}

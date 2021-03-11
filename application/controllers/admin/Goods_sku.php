@@ -59,6 +59,8 @@ class Goods_sku extends \Application\Component\Common\AdminPermissionValidateCon
 		unset($input['id']);
 		$input['u_id'] = $this->admin['id'];
 
+		$input = analysis_sku($input);
+
 		if($id){ //修改
 			$ret = $this->goods_sku_data->edit($id,$input);
 		}else{ //新增

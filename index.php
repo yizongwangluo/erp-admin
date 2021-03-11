@@ -37,6 +37,7 @@
  */
 /*线上部署时候，将DEBUG关闭 */
 define('CI_DEBUG', false);
+define('MB_JSONENCODE', 320);
 //设置时区
 ini_set('date.timezone','Asia/Shanghai');
 

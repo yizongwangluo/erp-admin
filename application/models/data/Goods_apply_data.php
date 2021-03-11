@@ -43,6 +43,68 @@ class Goods_apply_data extends \Application\Component\Common\IData{
             $this->set_error('请填写产品名称');return false;
         }
 
+        foreach($sku_list as $k=>$value){
+            //判断别名
+            if($value['alias']){
+                if(!$this->goods_sku_apply_data->get_only($value)){
+                    $this->set_error('sku别名已存在或与sku编码冲突');return false;
+                }
+            }
+
+            $sku_list[$k] = analysis_sku($value);
+        }
+
+        //时间
+        $time = time();
+        $arr['addtime'] = $time;
+        $arr['edittime'] = $time;
+
+        $arr = array_filter($arr);
+        $id = $this->store($arr);
+
+        if(!$id){
+            $this->set_error('添加失败，请稍后重新添加');return false;
+        }
+
+        if($id && count($sku_list)){ //添加spu成功，添加sku
+            $sql = 'INSERT INTO goods_sku_apply (spu_id,code,norms_name,norms,norms_name1,norms1,img,price,size,weight,cycle,information,remarks,u_id,type,is_real,status,alias,addtime,edittime,supplier_information)  VALUES ';
+            $sql_val = [];
+            foreach($sku_list as $k=>$value){
+                $code = '';
+                $is_real = $value['is_real']?$value['is_real']:0;
+                $type = $value['type']?$value['type']:0;
+                if($is_real){ //测试sku
+                    $code = date('YmdHis').'_'.$id.'_'.$k;
+                }
+                $sql_val[] = "({$id},'{$code}','{$value['norms_name']}','{$value['norms']}','{$value['norms_name1']}','{$value['norms1']}','{$value['img']}',{$value['price']},'{$value['size']}',{$value['weight']},{$value['cycle']},'{$value['information']}','{$value['remarks']}',{$u_id},{$type},{$is_real},{$status},'{$value['alias']}','{$arr['addtime']}','{$arr['edittime']}','{$value['supplier_information']}')";
+            }
+
+            $sql.=implode(',',$sql_val);
+            $query = $this->db->query($sql);
+            if($this->db->affected_rows()<=0){
+                $this->set_error('添加SKU失败,请稍后重新添加');return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 添加
+     * @param int $u_id
+     * @param array $arr
+     * @return bool
+     */
+    public function add_new($u_id = 0,$arr = []){
+
+        $status = $arr['status'] ? $arr['status']:0;
+
+        $sku_list = json_decode($arr['data_sku'],true);
+        unset($arr['data_sku']);
+
+        if(empty($arr['name'])){
+            $this->set_error('请填写产品名称');return false;
+        }
+
 
         foreach($sku_list as $k=>$value){
             //判断别名
@@ -66,7 +128,7 @@ class Goods_apply_data extends \Application\Component\Common\IData{
         }
 
         if($id && count($sku_list)){ //添加spu成功，添加sku
-            $sql = 'INSERT INTO goods_sku_apply (spu_id,code,norms_name,norms,norms_name1,norms1,img,price,size,weight,cycle,information,remarks,u_id,type,is_real,status,alias)  VALUES ';
+            $sql = 'INSERT INTO goods_sku_apply (spu_id,code,norms_name,norms,norms_name1,norms1,img,price,size,weight,cycle,information,remarks,u_id,type,is_real,status,alias,addtime,edittime)  VALUES ';
             $sql_val = [];
             foreach($sku_list as $k=>$value){
                 $code = '';
@@ -75,7 +137,7 @@ class Goods_apply_data extends \Application\Component\Common\IData{
                 if($is_real){ //测试sku
                     $code = date('YmdHis').'_'.$id.'_'.$k;
                 }
-                $sql_val[] = "({$id},'{$code}','{$value['norms_name']}','{$value['norms']}','{$value['norms_name1']}','{$value['norms1']}','{$value['img']}',{$value['price']},'{$value['size']}',{$value['weight']},{$value['cycle']},'{$value['information']}','{$value['remarks']}',{$u_id},{$type},{$is_real},{$status},'{$value['alias']}')";
+                $sql_val[] = "({$id},'{$code}','{$value['norms_name']}','{$value['norms']}','{$value['norms_name1']}','{$value['norms1']}','{$value['img']}',{$value['price']},'{$value['size']}',{$value['weight']},{$value['cycle']},'{$value['information']}','{$value['remarks']}',{$u_id},{$type},{$is_real},{$status},'{$value['alias']}','{$arr['addtime']}','{$arr['edittime']}')";
             }
 
             $sql.=implode(',',$sql_val);

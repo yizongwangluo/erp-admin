@@ -31,12 +31,27 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 	}
 
 	/**
+	 * 搜索条件判断
+	 * @param array $input
+	 */
+	public function goods_search($input = []){
+		if($input['a']=='sku_code_mh' && strlen($input['name'])<6){
+//			echo '<script type="text/javascript">alert("'.html_escape('sku编码模糊搜索 - 搜索字符长度不能小于6').'");history.back();</script>';
+//			exit();
+			show_error('sku编码模糊搜索 - 搜索字符长度不能小于6');
+//			$this->output->ajax_return(AJAX_RETURN_FAIL,);
+		}
+	}
+
+	/**
 	 * 商品列表
 	 */
 	public function index(){
 		$input = $this->input->get();
 		$page = max(1,$input['page']);
 		unset($input['page']);
+
+//		$this->goods_search($input);
 
 		$data = $this->goods_data->get_list($this->admin['id'],$input,$page);
 		$data['category_list'] = $this->goods_category_data->lists();
@@ -434,23 +449,21 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 
 		set_time_limit(0);
 
-		//获取商品详情
-		$spu_list = $this->goods_data->lists();
-		$category_list = $this->goods_category_data->lists();
-		$category_list = array_column($category_list,null,'id');
+		$input = $this->input->get();
+		$page = max(1,$input['page']);
+		unset($input['page']);
 
-		foreach($spu_list as $k=>$v){
-			$spu_list[$k]['sku_list'] = $this->goods_sku_data->get_list_spuid($v['id']);
-		}
+//		$this->goods_search($input);
 
-		$data = $this->goods_excel_temp($spu_list,$category_list); //导出模板
+		$list = $this->goods_data->get_list($this->admin['id'],$input,$page,17,true);
 
-//		$this->_exportExcel($data,'商品列表',38);
+		$data = $this->goods_excel_temp_all($list); //导出模板
+
 		$this->exportCsv($data,'商品列表');
 	}
 
 	/**
-	 * 导出全部
+	 * 导出全部 - mabang
 	 */
 	public function daochu_all_mb(){
 
@@ -686,6 +699,34 @@ class Goods extends \Application\Component\Common\AdminPermissionValidateControl
 			$data[$k][] = date('Y/m/d H:i:s',$spu_list[$v['spu_id']]['edittime']);//创建时间(2018/12/18 23:59:59)创建时间(2018/12/18 23:59:59)
 		}
 
+		return $data;
+	}
+
+
+	/**
+	 * 导出模板 daochu_all
+	 * @param array $spu_list
+	 * @return array
+	 */
+	private function goods_excel_temp_all($spu_list = []){
+
+		$data = [];
+		$data['heard'] = ["ID","产品图片","产品名","SKU","SKU别名","规格名1","规格值1","规格名2","规格值2","采购价（元）","重量（克）"];
+		$i=0;
+		foreach($spu_list as $k=>$v){
+			$i++;
+			$data[$i][] = $v['id'];
+			$data[$i][] = $v['img'];
+			$data[$i][] = $v['name'];
+			$data[$i][] = $v['sku_code'];
+			$data[$i][] = $v['alias'];
+			$data[$i][] = $v['norms_name'];
+			$data[$i][] = $v['norms'];
+			$data[$i][] = $v['norms_name1'];
+			$data[$i][] = $v['norms1'];
+			$data[$i][] = $v['price'];
+			$data[$i][] = $v['weight'];
+		}
 		return $data;
 	}
 

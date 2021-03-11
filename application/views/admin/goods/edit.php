@@ -264,7 +264,7 @@
 
     <div class="layui-form-item">
         <label class="layui-form-label">SKU列表：</label>
-        <div class="layui-inline">
+        <div class="layui-col-xs12">
             <table class="layui-hide" id="test" lay-filter="test" ></table>
         </div>
     </div>
@@ -279,12 +279,24 @@
 
     <script type="text/html" id="checkboxTpl">
         <!-- 这里的 checked 的状态只是演示 -->
-        <input type="checkbox" name="lock" value="{{d.id}}" title="已同步" lay-filter="lockDemo" {{ d.is_mabang == 1 ? 'checked' : '' }}>
+        <input type="checkbox" name="lock" value="{{d.id}}" title="同步" lay-filter="lockDemo" {{ d.is_mabang == 1 ? 'checked' : '' }}>
     </script>
 </div>
 
 <script type="text/javascript">
     var table,is_status = <?=json_encode($this->enum_field->get_values('is_status'))?>;
+
+    var gys_html = '<div class="layui-inline gys">' +
+        '<label class="layui-form-label">供应商：</label>' +
+        '<div class="layui-inline layui-inline-duan">' +
+        '<input type="text" name="supplier_name_{{}}" value="{name}" placeholder="供应商名称"  class="layui-input">' +
+        '</div>- ' +
+        '<div class="layui-inline  layui-inline-duan">' +
+        '<input type="text" name="supplier_url_{{}}" value="{url}"  placeholder="采购地址"  class="layui-input">' +
+        '</div>' +
+        '<i class="layui-icon layui-gys-icon layui-gys-add">&#xe654;</i>' +
+        '<i class="layui-icon layui-gys-icon layui-gys-del">&#xe640;</i>' +
+        '</div>';
 
     layui.use(['table','form'], function(){
             table = layui.table;
@@ -373,6 +385,20 @@
                                     console.log(k+'：'+v);
                                     form.render();
                                 });
+                            }else if(k=='supplier_information'){
+
+                                if(v==null){   return true; } //为空 跳出当前循环
+
+                                var json  = jQuery.parseJSON(v);
+                                    var html = '';
+                                    for (var i=1;i<=json.length;i++){
+                                        var html_tmp = gys_html.replace(new RegExp('{{}}',"g"),i-1);
+                                        html_tmp = html_tmp.replace(new RegExp('{name}',"g"), json[i-1]['name']);
+                                        html_tmp = html_tmp.replace(new RegExp('{url}',"g"), json[i-1]['productLinkAddress']);
+                                        html+=html_tmp;
+                                    }
+
+                                    body.find('#gys').html(html);
                             }else{
                                 if(k=='img'){
                                     body.find('.thumb_img').attr('src',v);

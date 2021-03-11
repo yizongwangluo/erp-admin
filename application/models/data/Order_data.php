@@ -116,4 +116,19 @@ class Order_data extends \Application\Component\Common\IData{
         return $result;
     }
 
+
+    /**
+     * 重新绑定shop_ID
+     */
+    public function rebind_shop_id($shop_info){
+
+        $sql = "update `order` set shop_id={$shop_info['id']},user_id={$shop_info['user_id']}
+                where shopify_o_id like '".$shop_info['code']."-%'";
+
+        $this->db->query($sql);
+
+        return $this->db->affected_rows() > 0;
+
+    }
+
 }

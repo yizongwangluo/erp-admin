@@ -32,7 +32,14 @@ class Getoperate_tmp_operate extends \Application\Component\Common\IData
         if(empty($shops)){  return false;  }
 
         $time = date('Y-m-d H:i:s'); //当前时间
-        $data_arr = [date("Y-m-d",strtotime("-1 day")),date("Y-m-d")];//获取 昨天/今天 的日期
+//        $data_arr = [date("Y-m-d",strtotime("-1 day")),date("Y-m-d")];//获取 昨天/今天 的日期
+
+        if(date('i')<30){
+            $data_arr = [date("Y-m-d",strtotime("-1 day"))];//获取 昨天 的日期
+        }else{
+            $data_arr = [date("Y-m-d")];//获取 今天 的日期
+        }
+
 
         foreach($data_arr as $item){//循环日期
 

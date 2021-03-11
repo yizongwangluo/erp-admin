@@ -96,14 +96,21 @@ class ErpApiFactory
         $data['magnetic'] = $sku_data['is_magnetism']?1:2; //		带磁 1.是 2.否
         $data['powder'] = $sku_data['is_powder']?1:2; //		粉末 1.是 2.否
         $data['remark'] = $sku_data['remarks']; //备注
-        $data['autoCreateSupplier'] = '1'; //备注
-//
-        $data['suppliersData'] = $this->json_encode_data([['name'=>$sku_data['supplier_name'],'productLinkAddress'=>$sku_data['source_address']]]); //关联供应商信息
+        $data['autoCreateSupplier'] = '1'; //供应商不存在，是否自动创建供应商，默认2不创建
+
+        //供应商信息
+        $sku_data['supplier_name']=$sku_data['supplier_name']?$sku_data['supplier_name']:'默认';
+        $suppliersData = json_decode($sku_data['supplier_information'],true);
+        $suppliersData[] = ['name'=>$sku_data['supplier_name'],'productLinkAddress'=>$sku_data['source_address']];
+        $data['suppliersData'] = $this->json_encode_data($suppliersData); //关联供应商信息
+        //供应商信息end
+
         $data['warehouseData'] = $this->json_encode_data([['name'=>$sku_data['warehouse_name']]]); //仓库
 
 //        $data['virtualSkus'] = $sku_data['alias']; //别名
         $data['virtualSkus'] = ''; //别名
 
+        log_message ( 'mabang_add_stock', $data['stockSku'].'开始', true );
         $ret = $this->http_url($this->url, $data, $this->get_sign($data));
 
         //记录日志
@@ -156,12 +163,19 @@ class ErpApiFactory
         $data['powder'] = $sku_data['is_powder']?'1':'2'; //		粉末 1.是 2.否
         $data['remark'] = $sku_data['remarks']; //备注
 
-        $data['suppliersData'] = $this->json_encode_data([['name'=>$sku_data['supplier_name'],'productLinkAddress'=>$sku_data['source_address']]]); //关联供应商信息
+        //供应商信息
+        $sku_data['supplier_name']=$sku_data['supplier_name']?$sku_data['supplier_name']:'默认';
+        $suppliersData = json_decode($sku_data['supplier_information'],true);
+        $suppliersData[] = ['name'=>$sku_data['supplier_name'],'productLinkAddress'=>$sku_data['source_address']];
+        $data['suppliersData'] = $this->json_encode_data($suppliersData); //关联供应商信息
+        //供应商信息end
+
         $data['warehouseData'] = $this->json_encode_data([['name'=>$sku_data['warehouse_name']]]); //仓库
 
 //        $data['virtualSkus'] = $sku_data['alias']; //别名
         $data['virtualSkus'] = ''; //别名
 
+        log_message ( 'mabang_change_stock', $data['stockSku'].'开始', true );
         $ret = $this->http_url($this->url, $data, $this->get_sign($data));
 
         //记录日志
@@ -184,7 +198,7 @@ class ErpApiFactory
         //JSON_UNESCAPED_UNICODE（中文不转为unicode ，对应的数字 256）
         //JSON_UNESCAPED_SLASHES （不转义反斜杠，对应的数字 64）
         //JSON_UNESCAPED_UNICODE + JSON_UNESCAPED_SLASHES = 320
-        return json_encode($data,'320');
+        return json_encode($data,MB_JSONENCODE);
     }
 
 

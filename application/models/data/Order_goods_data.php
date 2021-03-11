@@ -36,4 +36,21 @@ class Order_goods_data extends \Application\Component\Common\IData{
         }
         return $sku_list;
     }
+
+
+
+    /**
+     * 重新绑定shop_ID
+     */
+    public function rebind_shop_id($shop_info){
+
+        $sql = "update `order_goods` set shop_id={$shop_info['id']},user_id={$shop_info['user_id']}
+                where shopify_o_id like '".$shop_info['code']."-%'";
+
+        $this->db->query($sql);
+
+        return $this->db->affected_rows() > 0;
+
+    }
+
 }

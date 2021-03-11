@@ -180,6 +180,8 @@ class Goods_apply extends \Application\Component\Common\AdminPermissionValidateC
 		$id = $sku_info['id'];
 		unset($sku_info['id']);
 
+		$sku_info = analysis_sku($sku_info);
+
 		if($id){ //修改
 			$ret = $this->goods_sku_apply_data->update($id,$sku_info);
 		}else{ //添加
