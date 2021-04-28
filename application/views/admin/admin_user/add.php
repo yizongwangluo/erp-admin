@@ -200,6 +200,8 @@
             ,data: <?=json_encode($auth_group_list);?>
             //input的name 不设置与选择器相同(去#.)
             ,name: 'role_id'
+            //添加验证
+            ,verify:'required'
             //值的分隔符
             ,delimiter: ','
             //默认选中
